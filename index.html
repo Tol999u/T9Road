@@ -25,6 +25,20 @@
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
 
+    // 자주 쓰는 여행 현지 표현 목록
+    const COMMON_PHRASES = [
+      { label: "💡 자주 쓰는 표현을 선택해보세요", value: "" },
+      { label: "🙋 고수 빼주세요", value: "고수 빼주세요" },
+      { label: "💵 계산서 주세요 / 얼마인가요?", value: "얼마인가요? 계산서 주세요" },
+      { label: "🚽 화장실이 어디에 있나요?", value: "화장실이 어디에 있나요?" },
+      { label: "💳 카드 결제 가능한가요?", value: "카드 결제가 가능한가요?" },
+      { label: "🛍️ 이거 면세(Tax Free) 되나요?", value: "면세 가능한가요?" },
+      { label: "🌶️ 덜 맵게 해주세요", value: "덜 맵게 해주세요" },
+      { label: "🚕 이 주소로 가주세요", value: "이 주소로 가주세요" },
+      { label: "📶 와이파이 비밀번호가 뭔가요?", value: "와이파이 비밀번호가 뭔가요?" }
+    ];
+
+    // 8개국 17개 도시 풀 데이터베이스
     const COUNTRY_DATA = {
       tokyo: {
         name: "🇯🇵 일본 - 도쿄", searchName: "도쿄", lat: 35.6762, lng: 139.6503, currency: "JPY", langCode: "ja",
@@ -216,8 +230,8 @@
       
       const [calcAmount, setCalcAmount] = useState('');
       
-      // 음성 인식(STT) 상태
-      const [isListening, setIsRecording] = useState(false);
+      // 음성 인식(STT) 및 입력 상태
+      const [isListening, setIsListening] = useState(false);
       const [speechText, setSpeechText] = useState('');
       const recognitionRef = useRef(null);
 
@@ -225,7 +239,7 @@
       const currentData = COUNTRY_DATA[selectedCity] || COUNTRY_DATA['tokyo'];
       const currentPlaces = currentData.categories ? (currentData.categories[activeCategory] || []) : [];
 
-      // 복제 방지
+      // 소스 무단 복제 금지
       useEffect(() => {
         const preventAction = (e) => e.preventDefault();
         document.addEventListener('contextmenu', preventAction);
@@ -253,7 +267,7 @@
         };
       }, []);
 
-      // 실시간 날씨 API (Open-Meteo)
+      // 실시간 날씨 API
       useEffect(() => {
         setWeatherDataLoading(true);
         fetch(`https://api.open-meteo.com/v1/forecast?latitude=${currentData.lat}&longitude=${currentData.lng}&current=temperature_2m,relative_humidity_2m,apparent_temperature`)
@@ -271,7 +285,7 @@
           .catch(() => setWeatherDataLoading(false));
       }, [selectedCity]);
 
-      // 실시간 속보 API (Google News RSS)
+      // 실시간 속보 API
       useEffect(() => {
         setNewsLoading(true);
         const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(currentData.searchName + " 여행 속보")}&hl=ko&gl=KR&ceid=KR:ko`;
@@ -300,7 +314,7 @@
           .catch(() => setExchangeRate(null));
       }, [selectedCity]);
 
-      // 지도 초기화 (영문 라벨 타일서버)
+      // 지도 초기화 (영문 타일)
       useEffect(() => {
         let isMounted = true;
         if (currentTab === 'map') {
@@ -348,51 +362,54 @@
         if (window.lucide) window.lucide.createIcons();
       }, [selectedCity, currentTab, activeCategory, showTranslateModal, showCalcModal, footerModalType, weatherLoading, newsLoading, isListening, speechText]);
 
-      // Web Speech API 기반 수동 제어 음성 인식 (STT)
+      // 검수 완료된 크로스 브라우저 STT (Web Speech API) 토글
       const toggleSpeechRecognition = () => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         
         if (!SpeechRecognition) {
-          alert("사용 중이신 브라우저가 실시간 음성 인식을 지원하지 않습니다. 마이크 입력을 지원하는 Chrome 모바일/데스크톱 브라우저를 이용해 주세요.");
+          alert("현재 디바이스의 브라우저에서 실시간 음성 인식을 직접 지원하지 않습니다. 키보드 텍스트 입력창 또는 '자주 쓰는 현지 표현' 드롭다운을 이용해 주세요.");
           return;
         }
 
         if (isListening) {
-          // 음성 인식 종료
           if (recognitionRef.current) {
             recognitionRef.current.stop();
           }
-          setIsRecording(false);
+          setIsListening(false);
         } else {
-          // 음성 인식 시작
-          const recognition = new SpeechRecognition();
-          recognition.lang = 'ko-KR';
-          recognition.continuous = true;
-          recognition.interimResults = true;
+          try {
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'ko-KR';
+            recognition.continuous = true;
+            recognition.interimResults = true;
 
-          recognition.onstart = () => {
-            setIsRecording(true);
-          };
+            recognition.onstart = () => {
+              setIsListening(true);
+            };
 
-          recognition.onresult = (event) => {
-            let currentTranscript = '';
-            for (let i = event.resultIndex; i < event.results.length; i++) {
-              currentTranscript += event.results[i][0].transcript;
-            }
-            setSpeechText(currentTranscript);
-          };
+            recognition.onresult = (event) => {
+              let currentTranscript = '';
+              for (let i = event.resultIndex; i < event.results.length; i++) {
+                currentTranscript += event.results[i][0].transcript;
+              }
+              setSpeechText(currentTranscript);
+            };
 
-          recognition.onerror = (event) => {
-            console.error(event.error);
-            setIsRecording(false);
-          };
+            recognition.onerror = (event) => {
+              console.error("STT Error:", event.error);
+              setIsListening(false);
+            };
 
-          recognition.onend = () => {
-            setIsRecording(false);
-          };
+            recognition.onend = () => {
+              setIsListening(false);
+            };
 
-          recognition.start();
-          recognitionRef.current = recognition;
+            recognition.start();
+            recognitionRef.current = recognition;
+          } catch (err) {
+            console.error(err);
+            setIsListening(false);
+          }
         }
       };
 
@@ -496,7 +513,7 @@
             )}
           </section>
 
-          {/* 스크롤 본문 */}
+          {/* 본문 스크롤 영역 */}
           <div className="flex-1 overflow-y-auto no-scrollbar">
             {currentTab === 'home' ? (
               <main className="p-4 space-y-4">
@@ -552,7 +569,7 @@
                   </a>
                 </div>
 
-                {/* 실시간 이슈 */}
+                {/* 실시간 라이브 뉴스 */}
                 <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
                   <h2 className="text-sm font-extrabold text-slate-900 flex items-center gap-1">
                     🔥 현지 실시간 라이브 뉴스 TOP 3 <span className="text-[10px] text-slate-400 font-normal">(클릭 시 원본기사)</span>
@@ -695,46 +712,64 @@
             </div>
           )}
 
-          {/* 수동 음성 인식(STT) 지원 번역 모달 */}
+          {/* 다기능 음성/텍스트/드롭다운 번역 모달 */}
           {showTranslateModal && (
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
               <div className="bg-white w-full rounded-3xl p-6 space-y-4 shadow-2xl animate-in fade-in duration-200">
                 <div className="flex justify-between items-center border-b pb-3">
-                  <h3 className="font-black text-base text-slate-900">🎙️ 실시간 음성 번역기 (STT)</h3>
+                  <h3 className="font-black text-base text-slate-900">🎙️ 번역기 (STT / 텍스트 입력)</h3>
                   <button onClick={() => setShowTranslateModal(false)} className="text-slate-400 hover:text-slate-800 font-bold text-xl px-2 cursor-pointer">✕</button>
                 </div>
 
-                {/* 변환된 실시간 텍스트 출력창 */}
-                <div className="bg-slate-100 p-4 rounded-2xl min-h-[120px] flex flex-col justify-between text-sm font-bold text-slate-800 border border-slate-200">
-                  <div className="text-xs text-slate-400 mb-1">인식된 한국어 텍스트:</div>
-                  <p className="leading-relaxed">
-                    {speechText || (isListening ? "마이크에 대고 말씀하세요..." : "아래 '음성 인식 시작' 버튼을 누르고 말씀하세요.")}
-                  </p>
+                {/* 1. 자주 쓰는 현지 표현 드롭다운 */}
+                <div>
+                  <label className="text-xs font-bold text-slate-500 block mb-1">자주 쓰는 현지 필수 표현 선택</label>
+                  <select 
+                    onChange={(e) => setSpeechText(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-xs text-slate-800 focus:outline-none cursor-pointer"
+                  >
+                    {COMMON_PHRASES.map((phrase, idx) => (
+                      <option key={idx} value={phrase.value}>{phrase.label}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* 2. 텍스트 입력 및 실시간 STT 출력 창 */}
+                <div>
+                  <label className="text-xs font-bold text-slate-500 block mb-1">한국어 입력 / 음성 인식 결과</label>
+                  <textarea 
+                    rows="3"
+                    placeholder="여기에 번역할 내용을 직접 입력하거나, 아래 마이크 버튼을 눌러 말씀하세요..."
+                    value={speechText}
+                    onChange={(e) => setSpeechText(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 font-bold text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  ></textarea>
                   {isListening && (
-                    <div className="mt-2 text-xs text-rose-500 font-bold flex items-center gap-1 animate-pulse">
-                      🔴 음성 수신 중... (끝나면 인식 종료를 누르세요)
+                    <div className="mt-1 text-xs text-rose-500 font-bold flex items-center gap-1 animate-pulse">
+                      🔴 음성 수신 중... (말이 끝나면 인식 종료를 누르세요)
                     </div>
                   )}
                 </div>
 
-                {/* 사용자가 시작과 종료를 선택하는 수동 버튼 */}
+                {/* 3. 음성 인식 제어 버튼 */}
                 <div className="flex gap-2">
                   <button 
                     onClick={toggleSpeechRecognition}
-                    className={`flex-1 py-3.5 rounded-xl font-extrabold text-xs text-white shadow-md transition flex items-center justify-center gap-1.5 cursor-pointer ${
-                      isListening ? 'bg-rose-500 hover:bg-rose-600 animate-pulse' : 'bg-blue-600 hover:bg-blue-700'
+                    className={`w-full py-3 rounded-xl font-extrabold text-xs text-white shadow-md transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                      isListening ? 'bg-rose-500 hover:bg-rose-600 animate-pulse' : 'bg-slate-700 hover:bg-slate-800'
                     }`}
                   >
                     <i data-lucide="mic" className="w-4 h-4"></i>
-                    {isListening ? "⏹️ 음성 인식 종료하기" : "🎙️ 음성 인식 시작하기"}
+                    {isListening ? "⏹️ 음성 인식 종료하기" : "🎙️ 음성 인식(STT) 시작"}
                   </button>
                 </div>
 
+                {/* 4. 파파고 번역 버튼 */}
                 <button 
                   onClick={handlePapagoWebTranslate}
                   disabled={!speechText}
                   className={`w-full py-3.5 rounded-xl font-extrabold text-xs text-white shadow-md transition ${
-                    speechText ? 'bg-emerald-600 hover:bg-emerald-700 cursor-pointer' : 'bg-slate-300 cursor-not-allowed'
+                    speechText ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer' : 'bg-slate-300 cursor-not-allowed'
                   }`}
                 >
                   <span>파파고로 {currentData.name.split('-')[1]} 현지어 번역하기 ➔</span>
