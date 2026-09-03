@@ -38,176 +38,220 @@
       { label: "📶 와이파이 비밀번호가 뭔가요?", value: "와이파이 비밀번호가 뭔가요?" }
     ];
 
-    // 8개국 17개 도시 풀 데이터베이스
+    // 8개국 17개 도시 데이터베이스 (확장 데이터 적용)
     const COUNTRY_DATA = {
       tokyo: {
-        name: "🇯🇵 일본 - 도쿄", searchName: "도쿄", lat: 35.6762, lng: 139.6503, currency: "JPY", langCode: "ja", langName: "일본어",
+        name: "🇯🇵 일본 - 도쿄", searchName: "도쿄", lat: 35.6762, lng: 139.6503, currency: "JPY", langCode: "ja", langName: "일본어", ttsLang: "ja-JP",
         sos: "tel:03-3452-7401", appLink: "https://www.go-taxi.jp/ko",
         categories: {
-          food: [{ id: 1, name: "이치란 신주쿠점", rating: "4.2", reviews: "3,400+", tag: "신주쿠 | 라멘", tip: "비밀 소스 5배 추천!" }],
-          stay: [{ id: 1, name: "소테츠 프레사 인 긴자", rating: "4.6", reviews: "1,200+", tag: "긴자 | 🟢 치안 우수 구역", tip: "야간 보행 매우 안전. 역과의 접근성이 뛰어납니다." }],
-          transit: [{ id: 1, name: "도쿄 메트로 패스 (72시간)", rating: "4.8", reviews: "5,800+", tag: "교통수단 | 패스권", tip: "하루 최소 4회 이상 지하철 탑승 시 무조건 이득!" }],
-          shop: [{ id: 1, name: "시부야 메가 돈키호테", rating: "4.4", reviews: "8,900+", tag: "시부야 | 쇼핑몰", tip: "5,000엔 이상 구매 시 면세 + 추가 5% 쿠폰 챙기세요." }]
+          food: [
+            { id: 1, name: "이치란 신주쿠점", rating: "4.2", reviews: "3,400+", tag: "신주쿠 | 라멘", tip: "비밀 소스 5배 추천!" },
+            { id: 2, name: "몬자야키 모헤지 시부야", rating: "4.6", reviews: "1,800+", tag: "시부야 | 몬자야키", tip: "직원분이 직접 구워줍니다. 오픈런 권장!" },
+            { id: 3, name: "스시로 아사쿠사점", rating: "4.4", reviews: "2,900+", tag: "아사쿠사 | 가성비 스시", tip: "태블릿 한글 주문 가능, 참치 대도로 추천!" }
+          ],
+          stay: [
+            { id: 1, name: "소테츠 프레사 인 긴자", rating: "4.6", reviews: "1,200+", tag: "긴자 | 🟢 치안 우수 구역", tip: "야간 보행 매우 안전. 역과의 접근성이 뛰어납니다." },
+            { id: 2, name: "호텔 그레이서리 신주쿠", rating: "4.5", reviews: "2,400+", tag: "신주쿠 | 🟡 번화가 위치", tip: "고질라 헤드 시그니처, 신주쿠역 도보 5분" },
+            { id: 3, name: "시부야 스트림 에디션 호텔", rating: "4.7", reviews: "980+", tag: "시부야 | 🟢 안전 감성 호텔", tip: "시부야역 직결, 쇼핑 및 야경 감상 최적" }
+          ],
+          transit: [
+            { id: 1, name: "도쿄 메트로 패스 (72시간)", rating: "4.8", reviews: "5,800+", tag: "교통수단 | 패스권", tip: "하루 최소 4회 이상 지하철 탑승 시 무조건 이득!" },
+            { id: 2, name: "스카이라이너 나리타 공항선", rating: "4.7", reviews: "4,100+", tag: "교통수단 | 공항철도", tip: "나리타에서 닛포리/우에노까지 36분 쾌속 이동" }
+          ],
+          shop: [
+            { id: 1, name: "시부야 메가 돈키호테", rating: "4.4", reviews: "8,900+", tag: "시부야 | 쇼핑몰", tip: "5,000엔 이상 구매 시 면세 + 추가 5% 쿠폰 챙기세요." },
+            { id: 2, name: "긴자 이토야 (Itoya)", rating: "4.6", reviews: "3,100+", tag: "긴자 | 대형 문구점", tip: "문구 및 잡화 덕후 필수 코스, 12층 건물 전체 쇼핑" }
+          ]
         }
       },
       osaka: {
-        name: "🇯🇵 일본 - 오사카", searchName: "오사카", lat: 34.6937, lng: 135.5023, currency: "JPY", langCode: "ja", langName: "일본어",
+        name: "🇯🇵 일본 - 오사카", searchName: "오사카", lat: 34.6937, lng: 135.5023, currency: "JPY", langCode: "ja", langName: "일본어", ttsLang: "ja-JP",
         sos: "tel:06-6213-1401", appLink: "https://www.go-taxi.jp/ko",
         categories: {
-          food: [{ id: 1, name: "쿠시카츠 다루마", rating: "4.3", reviews: "2,800+", tag: "도톤보리 | 튀김", tip: "소스 베이스 한 번만 찍기!" }],
-          stay: [{ id: 1, name: "스위소텔 난카이 오사카", rating: "4.7", reviews: "1,900+", tag: "난바 | 🟢 치안 양호 구역", tip: "난바역 상부 위치로 라피트 탑승이 매우 편리합니다." }],
-          transit: [{ id: 1, name: "이코카(ICOCA) 교통카드", rating: "4.9", reviews: "7,100+", tag: "교통수단 | IC카드", tip: "지하철, 버스, 편의점 결제까지 올인원 사용 가능!" }],
-          shop: [{ id: 1, name: "우메다 한신백화점", rating: "4.5", reviews: "3,200+", tag: "우메다 | 백화점", tip: "지하 식품관 타코야끼 및 디저트 쇼핑 강력 추천" }]
+          food: [
+            { id: 1, name: "쿠시카츠 다루마", rating: "4.3", reviews: "2,800+", tag: "도톤보리 | 튀김", tip: "소스 베이스 한 번만 찍기!" },
+            { id: 2, name: "한신백화점 타코야끼", rating: "4.6", reviews: "1,500+", tag: "우메다 | 타코야끼", tip: "겉바속촉의 정석, 파 추가 필수" }
+          ],
+          stay: [
+            { id: 1, name: "스위소텔 난카이 오사카", rating: "4.7", reviews: "1,900+", tag: "난바 | 🟢 치안 양호 구역", tip: "난바역 상부 위치로 라피트 탑승이 매우 편리합니다." },
+            { id: 2, name: "칸데오 호텔 오사카 남바", rating: "4.5", reviews: "2,100+", tag: "신사이바시 | 🟢 스파 호텔", tip: "옥상 노천탕 스파가 포함된 가성비 호텔" }
+          ],
+          transit: [
+            { id: 1, name: "이코카(ICOCA) 교통카드", rating: "4.9", reviews: "7,100+", tag: "교통수단 | IC카드", tip: "지하철, 버스, 편의점 결제까지 올인원 사용 가능!" }
+          ],
+          shop: [
+            { id: 1, name: "우메다 한신백화점", rating: "4.5", reviews: "3,200+", tag: "우메다 | 백화점", tip: "지하 식품관 디저트 쇼핑 강력 추천" }
+          ]
         }
       },
       fukuoka: {
-        name: "🇯🇵 일본 - 후쿠오카", searchName: "후쿠오카", lat: 33.5902, lng: 130.4017, currency: "JPY", langCode: "ja", langName: "일본어",
+        name: "🇯🇵 일본 - 후쿠오카", searchName: "후쿠오카", lat: 33.5902, lng: 130.4017, currency: "JPY", langCode: "ja", langName: "일본어", ttsLang: "ja-JP",
         sos: "tel:092-771-0461", appLink: "https://www.go-taxi.jp/ko",
         categories: {
           food: [{ id: 1, name: "신신라멘 본점", rating: "4.4", reviews: "4,100+", tag: "텐진 | 라멘", tip: "잡내 없는 돈코츠 라멘!" }],
-          stay: [{ id: 1, name: "오리엔탈 호텔 후쿠오카", rating: "4.6", reviews: "2,300+", tag: "하카타 | 🟢 안전 구역", tip: "하카타역 도보 1분 거리, 초보 여행자 추천" }],
-          transit: [{ id: 1, name: "후쿠오카 도심 자전거 (Charichari)", rating: "4.4", reviews: "890+", tag: "교통수단 | 자전거", tip: "평지가 많아 자전거 이동이 매우 유용합니다." }],
-          shop: [{ id: 1, name: "캐널시티 하카타", rating: "4.3", reviews: "6,500+", tag: "하카타 | 쇼핑몰", tip: "분수쇼 감상과 함께 산리오, 무인양품 쇼핑 가능" }]
+          stay: [{ id: 1, name: "오리엔탈 호텔 후쿠오카", rating: "4.6", reviews: "2,300+", tag: "하카타 | 🟢 안전 구역", tip: "하카타역 도보 1분 거리" }],
+          transit: [{ id: 1, name: "후쿠오카 자전거 (Charichari)", rating: "4.4", reviews: "890+", tag: "교통수단 | 자전거", tip: "평지가 많아 자전거 이동 최적" }],
+          shop: [{ id: 1, name: "캐널시티 하카타", rating: "4.3", reviews: "6,500+", tag: "하카타 | 쇼핑몰", tip: "분수쇼 및 캐릭터 샵 쇼핑" }]
         }
       },
       hokkaido: {
-        name: "🇯🇵 일본 - 홋카이도(삿포로)", searchName: "삿포로", lat: 43.0618, lng: 141.3545, currency: "JPY", langCode: "ja", langName: "일본어",
+        name: "🇯🇵 일본 - 홋카이도(삿포로)", searchName: "삿포로", lat: 43.0618, lng: 141.3545, currency: "JPY", langCode: "ja", langName: "일본어", ttsLang: "ja-JP",
         sos: "tel:011-218-0288", appLink: "https://www.go-taxi.jp/ko",
         categories: {
           food: [{ id: 1, name: "징기스칸 다루마 4.4", rating: "4.4", reviews: "2,500+", tag: "스스키노 | 양고기", tip: "비닐봉투에 옷 보관 권장" }],
-          stay: [{ id: 1, name: "크로스 호텔 삿포로", rating: "4.5", reviews: "1,100+", tag: "시계탑 인근 | 🟢 치안 안전", tip: "대욕장이 있어 일정을 마치고 피로를 풀기 좋습니다." }],
-          transit: [{ id: 1, name: "JR 홋카이도 레일 패스", rating: "4.7", reviews: "1,800+", tag: "교통수단 | 철도패스", tip: "오타루, 비에이, 노보리베츠 이동 시 필수" }],
-          shop: [{ id: 1, name: "삿포로 스텔라플레이스", rating: "4.5", reviews: "4,100+", tag: "삿포로역 | 백화점", tip: "삿포로역 연결 대형 쇼핑몰, 잡화 및 의류 추천" }]
+          stay: [{ id: 1, name: "크로스 호텔 삿포로", rating: "4.5", reviews: "1,100+", tag: "시계탑 인근 | 🟢 치안 안전", tip: "대욕장이 있어 피로 풀기 우수" }],
+          transit: [{ id: 1, name: "JR 홋카이도 레일 패스", rating: "4.7", reviews: "1,800+", tag: "교통수단 | 철도패스", tip: "오타루, 비에이 이동 필수" }],
+          shop: [{ id: 1, name: "삿포로 스텔라플레이스", rating: "4.5", reviews: "4,100+", tag: "삿포로역 | 백화점", tip: "삿포로역 연결 대형 쇼핑몰" }]
         }
       },
       bangkok: {
-        name: "🇹🇭 태국 - 방콕", searchName: "방콕", lat: 13.7563, lng: 100.5018, currency: "THB", langCode: "th", langName: "태국어",
+        name: "🇹🇭 태국 - 방콕", searchName: "방콕", lat: 13.7563, lng: 100.5018, currency: "THB", langCode: "th", langName: "태국어", ttsLang: "th-TH",
         sos: "tel:02-247-7500", appLink: "https://www.grab.com/th/",
         categories: {
-          food: [{ id: 1, name: "팁싸마이", rating: "4.3", reviews: "1,200+", tag: "프라나콘 | 팟타이", tip: "오렌지 주스 꼭 주문하세요!" }],
-          stay: [{ id: 1, name: "이스틴 그랜드 사톤", rating: "4.7", reviews: "2,100+", tag: "사톤 | 🟢 치안 양호 구역", tip: "BTS 수라싹역 구름다리와 바로 연결되어 안전합니다." }],
-          transit: [{ id: 1, name: "그랩(Grab) / 볼트(Bolt)", rating: "4.5", reviews: "9,200+", tag: "교통수단 | 승차호출", tip: "가까운 거리는 볼트가 저렴하고, 출퇴근 시간엔 BTS가 빠릅니다." }],
-          shop: [{ id: 1, name: "아이콘시암 (IconSiam)", rating: "4.8", reviews: "12,000+", tag: "클롱산 | 대형쇼핑몰", tip: "G층 실내 야시장에서 길거리 음식을 쾌적하게 쇼핑하세요." }]
+          food: [
+            { id: 1, name: "팁싸마이", rating: "4.3", reviews: "1,200+", tag: "프라나콘 | 팟타이", tip: "오렌지 주스 꼭 주문하세요!" },
+            { id: 2, name: "솜분씨푸드 사톤점", rating: "4.5", reviews: "3,800+", tag: "사톤 | 푸팟퐁커리", tip: "게살만 발라져 나오는 오리지널 커리 추천" }
+          ],
+          stay: [
+            { id: 1, name: "이스틴 그랜드 사톤", rating: "4.7", reviews: "2,100+", tag: "사톤 | 🟢 치안 양호 구역", tip: "BTS 수라싹역 구름다리와 바로 연결" },
+            { id: 2, name: "칼튼 호텔 방콕 스쿰빗", rating: "4.8", reviews: "1,400+", tag: "아속 | 🟢 도심 신축 호텔", tip: "아속역 인근 위치, 루프탑 바 야경 훌륭" }
+          ],
+          transit: [
+            { id: 1, name: "그랩(Grab) / 볼트(Bolt)", rating: "4.5", reviews: "9,200+", tag: "교통수단 | 승차호출", tip: "출퇴근 시간엔 BTS 지상철 탑승 추천" }
+          ],
+          shop: [
+            { id: 1, name: "아이콘시암 (IconSiam)", rating: "4.8", reviews: "12,000+", tag: "클롱산 | 대형쇼핑몰", tip: "G층 실내 야시장에서 길거리 음식 쇼핑" }
+          ]
         }
       },
       phuket: {
-        name: "🇹🇭 태국 - 푸켓", searchName: "푸켓", lat: 7.8804, lng: 98.3923, currency: "THB", langCode: "th", langName: "태국어",
+        name: "🇹🇭 태국 - 푸켓", searchName: "푸켓", lat: 7.8804, lng: 98.3923, currency: "THB", langCode: "th", langName: "태국어", ttsLang: "th-TH",
         sos: "tel:02-247-7500", appLink: "https://www.grab.com/th/",
         categories: {
           food: [{ id: 1, name: "넘버식스", rating: "4.2", reviews: "2,100+", tag: "빠통비치 | 현지식", tip: "모닝글로리볶음 강추!" }],
-          stay: [{ id: 1, name: "밀레니엄 리조트 빠통", rating: "4.4", reviews: "1,500+", tag: "빠통 | 🟡 번화가 번잡 구역", tip: "정실론 쇼핑몰과 연결, 밤에도 사람이 많습니다." }],
-          transit: [{ id: 1, name: "푸켓 스마트 버스", rating: "4.1", reviews: "620+", tag: "교통수단 | 공항버스", tip: "공항에서 주요 해변까지 저렴한 이동 가능" }],
-          shop: [{ id: 1, name: "정실론 쇼핑몰", rating: "4.3", reviews: "5,100+", tag: "빠통 | 대형몰", tip: "빅씨마트 푸켓 특산품 및 건망고 쇼핑 코스" }]
+          stay: [{ id: 1, name: "밀레니엄 리조트 빠통", rating: "4.4", reviews: "1,500+", tag: "빠통 | 🟡 번화가 위치", tip: "정실론 쇼핑몰 연결" }],
+          transit: [{ id: 1, name: "푸켓 스마트 버스", rating: "4.1", reviews: "620+", tag: "교통수단 | 공항버스", tip: "공항~해변 간 저렴 이동" }],
+          shop: [{ id: 1, name: "정실론 쇼핑몰", rating: "4.3", reviews: "5,100+", tag: "빠통 | 대형몰", tip: "빅씨마트 특산품 쇼핑" }]
         }
       },
       danang: {
-        name: "🇻🇳 베트남 - 다낭", searchName: "다낭", lat: 16.0544, lng: 108.2022, currency: "VND", langCode: "vi", langName: "베트남어",
+        name: "🇻🇳 베트남 - 다낭", searchName: "다낭", lat: 16.0544, lng: 108.2022, currency: "VND", langCode: "vi", langName: "베트남어", ttsLang: "vi-VN",
         sos: "tel:0236-3561-000", appLink: "https://www.grab.com/vn/",
         categories: {
-          food: [{ id: 1, name: "목식당", rating: "4.6", reviews: "4,500+", tag: "미케비치 | 해산물", tip: "크랩 마늘버터 소스 추천" }],
-          stay: [{ id: 1, name: "신라모노그램 다낭", rating: "4.8", reviews: "950+", tag: "리조트단지 | 🟢 가족형 안심 구역", tip: "프라이빗 비치가 있어 보안이 철저합니다." }],
-          transit: [{ id: 1, name: "다낭 그랩(Grab) 택시", rating: "4.6", reviews: "7,400+", tag: "교통수단 | 승차호출", tip: "바나힐이나 호이안 이동 시 사전 요금 확인 필수" }],
-          shop: [{ id: 1, name: "한시장 (Han Market)", rating: "4.2", reviews: "6,300+", tag: "시내 | 전통시장", tip: "아오자이, 망고, 탑젤리 시세표 미리 체크하세요." }]
+          food: [
+            { id: 1, name: "목식당", rating: "4.6", reviews: "4,500+", tag: "미케비치 | 해산물", tip: "크랩 마늘버터 소스 추천" },
+            { id: 2, name: "안토이 (An Thoi)", rating: "4.5", reviews: "2,100+", tag: "한시장 인근 | 베트남 가정식", tip: "반쎄오 및 반미 플래터 한국인 최애" }
+          ],
+          stay: [
+            { id: 1, name: "신라모노그램 다낭", rating: "4.8", reviews: "950+", tag: "리조트단지 | 🟢 가족 안심 구역", tip: "프라이빗 비치가 있어 보안 철저" },
+            { id: 2, name: "하얏트 리젠시 다낭", rating: "4.7", reviews: "1,800+", tag: "미케비치 | 🟢 고급 리조트", tip: "키즈클럽 완비, 가족 단위 휴양에 최적" }
+          ],
+          transit: [
+            { id: 1, name: "다낭 그랩(Grab) 택시", rating: "4.6", reviews: "7,400+", tag: "교통수단 | 승차호출", tip: "바나힐/호이안 이동 시 사전 요금 확인" }
+          ],
+          shop: [
+            { id: 1, name: "한시장 (Han Market)", rating: "4.2", reviews: "6,300+", tag: "시내 | 전통시장", tip: "아오자이, 망고, 탑젤리 시세표 체크" }
+          ]
         }
       },
       nhatrang: {
-        name: "🇻🇳 베트남 - 나트랑", searchName: "나트랑", lat: 12.2388, lng: 109.1967, currency: "VND", langCode: "vi", langName: "베트남어",
+        name: "🇻🇳 베트남 - 나트랑", searchName: "나트랑", lat: 12.2388, lng: 109.1967, currency: "VND", langCode: "vi", langName: "베트남어", ttsLang: "vi-VN",
         sos: "tel:0236-3561-000", appLink: "https://www.grab.com/vn/",
         categories: {
           food: [{ id: 1, name: "촌촌킴", rating: "4.4", reviews: "1,900+", tag: "시내 | 가정식", tip: "모닝글로리+돼지고기 볶음 추천" }],
-          stay: [{ id: 1, name: "인터컨티넨탈 나트랑", rating: "4.7", reviews: "1,800+", tag: "해변가 | 🟢 안전 구역", tip: "시내 중심가에 위치해 도보 이동 및 치안이 우수합니다." }],
-          transit: [{ id: 1, name: "나트랑 공항 픽업 샌딩", rating: "4.5", reviews: "3,100+", tag: "교통수단 | 픽업차량", tip: "깜란 공항에서 시내까지 프라이빗 차량 예약 권장" }],
-          shop: [{ id: 1, name: "롯데마트 나트랑점", rating: "4.6", reviews: "5,200+", tag: "시내 | 대형마트", tip: "G7 커피, 건망고, 아치카페 선물용 쇼핑 추천" }]
+          stay: [{ id: 1, name: "인터컨티넨탈 나트랑", rating: "4.7", reviews: "1,800+", tag: "해변가 | 🟢 안전 구역", tip: "시내 중심가 도보 접근성 우수" }],
+          transit: [{ id: 1, name: "나트랑 공항 픽업 샌딩", rating: "4.5", reviews: "3,100+", tag: "교통수단 | 픽업차량", tip: "공항에서 시내 프라이빗 차량 권장" }],
+          shop: [{ id: 1, name: "롯데마트 나트랑점", rating: "4.6", reviews: "5,200+", tag: "시내 | 대형마트", tip: "G7 커피, 건망고 선물용 쇼핑" }]
         }
       },
       phuquoc: {
-        name: "🇻🇳 베트남 - 푸꾸옥", searchName: "푸꾸옥", lat: 10.2899, lng: 103.9840, currency: "VND", langCode: "vi", langName: "베트남어",
+        name: "🇻🇳 베트남 - 푸꾸옥", searchName: "푸꾸옥", lat: 10.2899, lng: 103.9840, currency: "VND", langCode: "vi", langName: "베트남어", ttsLang: "vi-VN",
         sos: "tel:0236-3561-000", appLink: "https://www.grab.com/vn/",
         categories: {
           food: [{ id: 1, name: "신짜오 식당", rating: "4.3", reviews: "2,300+", tag: "즈엉동 | 해산물", tip: "일몰 시각 창가 자리 예약 필수" }],
-          stay: [{ id: 1, name: "Novotel 푸꾸옥 리조트", rating: "4.5", reviews: "1,400+", tag: "소나시 | 🟢 안전 구역", tip: "소나시 야시장 도보 이동 가능 및 리조트 보안 우수" }],
-          transit: [{ id: 1, name: "푸꾸옥 빈버스 (VinBus)", rating: "4.8", reviews: "4,900+", tag: "교통수단 | 무료버스", tip: "무료 운행 노선 앱으로 실시간 시각표 체크 가능" }],
-          shop: [{ id: 1, name: "킹콩마트 (Kingkong Mart)", rating: "4.7", reviews: "8,100+", tag: "여행자거리 | 종합마트", tip: "푸꾸옥 후추, 땅콩, 통조림 쇼핑의 성지" }]
+          stay: [{ id: 1, name: "Novotel 푸꾸옥 리조트", rating: "4.5", reviews: "1,400+", tag: "소나시 | 🟢 안전 구역", tip: "소나시 야시장 도보 이동 가능" }],
+          transit: [{ id: 1, name: "푸꾸옥 빈버스 (VinBus)", rating: "4.8", reviews: "4,900+", tag: "교통수단 | 무료버스", tip: "무료 노선 앱으로 시각표 체크" }],
+          shop: [{ id: 1, name: "킹콩마트 (Kingkong Mart)", rating: "4.7", reviews: "8,100+", tag: "여행자거리 | 종합마트", tip: "후추, 땅콩 쇼핑의 성지" }]
         }
       },
       cebu: {
-        name: "🇵🇭 필리핀 - 세부", searchName: "세부", lat: 10.3157, lng: 123.8854, currency: "PHP", langCode: "en", langName: "영어",
+        name: "🇵🇭 필리핀 - 세부", searchName: "세부", lat: 10.3157, lng: 123.8854, currency: "PHP", langCode: "en", langName: "영어", ttsLang: "en-US",
         sos: "tel:032-231-1616", appLink: "https://www.grab.com/ph/",
         categories: {
           food: [{ id: 1, name: "골드망고 그릴", rating: "4.5", reviews: "1,700+", tag: "막탄 | 퓨전", tip: "감바스 추천, 픽드랍 가능" }],
-          stay: [{ id: 1, name: "샹그릴라 막탄 리조트", rating: "4.8", reviews: "3,200+", tag: "막탄 | 🟢 치안 안전", tip: "리조트 내 프라이빗 비치와 자체 경비 시스템 운영" }],
-          transit: [{ id: 1, name: "막탄 리조트 단지 픽드랍 차량", rating: "4.4", reviews: "2,100+", tag: "교통수단 | 픽업 서비스", tip: "마사지샵/식당 예약 시 무료 픽드랍 제공 여부 확인" }],
-          shop: [{ id: 1, name: "아얄라몰 세부", rating: "4.5", reviews: "9,500+", tag: "세부시티 | 대형몰", tip: "바나나칩, 폰즈 파우더, 헤어 트릿먼트 쇼핑" }]
+          stay: [{ id: 1, name: "샹그릴라 막탄 리조트", rating: "4.8", reviews: "3,200+", tag: "막탄 | 🟢 치안 안전", tip: "프라이빗 비치 및 경비 철저" }],
+          transit: [{ id: 1, name: "막탄 리조트 단지 픽드랍", rating: "4.4", reviews: "2,100+", tag: "교통수단 | 픽업", tip: "예약 시 무료 픽드랍 제공 여부 확인" }],
+          shop: [{ id: 1, name: "아얄라몰 세부", rating: "4.5", reviews: "9,500+", tag: "세부시티 | 대형몰", tip: "바나나칩, 폰즈 파우더 쇼핑" }]
         }
       },
       boracay: {
-        name: "🇵🇭 필리핀 - 보라카이", searchName: "보라카이", lat: 11.9674, lng: 121.9248, currency: "PHP", langCode: "en", langName: "영어",
+        name: "🇵🇭 필리핀 - 보라카이", searchName: "보라카이", lat: 11.9674, lng: 121.9248, currency: "PHP", langCode: "en", langName: "영어", ttsLang: "en-US",
         sos: "tel:02-8811-6139", appLink: "https://www.grab.com/ph/",
         categories: {
           food: [{ id: 1, name: "게릴라 아일랜드", rating: "4.4", reviews: "1,100+", tag: "디몰 | 바베큐", tip: "알리망오 크랩 추천" }],
-          stay: [{ id: 1, name: "헤난 가든 리조트", rating: "4.6", reviews: "2,800+", tag: "스테이션2 | 🟡 중심가 번화", tip: "화이트비치 도보 3분, 위치성 및 보안 무난" }],
-          transit: [{ id: 1, name: "보라카이 전기 트라이시클", rating: "4.3", reviews: "1,500+", tag: "교통수단 | 현지택시", tip: "스테이션 간 이동 시 정찰제 요금표 확인 후 탑승" }],
-          shop: [{ id: 1, name: "디몰 (D'Mall Boracay)", rating: "4.4", reviews: "7,800+", tag: "스테이션2 | 오픈쇼핑가", tip: "악마의 잼, 노니비누, 수제 기념품 쇼핑 중심지" }]
+          stay: [{ id: 1, name: "헤난 가든 리조트", rating: "4.6", reviews: "2,800+", tag: "스테이션2 | 🟡 중심가 번화", tip: "화이트비치 도보 3분 위치" }],
+          transit: [{ id: 1, name: "보라카이 전기 트라이시클", rating: "4.3", reviews: "1,500+", tag: "교통수단 | 트라이시클", tip: "정찰제 요금표 확인 후 탑승" }],
+          shop: [{ id: 1, name: "디몰 (D'Mall Boracay)", rating: "4.4", reviews: "7,800+", tag: "스테이션2 | 쇼핑가", tip: "악마의 잼 및 노니비누 쇼핑" }]
         }
       },
       sydney: {
-        name: "🇦🇺 호주 - 시드니", searchName: "시드니", lat: -33.8688, lng: 151.2093, currency: "AUD", langCode: "en", langName: "영어",
+        name: "🇦🇺 호주 - 시드니", searchName: "시드니", lat: -33.8688, lng: 151.2093, currency: "AUD", langCode: "en", langName: "영어", ttsLang: "en-US",
         sos: "tel:02-9210-0200", appLink: "https://www.uber.com/au/en/",
         categories: {
           food: [{ id: 1, name: "팬케이크 온 더 록스", rating: "4.3", reviews: "4,200+", tag: "록스 | 브런치", tip: "바베큐 립 추천" }],
-          stay: [{ id: 1, name: "릿지스 시드니 하버", rating: "4.5", reviews: "1,300+", tag: "더록스 | 🟢 안전 우수", tip: "오페라하우스 도보 접근성 및 치안이 훌륭합니다." }],
-          transit: [{ id: 1, name: "시드니 오팔(Opal) 및 컨택리스", rating: "4.8", reviews: "6,200+", tag: "교통수단 | 페리/트램", tip: "일요일 주중 캡 환급 혜택 자동 적용" }],
-          shop: [{ id: 1, name: "퀸 빅토리아 빌딩 (QVB)", rating: "4.7", reviews: "11,000+", tag: "시티 | 대형쇼핑몰", tip: "세계에서 가장 아름다운 쇼핑몰, 어그 부츠 및 럭셔리 브랜드" }]
+          stay: [{ id: 1, name: "릿지스 시드니 하버", rating: "4.5", reviews: "1,300+", tag: "더록스 | 🟢 안전 우수", tip: "오페라하우스 도보 접근성 훌륭" }],
+          transit: [{ id: 1, name: "시드니 오팔(Opal) 컨택리스", rating: "4.8", reviews: "6,200+", tag: "교통수단 | 페리/트램", tip: "일요일 주중 캡 환급 자동 적용" }],
+          shop: [{ id: 1, name: "퀸 빅토리아 빌딩 (QVB)", rating: "4.7", reviews: "11,000+", tag: "시티 | 대형쇼핑몰", tip: "어그 부츠 및 럭셔리 브랜드 쇼핑" }]
         }
       },
       perth: {
-        name: "🇦🇺 호주 - 퍼스", searchName: "퍼스", lat: -31.9505, lng: 115.8605, currency: "AUD", langCode: "en", langName: "영어",
+        name: "🇦🇺 호주 - 퍼스", searchName: "퍼스", lat: -31.9505, lng: 115.8605, currency: "AUD", langCode: "en", langName: "영어", ttsLang: "en-US",
         sos: "tel:08-9325-2177", appLink: "https://www.uber.com/au/en/",
         categories: {
           food: [{ id: 1, name: "C Restaurant", rating: "4.5", reviews: "1,500+", tag: "시내 | 회전식", tip: "360도 시내 뷰 감상 가능" }],
-          stay: [{ id: 1, name: "크라운 타워스 퍼스", rating: "4.7", reviews: "2,100+", tag: "버스우드 | 🟢 안심 구역", tip: "스완강 변 위치, 프라이빗 리조트 보안 철저" }],
-          transit: [{ id: 1, name: "퍼스 CAT 무료 버스", rating: "4.6", reviews: "1,800+", tag: "교통수단 | 노선버스", tip: "Red, Blue, Green CAT 노선 타고 시내 무임 이동" }],
-          shop: [{ id: 1, name: "하차웨이 아울렛 (Watertown)", rating: "4.2", reviews: "2,400+", tag: "웨스트퍼스 | 아울렛", tip: "호주 스포츠 의류 및 나이키/아디다스 할인매장" }]
+          stay: [{ id: 1, name: "크라운 타워스 퍼스", rating: "4.7", reviews: "2,100+", tag: "버스우드 | 🟢 안심 구역", tip: "스완강 변 프라이빗 리조트" }],
+          transit: [{ id: 1, name: "퍼스 CAT 무료 버스", rating: "4.6", reviews: "1,800+", tag: "교통수단 | 무료버스", tip: "CAT 노선 시내 무임 탑승" }],
+          shop: [{ id: 1, name: "하차웨이 아울렛 (Watertown)", rating: "4.2", reviews: "2,400+", tag: "웨스트퍼스 | 아울렛", tip: "호주 스포츠 의류 할인매장" }]
         }
       },
       brisbane: {
-        name: "🇦🇺 호주 - 브리즈번", searchName: "브리즈번", lat: -27.4705, lng: 153.0260, currency: "AUD", langCode: "en", langName: "영어",
+        name: "🇦🇺 호주 - 브리즈번", searchName: "브리즈번", lat: -27.4705, lng: 153.0260, currency: "AUD", langCode: "en", langName: "영어", ttsLang: "en-US",
         sos: "tel:07-3221-1400", appLink: "https://www.uber.com/au/en/",
         categories: {
           food: [{ id: 1, name: "Eat Street Market", rating: "4.7", reviews: "5,400+", tag: "야시장", tip: "금/토/일만 영업!" }],
-          stay: [{ id: 1, name: "메리통 스위트 허셜 스트리트", rating: "4.6", reviews: "3,100+", tag: "시티중심 | 🟢 치안 안전", tip: "레지던스형 숙소, 중앙역 도보 접근성 최고" }],
-          transit: [{ id: 1, name: "시티호퍼 (CityHopper) 무료 페리", rating: "4.8", reviews: "3,900+", tag: "교통수단 | 무료페리", tip: "브리즈번 강변 야경 관람 시 필수 무료 수단" }],
-          shop: [{ id: 1, name: "퀸스트리트 몰", rating: "4.5", reviews: "8,200+", tag: "시티중심 | 쇼핑보행로", tip: "영백화점 및 호주 포포크림/영양제 쇼핑" }]
+          stay: [{ id: 1, name: "메리통 스위트 허셜 스트리트", rating: "4.6", reviews: "3,100+", tag: "시티중심 | 🟢 치안 안전", tip: "중앙역 도보 접근성 최고" }],
+          transit: [{ id: 1, name: "시티호퍼 (CityHopper) 무료 페리", rating: "4.8", reviews: "3,900+", tag: "교통수단 | 무료페리", tip: "강변 야경 관람 시 필수 무료 수단" }],
+          shop: [{ id: 1, name: "퀸스트리트 몰", rating: "4.5", reviews: "8,200+", tag: "시티중심 | 쇼핑보행로", tip: "호주 포포크림 및 영양제 쇼핑" }]
         }
       },
       paris: {
-        name: "🇫🇷 프랑스 - 파리", searchName: "파리", lat: 48.8566, lng: 2.3522, currency: "EUR", langCode: "fr", langName: "프랑스어",
+        name: "🇫🇷 프랑스 - 파리", searchName: "파리", lat: 48.8566, lng: 2.3522, currency: "EUR", langCode: "fr", langName: "프랑스어", ttsLang: "fr-FR",
         sos: "tel:01-4753-0101", appLink: "https://www.bolt.eu/",
         categories: {
           food: [{ id: 1, name: "오 피에 드 코숑", rating: "4.2", reviews: "4,100+", tag: "레알 | 전통식", tip: "프랑스식 족발 요리 추천" }],
-          stay: [{ id: 1, name: "풀만 파리 투르 에펠", rating: "4.6", reviews: "2,700+", tag: "15구 | 🟢 비교적 안전 구역", tip: "에펠탑 뷰 숙소, 밤에도 관광객이 많아 도보 안전" }],
-          transit: [{ id: 1, name: "파리 나비고 데쿠베르트 패스", rating: "4.7", reviews: "9,100+", tag: "교통수단 | 주간패스", tip: "월~일 일주일 통합 이용권, 증명사진 미리 챙기세요" }],
-          shop: [{ id: 1, name: "라파예트 백화점", rating: "4.5", reviews: "15,000+", tag: "오페라 | 백화점", tip: "화려한 돔 천장 감상 및 텍스리펀 창구 서비스 이용" }]
+          stay: [{ id: 1, name: "풀만 파리 투르 에펠", rating: "4.6", reviews: "2,700+", tag: "15구 | 🟢 비교적 안전 구역", tip: "에펠탑 뷰 숙소, 밤에도 관광객이 많아 안전" }],
+          transit: [{ id: 1, name: "파리 나비고 데쿠베르트 패스", rating: "4.7", reviews: "9,100+", tag: "교통수단 | 주간패스", tip: "월~일 일주일 통합 이용권" }],
+          shop: [{ id: 1, name: "라파예트 백화점", rating: "4.5", reviews: "15,000+", tag: "오페라 | 백화점", tip: "화려한 돔 천장 감상 및 텍스리펀" }]
         }
       },
       london: {
-        name: "🇬🇧 영국 - 런던", searchName: "런던", lat: 51.5074, lng: -0.1278, currency: "GBP", langCode: "en", langName: "영어",
+        name: "🇬🇧 영국 - 런던", searchName: "런던", lat: 51.5074, lng: -0.1278, currency: "GBP", langCode: "en", langName: "영어", ttsLang: "en-GB",
         sos: "tel:020-7227-5500", appLink: "https://www.uber.com/gb/en/",
         categories: {
           food: [{ id: 1, name: "플랫 아이언", rating: "4.4", reviews: "6,200+", tag: "코벤트가든 | 스테이크", tip: "가성비 스테이크 맛집!" }],
-          stay: [{ id: 1, name: "파크 플라자 웨스트민스터 브릿지", rating: "4.6", reviews: "3,800+", tag: "워털루 | 🟢 안전 치안", tip: "빅벤 맞은편 위치, 밤거리 안전하고 관광지 이동 최고" }],
-          transit: [{ id: 1, name: "런던 지하철(Tube) 컨택리스", rating: "4.8", reviews: "12,000+", tag: "교통수단 | 지하철", tip: "하차 시 같은 카드로 탭하는 것 잊지 마세요!" }],
-          shop: [{ id: 1, name: "버로우 마켓 (Borough Market)", rating: "4.6", reviews: "18,000+", tag: "런던브릿지 | 식료품시장", tip: "몬머스 커피, 빠에야, 수제 치즈 쇼핑" }]
+          stay: [{ id: 1, name: "파크 플라자 웨스트민스터 브릿지", rating: "4.6", reviews: "3,800+", tag: "워털루 | 🟢 안전 치안", tip: "빅벤 맞은편 위치, 밤거리 안전" }],
+          transit: [{ id: 1, name: "런던 지하철(Tube) 컨택리스", rating: "4.8", reviews: "12,000+", tag: "교통수단 | 지하철", tip: "하차 시 같은 카드로 탭 필수" }],
+          shop: [{ id: 1, name: "버로우 마켓 (Borough Market)", rating: "4.6", reviews: "18,000+", tag: "런던브릿지 | 식료품시장", tip: "몬머스 커피 및 빠에야 쇼핑" }]
         }
       },
       hawaii: {
-        name: "🇺🇸 미국 - 하와이(호놀룰루)", searchName: "하와이", lat: 21.3069, lng: -157.8583, currency: "USD", langCode: "en", langName: "영어",
+        name: "🇺🇸 미국 - 하와이(호놀룰루)", searchName: "하와이", lat: 21.3069, lng: -157.8583, currency: "USD", langCode: "en", langName: "영어", ttsLang: "en-US",
         sos: "tel:0808-595-6100", appLink: "https://www.uber.com/",
         categories: {
           food: [{ id: 1, name: "지오바니 새우트럭", rating: "4.3", reviews: "7,200+", tag: "노스쇼어 | 갈릭새우", tip: "갈릭 스카피 추천!" }],
-          stay: [{ id: 1, name: "쉐라톤 와이키키", rating: "4.7", reviews: "5,400+", tag: "와이키키 | 🟢 안전 구역", tip: "인피니티 풀 유명, 와이키키 중심이라 밤에도 유동인구 많음" }],
-          transit: [{ id: 1, name: "하와이 와이키키 트롤리 (Pink Line)", rating: "4.4", reviews: "2,200+", tag: "교통수단 | 관광트롤리", tip: "JCB 카드 소지 시 성인 2인 무료 탑승 가능" }],
-          shop: [{ id: 1, name: "알라모아나 센터", rating: "4.7", reviews: "14,000+", tag: "호놀룰루 | 대형쇼핑몰", tip: "미국 최대 규모 오픈에어 쇼핑몰, 하와이안 셔츠 및 명품" }]
+          stay: [{ id: 1, name: "쉐라톤 와이키키", rating: "4.7", reviews: "5,400+", tag: "와이키키 | 🟢 안전 구역", tip: "인피니티 풀 유명, 와이키키 중심 위치" }],
+          transit: [{ id: 1, name: "하와이 와이키키 트롤리 (Pink Line)", rating: "4.4", reviews: "2,200+", tag: "교통수단 | 관광트롤리", tip: "JCB 카드 소지 시 성인 2인 무료" }],
+          shop: [{ id: 1, name: "알라모아나 센터", rating: "4.7", reviews: "14,000+", tag: "호놀룰루 | 대형쇼핑몰", tip: "미국 최대 규모 오픈에어 쇼핑몰" }]
         }
       }
     };
@@ -220,6 +264,9 @@
       const [showTranslateModal, setShowTranslateModal] = useState(false);
       const [showCalcModal, setShowCalcModal] = useState(false);
       const [footerModalType, setFooterModalType] = useState(null);
+
+      // 전광판 카러셀 인덱스 상태
+      const [carouselIndex, setCarouselIndex] = useState(0);
 
       // 실시간 API 데이터
       const [weatherData, setWeatherData] = useState(null);
@@ -240,6 +287,19 @@
       const mapRef = useRef(null);
       const currentData = COUNTRY_DATA[selectedCity] || COUNTRY_DATA['tokyo'];
       const currentPlaces = currentData.categories ? (currentData.categories[activeCategory] || []) : [];
+
+      // 전광판 자동 스위칭 타이머 (3초 마다 자동 전환)
+      useEffect(() => {
+        setCarouselIndex(0); // 도시 또는 카테고리 변경 시 인덱스 리셋
+      }, [selectedCity, activeCategory]);
+
+      useEffect(() => {
+        if (currentPlaces.length <= 1) return;
+        const interval = setInterval(() => {
+          setCarouselIndex((prevIndex) => (prevIndex + 1) % currentPlaces.length);
+        }, 3000);
+        return () => clearInterval(interval);
+      }, [currentPlaces]);
 
       // 소스 무단 복제 방지
       useEffect(() => {
@@ -287,7 +347,7 @@
           .catch(() => setWeatherDataLoading(false));
       }, [selectedCity]);
 
-      // 실시간 뉴스 API
+      // 속보 API
       useEffect(() => {
         setNewsLoading(true);
         const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(currentData.searchName + " 여행 속보")}&hl=ko&gl=KR&ceid=KR:ko`;
@@ -304,7 +364,7 @@
           .catch(() => setNewsLoading(false));
       }, [selectedCity]);
 
-      // 실시간 환율 API
+      // 환율 API
       useEffect(() => {
         fetch(`https://open.er-api.com/v6/latest/${currentData.currency}`)
           .then(res => res.json())
@@ -316,7 +376,7 @@
           .catch(() => setExchangeRate(null));
       }, [selectedCity]);
 
-      // 영문 지도
+      // 지도 초기화 (영문 타일)
       useEffect(() => {
         let isMounted = true;
         if (currentTab === 'map') {
@@ -362,21 +422,18 @@
 
       useEffect(() => {
         if (window.lucide) window.lucide.createIcons();
-      }, [selectedCity, currentTab, activeCategory, showTranslateModal, showCalcModal, footerModalType, weatherLoading, newsLoading, isListening, speechText, translatedResult, isTranslating]);
+      }, [selectedCity, currentTab, activeCategory, showTranslateModal, showCalcModal, footerModalType, weatherLoading, newsLoading, isListening, speechText, translatedResult, isTranslating, carouselIndex]);
 
-      // 크로스 브라우저 STT 토글
+      // 음성 인식 (STT) 토글
       const toggleSpeechRecognition = () => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        
         if (!SpeechRecognition) {
-          alert("사용 중이신 브라우저가 직접 음성 인식을 지원하지 않습니다. 아래 텍스트 입력창이나 드롭다운을 이용해 주세요.");
+          alert("현재 디바이스의 브라우저에서 음성 인식을 직접 지원하지 않습니다. 텍스트 입력창이나 드롭다운을 이용해 주세요.");
           return;
         }
 
         if (isListening) {
-          if (recognitionRef.current) {
-            recognitionRef.current.stop();
-          }
+          if (recognitionRef.current) recognitionRef.current.stop();
           setIsListening(false);
         } else {
           try {
@@ -385,10 +442,7 @@
             recognition.continuous = true;
             recognition.interimResults = true;
 
-            recognition.onstart = () => {
-              setIsListening(true);
-            };
-
+            recognition.onstart = () => setIsListening(true);
             recognition.onresult = (event) => {
               let currentTranscript = '';
               for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -396,14 +450,8 @@
               }
               setSpeechText(currentTranscript);
             };
-
-            recognition.onerror = () => {
-              setIsListening(false);
-            };
-
-            recognition.onend = () => {
-              setIsListening(false);
-            };
+            recognition.onerror = () => setIsListening(false);
+            recognition.onend = () => setIsListening(false);
 
             recognition.start();
             recognitionRef.current = recognition;
@@ -413,7 +461,7 @@
         }
       };
 
-      // 파파고/무료 번역 API 엔진 (화면 내 인앱 번역 수행)
+      // 화면 내 인앱 번역 수행
       const handleInAppTranslate = () => {
         if(!speechText) return;
         setIsTranslating(true);
@@ -429,27 +477,50 @@
               setTranslatedResult({
                 original: speechText,
                 translated: translatedText,
-                langName: currentData.langName
+                langName: currentData.langName,
+                ttsLang: currentData.ttsLang
               });
             }
             setIsTranslating(false);
           })
           .catch(() => {
-            // 폴백 처리
             setTranslatedResult({
               original: speechText,
-              translated: `[${currentData.langName} 번역 완료] "${speechText}"`,
-              langName: currentData.langName
+              translated: `[${currentData.langName} 번역] "${speechText}"`,
+              langName: currentData.langName,
+              ttsLang: currentData.ttsLang
             });
             setIsTranslating(false);
           });
       };
 
-      // 실시간 환율 계산
+      // [신규 지원] 현지인용 스피커 음성 출력 (TTS)
+      const handleSpeakText = (text, ttsLang) => {
+        if (!('speechSynthesis' in window)) {
+          alert("현재 브라우저에서 음성 합성(TTS) 기능을 지원하지 않습니다.");
+          return;
+        }
+        window.speechSynthesis.cancel(); // 이전 음성 중단
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = ttsLang || 'ja-JP';
+        utterance.rate = 0.9; // 현지인이 똑똑히 들을 수 있도록 약간 천천히 읽기
+        window.speechSynthesis.speak(utterance);
+      };
+
+      // 환율 계산
       const calculateKRW = () => {
         if (!calcAmount || isNaN(calcAmount)) return 0;
         const rate = exchangeRate || (currentData.currency === 'JPY' ? 9.1 : (currentData.currency === 'VND' ? 0.055 : 1350));
         return Math.round(parseFloat(calcAmount) * rate);
+      };
+
+      // 카테고리별 스마트 맞춤 링크 생성 (숙소: 아고다 / 그외: 구글맵)
+      const getSmartLink = (place) => {
+        if (activeCategory === 'stay') {
+          return `https://www.agoda.com/ko-kr/search?text=${encodeURIComponent(place.name + " " + currentData.searchName)}`;
+        } else {
+          return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name + " " + currentData.searchName)}`;
+        }
       };
 
       return (
@@ -557,14 +628,14 @@
                   </p>
                 </div>
 
-                {/* 4대 퀵 기능 */}
+                {/* 4대 퀵 기능 (버튼 명칭: '번역기'로 수정 완료) */}
                 <div className="grid grid-cols-4 gap-2">
                   <button 
                     onClick={() => setShowTranslateModal(true)}
                     className="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-1 active:scale-95 transition cursor-pointer"
                   >
                     <div className="p-2 bg-blue-100 text-blue-600 rounded-xl"><i data-lucide="mic" className="w-4 h-4"></i></div>
-                    <span className="text-xs font-bold text-slate-700">인앱번역기</span>
+                    <span className="text-xs font-bold text-slate-700">번역기</span>
                   </button>
 
                   <a 
@@ -621,7 +692,7 @@
                   </div>
                 </div>
 
-                {/* 카테고리 정보 */}
+                {/* 전광판 카러셀 및 카테고리 정보 */}
                 <div className="space-y-3">
                   <div className="flex gap-2 overflow-x-auto pb-1 text-xs no-scrollbar">
                     {[
@@ -644,42 +715,75 @@
                     ))}
                   </div>
 
-                  <div className="space-y-3">
-                    {currentPlaces.length > 0 ? (
-                      currentPlaces.map((place) => {
-                        const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name + " " + currentData.searchName)}`;
+                  {/* 3초마다 바뀌는 실시간 전광판 롤링 메인 카드 */}
+                  {currentPlaces.length > 0 ? (
+                    <div className="relative">
+                      {(() => {
+                        const currentPlace = currentPlaces[carouselIndex % currentPlaces.length];
+                        const linkUrl = getSmartLink(currentPlace);
+                        const isStay = activeCategory === 'stay';
+
                         return (
                           <a 
-                            key={place.id} 
-                            href={googleMapsUrl}
+                            href={linkUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="block bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-2 hover:border-blue-300 transition cursor-pointer group"
+                            className="block bg-gradient-to-br from-white via-slate-50 to-blue-50/40 p-4 rounded-2xl shadow-md border-2 border-blue-200/80 space-y-2.5 transition transform active:scale-98 cursor-pointer relative overflow-hidden group"
                           >
-                            <div className="flex justify-between items-start">
+                            {/* 전광판 배지 라이브 표시 */}
+                            <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+                              <span className="text-[10px] font-black bg-blue-600 text-white px-2 py-0.5 rounded-full animate-pulse flex items-center gap-1">
+                                📡 실시간 롤링 전광판 ({carouselIndex + 1}/{currentPlaces.length})
+                              </span>
+                              <span className="text-[11px] font-bold text-blue-600 group-hover:underline">
+                                {isStay ? "🏨 아고다 예약 ➔" : "🗺️ 구글맵 보기 ➔"}
+                              </span>
+                            </div>
+
+                            <div className="flex justify-between items-start pt-1">
                               <div>
-                                <h3 className="font-bold text-sm text-slate-900 group-hover:text-blue-600 flex items-center gap-1">
-                                  {place.name} <span className="text-[10px] text-blue-500 font-normal">🗺️ 구글맵</span>
+                                <h3 className="font-extrabold text-base text-slate-900 group-hover:text-blue-700 flex items-center gap-1.5">
+                                  {currentPlace.name}
                                 </h3>
-                                <span className="text-[11px] text-slate-400">{place.tag}</span>
+                                <span className="text-xs text-slate-500 font-medium">{currentPlace.tag}</span>
                               </div>
-                              <div className="flex items-center gap-1 text-xs font-black text-amber-500 bg-amber-50 px-2 py-1 rounded-lg">
-                                <span>⭐ {place.rating}</span>
-                                <span className="text-slate-300 font-normal">({place.reviews})</span>
+                              <div className="flex items-center gap-1 text-xs font-black text-amber-500 bg-amber-50 px-2 py-1 rounded-xl border border-amber-200">
+                                <span>⭐ {currentPlace.rating}</span>
+                                <span className="text-slate-400 font-normal">({currentPlace.reviews})</span>
                               </div>
                             </div>
-                            <div className="bg-amber-50/80 p-3 rounded-xl border border-amber-100 text-xs text-amber-950 leading-relaxed">
-                              <span className="font-black text-amber-800">💡 톨구 꿀팁: </span>{place.tip}
+
+                            <div className="bg-amber-100/60 p-3 rounded-xl border border-amber-200 text-xs text-amber-950 leading-relaxed">
+                              <span className="font-black text-amber-900">💡 톨구 꿀팁: </span>{currentPlace.tip}
                             </div>
                           </a>
                         );
-                      })
-                    ) : (
-                      <div className="bg-white p-6 rounded-2xl text-center text-xs text-slate-400 border border-slate-100">
-                        해당 카테고리의 현지 데이터를 준비 중입니다.
-                      </div>
-                    )}
-                  </div>
+                      })()}
+
+                      {/* 수동 넘김 화통 제어 버튼 */}
+                      {currentPlaces.length > 1 && (
+                        <div className="flex justify-between items-center mt-2 px-1 text-[11px] text-slate-400 font-bold">
+                          <button 
+                            onClick={(e) => { e.preventDefault(); setCarouselIndex((prev) => (prev - 1 + currentPlaces.length) % currentPlaces.length); }}
+                            className="bg-white border px-2.5 py-1 rounded-lg shadow-sm hover:bg-slate-50 text-slate-700 cursor-pointer"
+                          >
+                            ◀ 이전 정보
+                          </button>
+                          <span>3초 자동 전환 중</span>
+                          <button 
+                            onClick={(e) => { e.preventDefault(); setCarouselIndex((prev) => (prev + 1) % currentPlaces.length); }}
+                            className="bg-white border px-2.5 py-1 rounded-lg shadow-sm hover:bg-slate-50 text-slate-700 cursor-pointer"
+                          >
+                            다음 정보 ▶
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="bg-white p-6 rounded-2xl text-center text-xs text-slate-400 border border-slate-100">
+                      해당 카테고리의 현지 데이터를 준비 중입니다.
+                    </div>
+                  )}
                 </div>
 
                 {/* 푸터 */}
@@ -737,16 +841,16 @@
             </div>
           )}
 
-          {/* 톨구로드 화면 자체 내장 인앱 번역 모달 */}
+          {/* 인앱 번역기 모달 (TTS 현지 스피커 음성 재생 기능 탑재) */}
           {showTranslateModal && (
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
               <div className="bg-white w-full rounded-3xl p-6 space-y-4 shadow-2xl animate-in fade-in duration-200 max-h-[90vh] overflow-y-auto no-scrollbar">
                 <div className="flex justify-between items-center border-b pb-3">
-                  <h3 className="font-black text-base text-slate-900">🗣️ 실시간 인앱 번역기 ({currentData.langName})</h3>
+                  <h3 className="font-black text-base text-slate-900">🗣️ 실시간 번역기 ({currentData.langName})</h3>
                   <button onClick={() => setShowTranslateModal(false)} className="text-slate-400 hover:text-slate-800 font-bold text-xl px-2 cursor-pointer">✕</button>
                 </div>
 
-                {/* 1. 자주 쓰는 현지 표현 선택 */}
+                {/* 자주 쓰는 표현 선택 */}
                 <div>
                   <label className="text-xs font-bold text-slate-500 block mb-1">자주 쓰는 현지 필수 표현 선택</label>
                   <select 
@@ -762,7 +866,7 @@
                   </select>
                 </div>
 
-                {/* 2. 한국어 텍스트 및 음성 입력 창 */}
+                {/* 텍스트/음성 입력 창 */}
                 <div>
                   <label className="text-xs font-bold text-slate-500 block mb-1">한국어 입력 / 음성 인식 내용</label>
                   <textarea 
@@ -782,7 +886,7 @@
                   )}
                 </div>
 
-                {/* 3. 음성 인식 토글 버튼 */}
+                {/* 음성 인식 제어 */}
                 <button 
                   onClick={toggleSpeechRecognition}
                   className={`w-full py-2.5 rounded-xl font-extrabold text-xs text-white shadow-sm transition flex items-center justify-center gap-1.5 cursor-pointer ${
@@ -793,7 +897,7 @@
                   {isListening ? "⏹️ 음성 인식 종료하기" : "🎙️ 음성 인식(STT) 마이크 켜기"}
                 </button>
 
-                {/* 4. 화면 내 즉시 번역하기 버튼 */}
+                {/* 번역 버튼 */}
                 <button 
                   onClick={handleInAppTranslate}
                   disabled={!speechText || isTranslating}
@@ -801,19 +905,30 @@
                     speechText && !isTranslating ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer' : 'bg-slate-300 cursor-not-allowed'
                   }`}
                 >
-                  {isTranslating ? "실시간 번역 중..." : `✨ 화면에서 바로 ${currentData.langName} 번역하기`}
+                  {isTranslating ? "실시간 번역 중..." : `✨ ${currentData.langName} 번역하기`}
                 </button>
 
-                {/* 5. 톨구로드 화면 자체 번역 결과 카드 출력 */}
+                {/* 현지인용 스피커 출력(TTS) 버튼이 내장된 번역 결과 카드 */}
                 {translatedResult && (
-                  <div className="bg-blue-50 border-2 border-blue-200 p-4 rounded-2xl space-y-2 animate-in fade-in duration-200">
+                  <div className="bg-blue-50 border-2 border-blue-200 p-4 rounded-2xl space-y-3 animate-in fade-in duration-200">
                     <div className="flex justify-between items-center text-xs font-bold text-blue-900 border-b border-blue-200/60 pb-1.5">
                       <span>현지 번역 결과 ({translatedResult.langName})</span>
-                      <span className="text-[10px] text-blue-600">현지인에게 보여주세요 📱</span>
+                      <span className="text-[10px] text-blue-600">현지인 전달용 📱</span>
                     </div>
-                    <div className="text-base font-black text-slate-900 tracking-wide leading-snug py-1">
+
+                    <div className="text-lg font-black text-slate-900 tracking-wide leading-snug py-1">
                       {translatedResult.translated}
                     </div>
+
+                    {/* [신규 기능] 현지인용 스피커 음성 재생 버튼 */}
+                    <button 
+                      onClick={() => handleSpeakText(translatedResult.translated, translatedResult.ttsLang)}
+                      className="w-full py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-extrabold text-xs rounded-xl shadow flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer"
+                    >
+                      <i data-lucide="volume-2" className="w-4 h-4"></i>
+                      <span>🔊 현지어로 읽어주기 (스피커 출력)</span>
+                    </button>
+
                     <div className="text-xs font-bold text-slate-500 pt-1 border-t border-blue-200/60">
                       원문: {translatedResult.original}
                     </div>
