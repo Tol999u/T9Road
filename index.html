@@ -25,9 +25,7 @@
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
 
-    // 8개국 17개 도시 누락 없는 완전 데이터베이스
     const COUNTRY_DATA = {
-      // 1. 일본 (4개)
       tokyo: {
         name: "🇯🇵 일본 - 도쿄", searchName: "도쿄", lat: 35.6762, lng: 139.6503, currency: "JPY", langCode: "ja",
         sos: "tel:03-3452-7401", appLink: "https://www.go-taxi.jp/ko",
@@ -68,8 +66,6 @@
           shop: [{ id: 1, name: "삿포로 스텔라플레이스", rating: "4.5", reviews: "4,100+", tag: "삿포로역 | 백화점", tip: "삿포로역 연결 대형 쇼핑몰, 잡화 및 의류 추천" }]
         }
       },
-
-      // 2. 태국 (2개)
       bangkok: {
         name: "🇹🇭 태국 - 방콕", searchName: "방콕", lat: 13.7563, lng: 100.5018, currency: "THB", langCode: "th",
         sos: "tel:02-247-7500", appLink: "https://www.grab.com/th/",
@@ -90,8 +86,6 @@
           shop: [{ id: 1, name: "정실론 쇼핑몰", rating: "4.3", reviews: "5,100+", tag: "빠통 | 대형몰", tip: "빅씨마트 푸켓 특산품 및 건망고 쇼핑 코스" }]
         }
       },
-
-      // 3. 베트남 (3개)
       danang: {
         name: "🇻🇳 베트남 - 다낭", searchName: "다낭", lat: 16.0544, lng: 108.2022, currency: "VND", langCode: "vi",
         sos: "tel:0236-3561-000", appLink: "https://www.grab.com/vn/",
@@ -122,8 +116,6 @@
           shop: [{ id: 1, name: "킹콩마트 (Kingkong Mart)", rating: "4.7", reviews: "8,100+", tag: "여행자거리 | 종합마트", tip: "푸꾸옥 후추, 땅콩, 통조림 쇼핑의 성지" }]
         }
       },
-
-      // 4. 필리핀 (2개)
       cebu: {
         name: "🇵🇭 필리핀 - 세부", searchName: "세부", lat: 10.3157, lng: 123.8854, currency: "PHP", langCode: "en",
         sos: "tel:032-231-1616", appLink: "https://www.grab.com/ph/",
@@ -144,8 +136,6 @@
           shop: [{ id: 1, name: "디몰 (D'Mall Boracay)", rating: "4.4", reviews: "7,800+", tag: "스테이션2 | 오픈쇼핑가", tip: "악마의 잼, 노니비누, 수제 기념품 쇼핑 중심지" }]
         }
       },
-
-      // 5. 호주 (3개)
       sydney: {
         name: "🇦🇺 호주 - 시드니", searchName: "시드니", lat: -33.8688, lng: 151.2093, currency: "AUD", langCode: "en",
         sos: "tel:02-9210-0200", appLink: "https://www.uber.com/au/en/",
@@ -176,8 +166,6 @@
           shop: [{ id: 1, name: "퀸스트리트 몰", rating: "4.5", reviews: "8,200+", tag: "시티중심 | 쇼핑보행로", tip: "영백화점 및 호주 포포크림/영양제 쇼핑" }]
         }
       },
-
-      // 6. 유럽 (2개)
       paris: {
         name: "🇫🇷 프랑스 - 파리", searchName: "파리", lat: 48.8566, lng: 2.3522, currency: "EUR", langCode: "fr",
         sos: "tel:01-4753-0101", appLink: "https://www.bolt.eu/",
@@ -198,8 +186,6 @@
           shop: [{ id: 1, name: "버로우 마켓 (Borough Market)", rating: "4.6", reviews: "18,000+", tag: "런던브릿지 | 식료품시장", tip: "몬머스 커피, 빠에야, 수제 치즈 쇼핑" }]
         }
       },
-
-      // 7. 미주 (1개)
       hawaii: {
         name: "🇺🇸 미국 - 하와이(호놀룰루)", searchName: "하와이", lat: 21.3069, lng: -157.8583, currency: "USD", langCode: "en",
         sos: "tel:0808-595-6100", appLink: "https://www.uber.com/",
@@ -219,10 +205,9 @@
       
       const [showTranslateModal, setShowTranslateModal] = useState(false);
       const [showCalcModal, setShowCalcModal] = useState(false);
-      const [selectedNews, setSelectedNews] = useState(null);
       const [footerModalType, setFooterModalType] = useState(null);
 
-      // 실시간 API 데이터 상태
+      // 실시간 API 데이터
       const [weatherData, setWeatherData] = useState(null);
       const [weatherLoading, setWeatherDataLoading] = useState(true);
       const [newsData, setNewsData] = useState([]);
@@ -230,13 +215,17 @@
       const [exchangeRate, setExchangeRate] = useState(null);
       
       const [calcAmount, setCalcAmount] = useState('');
-      const [translateInput, setTranslateInput] = useState('');
-      const mapRef = useRef(null);
+      
+      // 음성 인식(STT) 상태
+      const [isListening, setIsRecording] = useState(false);
+      const [speechText, setSpeechText] = useState('');
+      const recognitionRef = useRef(null);
 
+      const mapRef = useRef(null);
       const currentData = COUNTRY_DATA[selectedCity] || COUNTRY_DATA['tokyo'];
       const currentPlaces = currentData.categories ? (currentData.categories[activeCategory] || []) : [];
 
-      // 복제 및 보안 차단
+      // 복제 방지
       useEffect(() => {
         const preventAction = (e) => e.preventDefault();
         document.addEventListener('contextmenu', preventAction);
@@ -264,7 +253,7 @@
         };
       }, []);
 
-      // 1. [실시간 API 연동] Open-Meteo 실시간 날씨 데이터 호출
+      // 실시간 날씨 API (Open-Meteo)
       useEffect(() => {
         setWeatherDataLoading(true);
         fetch(`https://api.open-meteo.com/v1/forecast?latitude=${currentData.lat}&longitude=${currentData.lng}&current=temperature_2m,relative_humidity_2m,apparent_temperature`)
@@ -282,7 +271,7 @@
           .catch(() => setWeatherDataLoading(false));
       }, [selectedCity]);
 
-      // 2. [실시간 API 연동] Google News RSS 실시간 현지 뉴스 호출
+      // 실시간 속보 API (Google News RSS)
       useEffect(() => {
         setNewsLoading(true);
         const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(currentData.searchName + " 여행 속보")}&hl=ko&gl=KR&ceid=KR:ko`;
@@ -292,14 +281,14 @@
             if(data && data.items && data.items.length > 0) {
               setNewsData(data.items.slice(0, 3));
             } else {
-              setNewsData([{ title: `${currentData.searchName} 현지 관광지 및 주요 이동수단 정상 운행 중`, link: `https://news.google.com/search?q=${encodeURIComponent(currentData.searchName)}` }]);
+              setNewsData([{ title: `${currentData.searchName} 현지 관광지 및 대중교통 정상 운행 중`, link: `https://news.google.com/search?q=${encodeURIComponent(currentData.searchName)}` }]);
             }
             setNewsLoading(false);
           })
           .catch(() => setNewsLoading(false));
       }, [selectedCity]);
 
-      // 3. [실시간 API 연동] 글로벌 환율 실시간 연동 (Open Exchange Rates API)
+      // 실시간 환율 API
       useEffect(() => {
         fetch(`https://open.er-api.com/v6/latest/${currentData.currency}`)
           .then(res => res.json())
@@ -311,7 +300,7 @@
           .catch(() => setExchangeRate(null));
       }, [selectedCity]);
 
-      // 4. [완전 해결] 영문 전용 지도(CartoDB Voyager) 및 탭 전환 먹통/크래시 버그 차단
+      // 지도 초기화 (영문 라벨 타일서버)
       useEffect(() => {
         let isMounted = true;
         if (currentTab === 'map') {
@@ -331,7 +320,6 @@
               zoomControl: true
             });
 
-            // 100% 영문 전용 지도 타일 레이어
             L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
               attribution: '&copy; OpenStreetMap &copy; CARTO',
               subdomains: 'abcd',
@@ -358,16 +346,64 @@
 
       useEffect(() => {
         if (window.lucide) window.lucide.createIcons();
-      }, [selectedCity, currentTab, activeCategory, showTranslateModal, showCalcModal, selectedNews, footerModalType, weatherLoading, newsLoading]);
+      }, [selectedCity, currentTab, activeCategory, showTranslateModal, showCalcModal, footerModalType, weatherLoading, newsLoading, isListening, speechText]);
 
-      // 5. [실시간 연동] 파파고 공식 번역 엔진 웹 이동
+      // Web Speech API 기반 수동 제어 음성 인식 (STT)
+      const toggleSpeechRecognition = () => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        
+        if (!SpeechRecognition) {
+          alert("사용 중이신 브라우저가 실시간 음성 인식을 지원하지 않습니다. 마이크 입력을 지원하는 Chrome 모바일/데스크톱 브라우저를 이용해 주세요.");
+          return;
+        }
+
+        if (isListening) {
+          // 음성 인식 종료
+          if (recognitionRef.current) {
+            recognitionRef.current.stop();
+          }
+          setIsRecording(false);
+        } else {
+          // 음성 인식 시작
+          const recognition = new SpeechRecognition();
+          recognition.lang = 'ko-KR';
+          recognition.continuous = true;
+          recognition.interimResults = true;
+
+          recognition.onstart = () => {
+            setIsRecording(true);
+          };
+
+          recognition.onresult = (event) => {
+            let currentTranscript = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+              currentTranscript += event.results[i][0].transcript;
+            }
+            setSpeechText(currentTranscript);
+          };
+
+          recognition.onerror = (event) => {
+            console.error(event.error);
+            setIsRecording(false);
+          };
+
+          recognition.onend = () => {
+            setIsRecording(false);
+          };
+
+          recognition.start();
+          recognitionRef.current = recognition;
+        }
+      };
+
+      // 파파고 웹 연결
       const handlePapagoWebTranslate = () => {
-        if(!translateInput) return;
-        const papagoUrl = `https://papago.naver.com/?sk=ko&tk=${currentData.langCode}&st=${encodeURIComponent(translateInput)}`;
+        if(!speechText) return;
+        const papagoUrl = `https://papago.naver.com/?sk=ko&tk=${currentData.langCode}&st=${encodeURIComponent(speechText)}`;
         window.open(papagoUrl, '_blank');
       };
 
-      // 6. [실시간 환율 정밀 계산]
+      // 실시간 환율 계산
       const calculateKRW = () => {
         if (!calcAmount || isNaN(calcAmount)) return 0;
         const rate = exchangeRate || (currentData.currency === 'JPY' ? 9.1 : (currentData.currency === 'VND' ? 0.055 : 1350));
@@ -447,12 +483,12 @@
             </div>
           </section>
 
-          {/* 실시간 구글 뉴스 RSS 헤드라인 */}
+          {/* 속보 티커 */}
           <section className="bg-red-500 text-white px-4 py-2.5 flex items-center justify-between text-xs font-semibold shadow-inner shrink-0">
             <div className="flex items-center gap-2 truncate pr-2">
               <span className="font-bold whitespace-nowrap bg-black/25 px-2 py-0.5 rounded">🚨 [실시간 속보]</span>
               <span className="truncate">
-                {newsLoading ? "현지 실시간 라이브 속보 수신 중..." : (newsData[0] ? newsData[0].title : "현지 교통 및 주요 서비스 정상 운행 중")}
+                {newsLoading ? "현지 실시간 속보 수신 중..." : (newsData[0] ? newsData[0].title : "현지 대중교통 및 서비스 정상 운행 중")}
               </span>
             </div>
             {newsData[0] && (
@@ -460,16 +496,16 @@
             )}
           </section>
 
-          {/* 본문 스크롤 영역 */}
+          {/* 스크롤 본문 */}
           <div className="flex-1 overflow-y-auto no-scrollbar">
             {currentTab === 'home' ? (
               <main className="p-4 space-y-4">
-                {/* 실시간 Open-Meteo API 날씨 카드 */}
+                {/* 실시간 날씨 */}
                 <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 text-blue-600 font-extrabold">
                       <span className="text-2xl">☀️</span>
-                      <span className="text-xl">{weatherLoading ? "불러오는 중..." : (weatherData ? weatherData.temp : "24°C")}</span>
+                      <span className="text-xl">{weatherLoading ? "..." : (weatherData ? weatherData.temp : "24°C")}</span>
                       <span className="text-xs text-slate-400 font-normal">(체감 {weatherLoading ? "..." : (weatherData ? weatherData.feels : "23°C")})</span>
                     </div>
                     <span className="text-xs text-slate-400 font-medium">습도 {weatherLoading ? "..." : (weatherData ? weatherData.humidity : "60%")}</span>
@@ -516,7 +552,7 @@
                   </a>
                 </div>
 
-                {/* 실시간 구글 뉴스 TOP 3 */}
+                {/* 실시간 이슈 */}
                 <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
                   <h2 className="text-sm font-extrabold text-slate-900 flex items-center gap-1">
                     🔥 현지 실시간 라이브 뉴스 TOP 3 <span className="text-[10px] text-slate-400 font-normal">(클릭 시 원본기사)</span>
@@ -543,7 +579,7 @@
                   </div>
                 </div>
 
-                {/* 카테고리 스위칭 및 구글맵 연동 리스트 */}
+                {/* 카테고리 정보 */}
                 <div className="space-y-3">
                   <div className="flex gap-2 overflow-x-auto pb-1 text-xs no-scrollbar">
                     {[
@@ -566,7 +602,6 @@
                     ))}
                   </div>
 
-                  {/* 장소 클릭 시 구글맵 새 창 실시간 이동 */}
                   <div className="space-y-3">
                     {currentPlaces.length > 0 ? (
                       currentPlaces.map((place) => {
@@ -629,7 +664,7 @@
             )}
           </div>
 
-          {/* 중앙 위치 실시간 환율 계산기 모달 */}
+          {/* 환율 모달 */}
           {showCalcModal && (
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
               <div className="bg-white w-full rounded-3xl p-6 space-y-4 shadow-2xl animate-in fade-in duration-200">
@@ -660,36 +695,57 @@
             </div>
           )}
 
-          {/* 파파고 실시간 번역 모달 */}
+          {/* 수동 음성 인식(STT) 지원 번역 모달 */}
           {showTranslateModal && (
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
               <div className="bg-white w-full rounded-3xl p-6 space-y-4 shadow-2xl animate-in fade-in duration-200">
                 <div className="flex justify-between items-center border-b pb-3">
-                  <h3 className="font-black text-base text-slate-900">🎙️ 파파고 실시간 웹 번역기</h3>
+                  <h3 className="font-black text-base text-slate-900">🎙️ 실시간 음성 번역기 (STT)</h3>
                   <button onClick={() => setShowTranslateModal(false)} className="text-slate-400 hover:text-slate-800 font-bold text-xl px-2 cursor-pointer">✕</button>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-500 block">한국어 문장 입력</label>
-                  <input 
-                    type="text" 
-                    placeholder="예: 고수 빼주세요 / 라멘 추천해 주세요"
-                    value={translateInput}
-                    onChange={(e) => setTranslateInput(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  />
+
+                {/* 변환된 실시간 텍스트 출력창 */}
+                <div className="bg-slate-100 p-4 rounded-2xl min-h-[120px] flex flex-col justify-between text-sm font-bold text-slate-800 border border-slate-200">
+                  <div className="text-xs text-slate-400 mb-1">인식된 한국어 텍스트:</div>
+                  <p className="leading-relaxed">
+                    {speechText || (isListening ? "마이크에 대고 말씀하세요..." : "아래 '음성 인식 시작' 버튼을 누르고 말씀하세요.")}
+                  </p>
+                  {isListening && (
+                    <div className="mt-2 text-xs text-rose-500 font-bold flex items-center gap-1 animate-pulse">
+                      🔴 음성 수신 중... (끝나면 인식 종료를 누르세요)
+                    </div>
+                  )}
                 </div>
+
+                {/* 사용자가 시작과 종료를 선택하는 수동 버튼 */}
+                <div className="flex gap-2">
+                  <button 
+                    onClick={toggleSpeechRecognition}
+                    className={`flex-1 py-3.5 rounded-xl font-extrabold text-xs text-white shadow-md transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                      isListening ? 'bg-rose-500 hover:bg-rose-600 animate-pulse' : 'bg-blue-600 hover:bg-blue-700'
+                    }`}
+                  >
+                    <i data-lucide="mic" className="w-4 h-4"></i>
+                    {isListening ? "⏹️ 음성 인식 종료하기" : "🎙️ 음성 인식 시작하기"}
+                  </button>
+                </div>
+
                 <button 
                   onClick={handlePapagoWebTranslate}
-                  className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer"
+                  disabled={!speechText}
+                  className={`w-full py-3.5 rounded-xl font-extrabold text-xs text-white shadow-md transition ${
+                    speechText ? 'bg-emerald-600 hover:bg-emerald-700 cursor-pointer' : 'bg-slate-300 cursor-not-allowed'
+                  }`}
                 >
                   <span>파파고로 {currentData.name.split('-')[1]} 현지어 번역하기 ➔</span>
                 </button>
+
                 <button onClick={() => setShowTranslateModal(false)} className="w-full py-2 bg-slate-100 text-slate-600 font-bold text-xs rounded-xl cursor-pointer">닫기</button>
               </div>
             </div>
           )}
 
-          {/* 푸터 상세 모달 */}
+          {/* 푸터 모달 */}
           {footerModalType && (
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
               <div className="bg-white w-full rounded-3xl p-6 space-y-4 max-h-[80vh] overflow-y-auto">
