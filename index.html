@@ -15,7 +15,6 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
-    /* Custom Scrollbar Hide */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
@@ -26,44 +25,53 @@
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
 
+    // 카테고리별(food, stay, transit, shop) 완전 분리 데이터베이스
     const COUNTRY_DATA = {
       tokyo: {
         name: "🇯🇵 일본 - 도쿄", lat: 35.6762, lng: 139.6503, currency: "JPY", rate: 9.1,
-        alert: { type: "⛈️ [LIVE]", text: "도쿄 인근 기습 폭우로 야마노테선 일부 지연 운행 중", level: "bg-amber-500", details: "지바현 및 도쿄 동부 지역 기습 폭우로 야마노테선 및 주요 지하철 노선이 약 15~20분 지연 운행되고 있습니다. 오사카/신주쿠 이동 시 지하철 노선 변경을 권장합니다.", url: "https://news.google.com/search?q=도쿄+지하철" },
+        alert: { type: "⛈️ [LIVE]", text: "도쿄 인근 기습 폭우로 야마노테선 일부 지연 운행 중", level: "bg-amber-500", details: "지바현 및 도쿄 동부 기습 폭우로 야마노테선이 약 15분 지연 운행되고 있습니다.", url: "https://news.google.com/search?q=도쿄+지하철" },
         weather: { temp: "22°C", feels: "21°C", humidity: "55%", tip: "일교차가 큽니다. 가벼운 외투와 접이식 우산을 챙기세요." },
         sos: "tel:03-3452-7401", appLink: "https://www.go-taxi.jp/ko",
-        issues: [
-          { id: 1, title: "시부야 메가돈키호테 면세 결제 대기시간 45분", comments: 32, content: "현재 시부야 메가돈키호테 5층 면세 카운터 줄이 매우 깁니다. 24시간 영업이므로 새벽 시간대나 오전 9시 이전 방문을 강력 추천합니다." },
-          { id: 2, title: "도쿄 지하철 72시간 패스 본전 코스", comments: 19, content: "도쿄 메트로 패스는 하루 최소 4회 이상 탑승 시 본전입니다. 시부야-긴자-아사쿠사-롯폰기 동선 추천드립니다." }
-        ],
-        places: [{ id: 1, name: "이치란 신주쿠점", rating: "4.2", reviews: "3,400+", tag: "신주쿠 | 라멘", tip: "비밀 소스 5배 추천!" }]
+        issues: [{ id: 1, title: "시부야 돈키호테 면세 대기시간 45분", comments: 32, content: "면세 카운터 줄이 깁니다. 새벽이나 오전 9시 이전 방문을 추천합니다." }],
+        categories: {
+          food: [{ id: 1, name: "이치란 신주쿠점", rating: "4.2", reviews: "3,400+", tag: "신주쿠 | 라멘", tip: "비밀 소스 5배 추천!" }],
+          stay: [{ id: 1, name: "소테츠 프레사 인 긴자", rating: "4.6", reviews: "1,200+", tag: "긴자 | 🟢 치안 우수 구역", tip: "야간 보행 매우 안전. 여유 있는 일정이 가능합니다." }],
+          transit: [{ id: 1, name: "도쿄 메트로 패스 (72시간)", rating: "4.8", reviews: "5,800+", tag: "교통수단 | 패스권", tip: "하루 최소 4회 이상 지하철 탑승 시 무조건 이득!" }],
+          shop: [{ id: 1, name: "시부야 메가 돈키호테", rating: "4.4", reviews: "8,900+", tag: "시부야 | 쇼핑몰", tip: "5,000엔 이상 구매 시 면세 + 추가 5% 쿠폰 챙기세요." }]
+        }
       },
       bangkok: {
         name: "🇹🇭 태국 - 방콕", lat: 13.7563, lng: 100.5018, currency: "THB", rate: 38.5,
-        alert: { type: "🚨 [속보]", text: "스쿰빗 도로 정체 심화, 지하철(BTS) 이용 권장", level: "bg-red-500", details: "금요일 퇴근 시간 및 도로 공사 여파로 스쿰빗 및 아속 사거리 인근이 극심하게 정체되고 있습니다. 택시 대신 BTS(지상철) 탑승을 추천합니다.", url: "https://news.google.com/search?q=방콕+교통" },
+        alert: { type: "🚨 [속보]", text: "스쿰빗 도로 정체 심화, 지하철(BTS) 이용 권장", level: "bg-red-500", details: "도로 정체가 심하니 택시 대신 BTS 지상철을 이용하세요.", url: "https://news.google.com/search?q=방콕+교통" },
         weather: { temp: "32°C", feels: "36°C", humidity: "75%", tip: "실내 에어컨이 강하니 얇은 겉옷을 챙기세요." },
         sos: "tel:02-247-7500", appLink: "https://www.grab.com/th/",
-        issues: [
-          { id: 1, title: "아이콘시암 면세 대기시간 15분", comments: 8, content: "아이콘시암 G층 텍스리펀 창구 한가합니다. 구매 후 영수증 챙겨서 바로 환급받으세요." }
-        ],
-        places: [{ id: 1, name: "팁싸마이", rating: "4.3", reviews: "1,200+", tag: "프라나콘 | 팟타이", tip: "오렌지 주스 꼭 주문하세요!" }]
+        issues: [{ id: 1, title: "아이콘시암 면세 대기시간 15분", comments: 8, content: "G층 텍스리펀 창구에서 영수증을 챙겨 환급받으세요." }],
+        categories: {
+          food: [{ id: 1, name: "팁싸마이", rating: "4.3", reviews: "1,200+", tag: "프라나콘 | 팟타이", tip: "오렌지 주스 꼭 주문하세요!" }],
+          stay: [{ id: 1, name: "이스틴 그랜드 사톤", rating: "4.7", reviews: "2,100+", tag: "사톤 | 🟢 치안 양호 구역", tip: "BTS 수라싹역과 바로 연결되어 야간 이동 시 안전합니다." }],
+          transit: [{ id: 1, name: "그랩(Grab) / 볼트(Bolt)", rating: "4.5", reviews: "9,200+", tag: "교통수단 | 승차호출", tip: "가까운 거리는 볼트가 저렴하고, 출퇴근 시간엔 BTS가 빠릅니다." }],
+          shop: [{ id: 1, name: "아이콘시암 (IconSiam)", rating: "4.8", reviews: "12,000+", tag: "클롱산 | 대형쇼핑몰", tip: "G층 쑥시암 실내 야시장에서 길거리 음식과 기념품을 쾌적하게 쇼핑하세요." }]
+        }
       },
       danang: {
         name: "🇻🇳 베트남 - 다낭", lat: 16.0544, lng: 108.2022, currency: "VND", rate: 0.055,
-        alert: { type: "🚕 [교통]", text: "공항 호객 행위 주의, Grab 예약 차량만 이용하세요", level: "bg-emerald-600", details: "다낭 국제공항 출국장 앞 잡상인 및 가짜 택시 호객이 빈번합니다. Grab 앱으로 차량 번호판을 반드시 확인 후 탑승하세요.", url: "https://news.google.com/search?q=다낭+여행" },
+        alert: { type: "🚕 [교통]", text: "공항 호객 행위 주의, Grab 예약 차량만 이용하세요", level: "bg-emerald-600", details: "공항 앞 호객 택시 대신 Grab 전용 탑승장을 이용하세요.", url: "https://news.google.com/search?q=다낭+여행" },
         weather: { temp: "29°C", feels: "32°C", humidity: "78%", tip: "바나힐 이동 시 가디건 필수" },
         sos: "tel:0236-3561-000", appLink: "https://www.grab.com/vn/",
-        issues: [
-          { id: 1, title: "한시장 아오자이 맞춤 2시간 소요", comments: 34, content: "한시장 2층 아오자이 가게에서 맞춤 시 약 2시간 걸립니다. 원단 선택 후 시내 관광 다녀오시면 딱 맞습니다." }
-        ],
-        places: [{ id: 1, name: "목식당", rating: "4.6", reviews: "4,500+", tag: "미케비치 | 해산물", tip: "크랩 마늘버터 소스 추천" }]
+        issues: [{ id: 1, title: "한시장 아오자이 맞춤 2시간 소요", comments: 34, content: "원단 선택 후 시내 관광 다녀오시면 완제 제작됩니다." }],
+        categories: {
+          food: [{ id: 1, name: "목식당", rating: "4.6", reviews: "4,500+", tag: "미케비치 | 해산물", tip: "크랩 마늘버터 소스 추천" }],
+          stay: [{ id: 1, name: "신라모노그램 다낭", rating: "4.8", reviews: "950+", tag: "리조트단지 | 🟢 가족형 안심 구역", tip: "프라이빗 비치가 있어 보안이 철저합니다." }],
+          transit: [{ id: 1, name: "다낭 그랩(Grab) 택시", rating: "4.6", reviews: "7,400+", tag: "교통수단 | 승차호출", tip: "바나힐이나 호이안 왕복 이동 시 기사와 요금 흥정 후 이용하세요." }],
+          shop: [{ id: 1, name: "한시장 (Han Market)", rating: "4.2", reviews: "6,300+", tag: "시내 | 전통시장", tip: "아오자이, 망고, 탑젤리 구매 시 시세표 사전 확인 필수!" }]
+        }
       }
     };
 
     function App() {
       const [selectedCity, setSelectedCity] = useState('tokyo');
       const [currentTab, setCurrentTab] = useState('home'); 
-      const [activeCategory, setActiveCategory] = useState('food');
+      const [activeCategory, setActiveCategory] = useState('food'); // 'food', 'stay', 'transit', 'shop'
       
       const [showTranslateModal, setShowTranslateModal] = useState(false);
       const [showCalcModal, setShowCalcModal] = useState(false);
@@ -77,6 +85,9 @@
       const mapRef = useRef(null);
 
       const currentData = COUNTRY_DATA[selectedCity] || COUNTRY_DATA['tokyo'];
+      
+      // 현재 선택된 카테고리별 리스트 동적 필터링
+      const currentPlaces = currentData.categories ? (currentData.categories[activeCategory] || []) : [];
 
       // 복제 및 보안 방지
       useEffect(() => {
@@ -144,10 +155,9 @@
       };
 
       return (
-        /* 웹/모바일 반응형 최적화 디바이스 프레임 컨테이너 */
         <div className="w-full max-w-md bg-slate-50 min-h-screen sm:min-h-[840px] sm:h-[840px] sm:rounded-[40px] shadow-2xl flex flex-col overflow-hidden relative select-none border-0 sm:border-8 sm:border-slate-800">
           
-          {/* 앱 헤더 */}
+          {/* 헤더 */}
           <header className="bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-600 text-white px-4 py-3.5 flex justify-between items-center sticky top-0 z-30 shadow-md shrink-0">
             <div className="flex items-center gap-2">
               <span className="bg-yellow-400 text-blue-900 font-black text-xs px-2 py-0.5 rounded-full">T9</span>
@@ -155,12 +165,12 @@
             </div>
           </header>
 
-          {/* 도시 선택 & 상단 메인 탭 */}
+          {/* 도시 선택 및 메인 탭 */}
           <section className="bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-600 px-4 pb-3 text-white space-y-3 shrink-0">
             <select 
               value={selectedCity}
               onChange={(e) => setSelectedCity(e.target.value)}
-              className="w-full bg-white text-slate-900 font-bold py-2.5 px-4 rounded-xl shadow-lg text-sm focus:outline-none"
+              className="w-full bg-white text-slate-900 font-bold py-2.5 px-4 rounded-xl shadow-lg text-sm focus:outline-none cursor-pointer"
             >
               <option value="tokyo">🇯🇵 일본 - 도쿄</option>
               <option value="bangkok">🇹🇭 태국 - 방콕</option>
@@ -201,7 +211,7 @@
             <span className="whitespace-nowrap text-yellow-200 underline font-bold">기사보기 ➔</span>
           </section>
 
-          {/* 스크롤 가능한 본문 영역 */}
+          {/* 본문 스크롤 영역 */}
           <div className="flex-1 overflow-y-auto no-scrollbar">
             {currentTab === 'home' ? (
               <main className="p-4 space-y-4">
@@ -220,7 +230,7 @@
                   </p>
                 </div>
 
-                {/* 4대 퀵 기능 (네트워크 진단 차단 방지 속성 반영) */}
+                {/* 4대 퀵 기능 */}
                 <div className="grid grid-cols-4 gap-2">
                   <button 
                     onClick={() => setShowTranslateModal(true)}
@@ -278,7 +288,7 @@
                   </div>
                 </div>
 
-                {/* 카테고리 정보 */}
+                {/* 카테고리 스위칭 탭 & 카드 리스트 */}
                 <div className="space-y-3">
                   <div className="flex gap-2 overflow-x-auto pb-1 text-xs no-scrollbar">
                     {[
@@ -290,10 +300,10 @@
                       <button
                         key={tab.id}
                         onClick={() => setActiveCategory(tab.id)}
-                        className={`px-3.5 py-2 rounded-xl font-extrabold whitespace-nowrap transition ${
+                        className={`px-3.5 py-2 rounded-xl font-extrabold whitespace-nowrap transition cursor-pointer ${
                           activeCategory === tab.id 
-                            ? 'bg-blue-600 text-white shadow-md' 
-                            : 'bg-white text-slate-600 border border-slate-100'
+                            ? 'bg-blue-600 text-white shadow-md scale-105' 
+                            : 'bg-white text-slate-600 border border-slate-100 hover:bg-slate-50'
                         }`}
                       >
                         {tab.label}
@@ -301,28 +311,35 @@
                     ))}
                   </div>
 
+                  {/* 동적으로 변경되는 정보 리스트 */}
                   <div className="space-y-3">
-                    {currentData.places.map((place) => (
-                      <div key={place.id} className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-2">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <h3 className="font-bold text-sm text-slate-900">{place.name}</h3>
-                            <span className="text-[11px] text-slate-400">{place.tag}</span>
+                    {currentPlaces.length > 0 ? (
+                      currentPlaces.map((place) => (
+                        <div key={place.id} className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-2 animate-in fade-in duration-200">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h3 className="font-bold text-sm text-slate-900">{place.name}</h3>
+                              <span className="text-[11px] text-slate-400">{place.tag}</span>
+                            </div>
+                            <div className="flex items-center gap-1 text-xs font-black text-amber-500 bg-amber-50 px-2 py-1 rounded-lg">
+                              <span>⭐ {place.rating}</span>
+                              <span className="text-slate-300 font-normal">({place.reviews})</span>
+                            </div>
                           </div>
-                          <div className="flex items-center gap-1 text-xs font-black text-amber-500 bg-amber-50 px-2 py-1 rounded-lg">
-                            <span>⭐ {place.rating}</span>
-                            <span className="text-slate-300 font-normal">({place.reviews})</span>
+                          <div className="bg-amber-50/80 p-3 rounded-xl border border-amber-100 text-xs text-amber-950 leading-relaxed">
+                            <span className="font-black text-amber-800">💡 톨구 꿀팁: </span>{place.tip}
                           </div>
                         </div>
-                        <div className="bg-amber-50/80 p-3 rounded-xl border border-amber-100 text-xs text-amber-950 leading-relaxed">
-                          <span className="font-black text-amber-800">💡 톨구 꿀팁: </span>{place.tip}
-                        </div>
+                      ))
+                    ) : (
+                      <div className="bg-white p-6 rounded-2xl text-center text-xs text-slate-400 border border-slate-100">
+                        해당 카테고리의 현지 데이터를 준비 중입니다.
                       </div>
-                    ))}
+                    )}
                   </div>
                 </div>
 
-                {/* 최하단 깔끔한 푸터 */}
+                {/* 푸터 */}
                 <footer className="mt-8 p-6 bg-slate-900 text-slate-300 rounded-2xl text-center text-xs space-y-3">
                   <div className="flex justify-center items-center gap-4 text-slate-200 font-bold">
                     <button onClick={() => setFooterModalType('terms')} className="hover:underline">이용약관</button>
@@ -346,7 +363,7 @@
             )}
           </div>
 
-          {/* 모달 레이어들 */}
+          {/* 모달 창 영역 */}
           {selectedIssue && (
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
               <div className="bg-white w-full rounded-3xl p-6 space-y-4">
