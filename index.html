@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>톨구로드 (T9 Road)</title>
+  <!-- Tailwind CSS & React CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-100">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const COUNTRY_DATA = {
+      tokyo: {
+        name: "🇯🇵 일본 - 도쿄",
+        currency: "JPY (엔화)",
+        alert: { type: "⛈️ [LIVE]", text: "도쿄 인근 기습 폭우로 야마노테선 일부 지연 운행 중", level: "bg-amber-500" },
+        weather: { temp: "22°C", feels: "21°C", humidity: "55%", tip: "일교차가 큽니다. 가벼운 외투와 접이식 우산을 챙기세요." },
+        issues: [
+          { id: 1, title: "시부야 메가돈키호테 면세 결제 대기시간 약 45분 소요", comments: 32 },
+          { id: 2, title: "도쿄 지하철 72시간 패스 본전 뽑는 추천 코스 공유", comments: 19 },
+          { id: 3, title: "스카이트리 당일권 현장 매진, 온라인 사전 예매 필수", comments: 11 }
+        ],
+        places: [
+          { id: 1, name: "이치란 신주쿠 메인다니점", rating: "4.2", reviews: "3,400+", tag: "신주쿠 | 라멘", tip: "비밀 소스 5배 추천! 현금 전용 키오스크가 많으니 현금 준비 필수" },
+          { id: 2, name: "몬자야키 모헤지 시부야 스크램블", rating: "4.5", reviews: "1,100+", tag: "시부야 | 몬자야키", tip: "오픈런 추천! 직원분이 직접 맛있게 볶아줍니다." }
+        ]
+      },
+      osaka: {
+        name: "🇯🇵 일본 - 오사카",
+        currency: "JPY (엔화)",
+        alert: { type: "🚨 [안내]", text: "난바역 주변 인파 집중으로 이동 시 소지품 소매치기 주의", level: "bg-blue-500" },
+        weather: { temp: "24°C", feels: "24°C", humidity: "60%", tip: "도톤보리 야경 투어 시 도보 이동이 많으니 편한 운동화 착용 권장" },
+        issues: [
+          { id: 1, title: "유니버설 스튜디오 익스프레스 티켓 현장 구매 불가", comments: 45 },
+          { id: 2, title: "우메다 공중정원 노을 시간대 입구 대기 줄 길어짐", comments: 28 },
+          { id: 3, title: "난바역 주교통 카드 파스모/이코카 간편 충전 팁", comments: 14 }
+        ],
+        places: [
+          { id: 1, name: "쿠시카츠 다루마 도톤보리점", rating: "4.3", reviews: "2,800+", tag: "도톤보리 | 튀김꼬치", tip: "소스 베이스 한 번만 찍는 규칙 준수! 양배추는 기본 무한 리필" },
+          { id: 2, name: "한신데파트 타코야끼", rating: "4.6", reviews: "920+", tag: "우메다 | 타코야끼", tip: "겉바속촉 진수. 파 추가 필수 추천" }
+        ]
+      },
+      bangkok: {
+        name: "🇹🇭 태국 - 방콕",
+        currency: "THB (바트)",
+        alert: { type: "🚨 [속보]", text: "스쿰빗 도로 정체 심화, 인근 이동 시 지하철(BTS/MRT) 권장", level: "bg-red-500" },
+        weather: { temp: "32°C", feels: "36°C", humidity: "75%", tip: "야외 활동 시 자외선 차단제 필수! 실내는 에어컨이 강하니 얇은 겉옷 챙기세요." },
+        issues: [
+          { id: 1, title: "현재 아이콘시암 면세/환전 대기시간 약 15분 소요", comments: 8 },
+          { id: 2, title: "스쿰빗 도로 대형 정체 중! BTS 이용 추천", comments: 23 },
+          { id: 3, title: "왓 아룬 야경 명소 명당 자리 꿀팁 공유", comments: 15 }
+        ],
+        places: [
+          { id: 1, name: "팁싸마이 (Thipsamai)", rating: "4.3", reviews: "1,200+", tag: "프라나콘 | 팟타이", tip: "오렌지 주스 꼭 주문하세요! 향신료 향이 약해 한국인 입맛에 딱 맞습니다." },
+          { id: 2, name: "똠얌꿍 방람푸", rating: "4.5", reviews: "850+", tag: "카오산로드 | 현지 노포", tip: "주문 시 '마이사이팍치(고수 빼주세요)'를 꼭 전달하세요." }
+        ]
+      },
+      danang: {
+        name: "🇻🇳 베트남 - 다낭",
+        currency: "VND (동)",
+        alert: { type: "🚕 [교통]", text: "공항 호객 행위 주의, Grab(그랩) 예약 차량만 이용하세요", level: "bg-emerald-600" },
+        weather: { temp: "29°C", feels: "32°C", humidity: "78%", tip: "바나힐 이동 시 고지대는 서늘하니 가디건 필수. 롯데마트 환전 우대율 좋음" },
+        issues: [
+          { id: 1, title: "바나힐 골든브릿지 안개 상태 실시간 웹캠 공유", comments: 52 },
+          { id: 2, title: "한시장 아오자이 맞춤 제작 소요시간 약 2시간", comments: 34 },
+          { id: 3, title: "목식당 해산물 사전 예약 카톡 채널 이용법", comments: 27 }
+        ],
+        places: [
+          { id: 1, name: "목식당 (Moc Seafood)", rating: "4.6", reviews: "4,500+", tag: "미케비치 | 해산물", tip: "크랩 마늘버터 소스+볶음밥 조합 추천. 사전 에어컨 룸 예약 권장" },
+          { id: 2, name: "안토이 (An Thoi)", rating: "4.5", reviews: "2,100+", tag: "한시장 인근 | 베트남 가정식", tip: "반쎄오와 반미 플래터 한국인 최애 메뉴" }
+        ]
+      },
+      paris: {
+        name: "🇫🇷 프랑스 - 파리",
+        currency: "EUR (유로)",
+        alert: { type: "⚠️ [치안]", text: "에펠탑 및 지하철 1/4호선 주변 소매치기 삼중 주의", level: "bg-red-600" },
+        weather: { temp: "18°C", feels: "17°C", humidity: "60%", tip: "나비고 트래블 카드 증명사진 준비. 뮤지엄패스 사전 시간 지정 예약 필수" },
+        issues: [
+          { id: 1, title: "루브르 박물관 현장권 매진, 공식홈 시각 예약 필수", comments: 68 },
+          { id: 2, title: "에펠탑 정각 반짝이는 화이트 에펠 시각 및 스팟", comments: 42 },
+          { id: 3, title: "소매치기 수법: 서명 운동/팔찌 강제 착용 주의", comments: 85 }
+        ],
+        places: [
+          { id: 1, name: "오 피에 드 코숑", rating: "4.2", reviews: "4,100+", tag: "레알 | 전통 브라세리", tip: "프랑스식 족발 요리와 양파스프 맛집. 24시간 영업" },
+          { id: 2, name: "사노키 (Sanuki Ya)", rating: "4.4", reviews: "2,900+", tag: "루브르 인근 | 우동", tip: "지드래곤 방문 우동집. 튀김 냉우동 세트 강추" }
+        ]
+      }
+    };
+
+    function App() {
+      const [selectedCity, setSelectedCity] = useState('tokyo');
+      const [activeCategory, setActiveCategory] = useState('food');
+      const currentData = COUNTRY_DATA[selectedCity] || COUNTRY_DATA['tokyo'];
+
+      useEffect(() => {
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      }, [selectedCity, activeCategory]);
+
+      return (
+        <div className="max-w-md mx-auto bg-gray-50 min-h-screen pb-32 font-sans text-gray-800 relative shadow-2xl select-none">
+          {/* HEADER */}
+          <header className="bg-blue-600 text-white px-4 py-3 flex justify-between items-center sticky top-0 z-50">
+            <h1 className="text-xl font-black tracking-wider">톨구로드 <span className="text-yellow-300 text-sm font-normal">(T9 Road)</span></h1>
+          </header>
+
+          {/* 1. 도시 선택 */}
+          <section className="bg-blue-600 px-4 pb-4 text-white">
+            <select 
+              value={selectedCity}
+              onChange={(e) => setSelectedCity(e.target.value)}
+              className="w-full bg-white text-gray-900 font-bold py-2.5 px-4 rounded-xl shadow-md text-base"
+            >
+              <option value="tokyo">🇯🇵 일본 - 도쿄</option>
+              <option value="osaka">🇯🇵 일본 - 오사카</option>
+              <option value="bangkok">🇹🇭 태국 - 방콕</option>
+              <option value="danang">🇻🇳 베트남 - 다낭</option>
+              <option value="paris">🇫🇷 프랑스 - 파리</option>
+            </select>
+          </section>
+
+          {/* 2. 속보 */}
+          <section className={`${currentData.alert.level} text-white px-4 py-2.5 flex items-center justify-between text-xs font-semibold shadow-inner`}>
+            <div className="flex items-center gap-2 truncate pr-2">
+              <span className="font-bold whitespace-nowrap bg-black/20 px-1.5 py-0.5 rounded">{currentData.alert.type}</span>
+              <span className="truncate">{currentData.alert.text}</span>
+            </div>
+          </section>
+
+          <main className="p-4 space-y-4">
+            {/* 3. 날씨 */}
+            <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-lg font-bold text-blue-600">☀️ {currentData.weather.temp}</span>
+                <span className="text-xs text-gray-400">습도 {currentData.weather.humidity}</span>
+              </div>
+              <p className="text-xs text-gray-600 bg-blue-50 p-2.5 rounded-xl border border-blue-100 leading-relaxed">
+                💡 {currentData.weather.tip}
+              </p>
+            </div>
+
+            {/* 4. 이슈 */}
+            <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 space-y-3">
+              <h2 className="text-sm font-bold text-gray-900">🔥 현지 실시간 ISSUE TOP 3</h2>
+              <div className="space-y-2">
+                {currentData.issues.map((issue) => (
+                  <div key={issue.id} className="text-xs py-1 border-b border-gray-50 last:border-none text-gray-700">
+                    {issue.id}. {issue.title}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 5. 맛집 카드 */}
+            <div className="space-y-3">
+              <div className="font-bold text-sm">🍜 현지 검증 맛집</div>
+              {currentData.places.map((place) => (
+                <div key={place.id} className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 space-y-2">
+                  <div className="flex justify-between items-start">
+                    <h3 className="font-bold text-sm text-gray-900">{place.name}</h3>
+                    <span className="text-xs font-bold text-amber-500">⭐ {place.rating}</span>
+                  </div>
+                  <div className="bg-amber-50 p-2.5 rounded-xl text-xs text-amber-900">
+                    💡 {place.tip}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* FOOTER */}
+            <footer className="mt-8 pt-6 pb-20 border-t border-gray-200 text-center text-gray-400 space-y-2 text-[11px]">
+              <p className="font-bold text-gray-600">무단 복제 및 배포 금지 안내</p>
+              <p className="text-[10px]">본 서비스의 모든 정보는 저작권법의 보호를 받습니다.</p>
+              <p className="font-bold text-gray-500 pt-1">by tol9u. All rights reserved.</p>
+            </footer>
+          </main>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
