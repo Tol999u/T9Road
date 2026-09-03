@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>톨구로드 (T9 Road)</title>
   <!-- Tailwind CSS & React CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -14,9 +14,14 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* Custom Scrollbar Hide */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
 </head>
-<body class="bg-gray-100">
-  <div id="root"></div>
+<body class="bg-slate-900 min-h-screen flex items-center justify-center sm:p-4">
+  <div id="root" class="w-full flex justify-center"></div>
 
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
@@ -60,12 +65,11 @@
       const [currentTab, setCurrentTab] = useState('home'); 
       const [activeCategory, setActiveCategory] = useState('food');
       
-      // 모달 상태 관리
       const [showTranslateModal, setShowTranslateModal] = useState(false);
       const [showCalcModal, setShowCalcModal] = useState(false);
       const [selectedIssue, setSelectedIssue] = useState(null);
       const [showNewsModal, setShowNewsModal] = useState(false);
-      const [footerModalType, setFooterModalType] = useState(null); // 'terms', 'privacy', 'contact'
+      const [footerModalType, setFooterModalType] = useState(null);
 
       const [calcAmount, setCalcAmount] = useState('');
       const [isRecording, setIsRecording] = useState(false);
@@ -74,7 +78,7 @@
 
       const currentData = COUNTRY_DATA[selectedCity] || COUNTRY_DATA['tokyo'];
 
-      // 보안 단축키 및 복제 방지
+      // 복제 및 보안 방지
       useEffect(() => {
         const preventAction = (e) => e.preventDefault();
         document.addEventListener('contextmenu', preventAction);
@@ -140,18 +144,19 @@
       };
 
       return (
-        <div className="max-w-md mx-auto bg-slate-50 min-h-screen font-sans text-slate-800 relative shadow-2xl select-none">
+        /* 웹/모바일 반응형 최적화 디바이스 프레임 컨테이너 */
+        <div className="w-full max-w-md bg-slate-50 min-h-screen sm:min-h-[840px] sm:h-[840px] sm:rounded-[40px] shadow-2xl flex flex-col overflow-hidden relative select-none border-0 sm:border-8 sm:border-slate-800">
           
-          {/* HEADER */}
-          <header className="bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-600 text-white px-4 py-3.5 flex justify-between items-center sticky top-0 z-50 shadow-md">
+          {/* 앱 헤더 */}
+          <header className="bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-600 text-white px-4 py-3.5 flex justify-between items-center sticky top-0 z-30 shadow-md shrink-0">
             <div className="flex items-center gap-2">
               <span className="bg-yellow-400 text-blue-900 font-black text-xs px-2 py-0.5 rounded-full">T9</span>
               <h1 className="text-xl font-black tracking-wider">톨구로드 <span className="text-blue-200 text-xs font-normal">Tol9u Road</span></h1>
             </div>
           </header>
 
-          {/* 도시 선택 & 메인 네비게이션 */}
-          <section className="bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-600 px-4 pb-3 text-white space-y-3">
+          {/* 도시 선택 & 상단 메인 탭 */}
+          <section className="bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-600 px-4 pb-3 text-white space-y-3 shrink-0">
             <select 
               value={selectedCity}
               onChange={(e) => setSelectedCity(e.target.value)}
@@ -173,7 +178,7 @@
                 onClick={() => setCurrentTab('map')}
                 className={`flex-1 py-1.5 rounded-lg transition ${currentTab === 'map' ? 'bg-white text-blue-900 shadow' : 'text-white/80'}`}
               >
-                🗺️ 현지 실시간 지도
+                🗺️ 현지 지도
               </button>
               <button 
                 onClick={() => setShowTranslateModal(true)}
@@ -184,10 +189,10 @@
             </div>
           </section>
 
-          {/* 1. 라이브 뉴스 클릭 시 기사 모달 연동 */}
+          {/* 속보 티커 */}
           <section 
             onClick={() => setShowNewsModal(true)}
-            className={`${currentData.alert.level} text-white px-4 py-2.5 flex items-center justify-between text-xs font-semibold shadow-inner cursor-pointer hover:opacity-90 transition`}
+            className={`${currentData.alert.level} text-white px-4 py-2.5 flex items-center justify-between text-xs font-semibold shadow-inner cursor-pointer hover:opacity-90 transition shrink-0`}
           >
             <div className="flex items-center gap-2 truncate pr-2">
               <span className="font-bold whitespace-nowrap bg-black/25 px-2 py-0.5 rounded">{currentData.alert.type}</span>
@@ -196,150 +201,155 @@
             <span className="whitespace-nowrap text-yellow-200 underline font-bold">기사보기 ➔</span>
           </section>
 
-          {currentTab === 'home' ? (
-            <main className="p-4 space-y-4">
-              {/* 날씨 */}
-              <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-blue-600 font-extrabold">
-                    <span className="text-2xl">☀️</span>
-                    <span className="text-xl">{currentData.weather.temp}</span>
-                    <span className="text-xs text-slate-400 font-normal">(체감 {currentData.weather.feels})</span>
+          {/* 스크롤 가능한 본문 영역 */}
+          <div className="flex-1 overflow-y-auto no-scrollbar">
+            {currentTab === 'home' ? (
+              <main className="p-4 space-y-4">
+                {/* 날씨 */}
+                <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-blue-600 font-extrabold">
+                      <span className="text-2xl">☀️</span>
+                      <span className="text-xl">{currentData.weather.temp}</span>
+                      <span className="text-xs text-slate-400 font-normal">(체감 {currentData.weather.feels})</span>
+                    </div>
+                    <span className="text-xs text-slate-400 font-medium">습도 {currentData.weather.humidity}</span>
                   </div>
-                  <span className="text-xs text-slate-400 font-medium">습도 {currentData.weather.humidity}</span>
-                </div>
-                <p className="text-xs text-slate-600 bg-blue-50/80 p-3 rounded-xl border border-blue-100/80 leading-relaxed">
-                  💡 <span className="font-bold text-blue-900">현지 옷차림 팁:</span> {currentData.weather.tip}
-                </p>
-              </div>
-
-              {/* 4대 퀵 기능 */}
-              <div className="grid grid-cols-4 gap-2">
-                <button 
-                  onClick={() => setShowTranslateModal(true)}
-                  className="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-1 active:scale-95 transition"
-                >
-                  <div className="p-2 bg-blue-100 text-blue-600 rounded-xl"><i data-lucide="mic" className="w-4 h-4"></i></div>
-                  <span className="text-xs font-bold text-slate-700">파파고번역</span>
-                </button>
-
-                <a 
-                  href={currentData.appLink} target="_blank"
-                  className="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-1 active:scale-95 transition"
-                >
-                  <div className="p-2 bg-emerald-100 text-emerald-600 rounded-xl"><i data-lucide="car" className="w-4 h-4"></i></div>
-                  <span className="text-xs font-bold text-slate-700">교통호출</span>
-                </a>
-
-                <button 
-                  onClick={() => setShowCalcModal(true)}
-                  className="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-1 active:scale-95 transition"
-                >
-                  <div className="p-2 bg-amber-100 text-amber-600 rounded-xl"><i data-lucide="calculator" className="w-4 h-4"></i></div>
-                  <span className="text-xs font-bold text-slate-700">환율계산</span>
-                </button>
-
-                <a 
-                  href={currentData.sos}
-                  className="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-1 active:scale-95 transition"
-                >
-                  <div className="p-2 bg-rose-100 text-rose-600 rounded-xl"><i data-lucide="phone-call" className="w-4 h-4"></i></div>
-                  <span className="text-xs font-bold text-rose-600">영사관SOS</span>
-                </a>
-              </div>
-
-              {/* 2. 현지 실시간 이슈 클릭 시 팝업 연동 */}
-              <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
-                <h2 className="text-sm font-extrabold text-slate-900 flex items-center gap-1">
-                  🔥 현지 실시간 이슈 TOP 3 <span className="text-[10px] text-slate-400 font-normal">(클릭 시 상세)</span>
-                </h2>
-                <div className="space-y-2">
-                  {currentData.issues.map((issue) => (
-                    <div 
-                      key={issue.id} 
-                      onClick={() => setSelectedIssue(issue)}
-                      className="flex justify-between items-center text-xs py-2 border-b border-slate-50 last:border-none cursor-pointer hover:bg-slate-50 px-1 rounded transition"
-                    >
-                      <span className="font-bold text-slate-800 truncate pr-2">{issue.id}. {issue.title}</span>
-                      <span className="text-slate-400 font-bold text-[10px] bg-slate-100 px-2 py-0.5 rounded-full whitespace-nowrap">
-                        💬 {issue.comments}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* 카테고리 정보 */}
-              <div className="space-y-3">
-                <div className="flex gap-2 overflow-x-auto pb-1 text-xs">
-                  {[
-                    { id: 'food', label: '🍜 맛집·카페' },
-                    { id: 'stay', label: '🛏️ 숙소·치안' },
-                    { id: 'transit', label: '🚌 교통 guide' },
-                    { id: 'shop', label: '🛍️ 쇼핑·꿀팁' },
-                  ].map((tab) => (
-                    <button
-                      key={tab.id}
-                      onClick={() => setActiveCategory(tab.id)}
-                      className={`px-3 py-2 rounded-xl font-extrabold whitespace-nowrap transition ${
-                        activeCategory === tab.id 
-                          ? 'bg-blue-600 text-white shadow-md' 
-                          : 'bg-white text-slate-600 border border-slate-100'
-                      }`}
-                    >
-                      {tab.label}
-                    </button>
-                  ))}
+                  <p className="text-xs text-slate-600 bg-blue-50/80 p-3 rounded-xl border border-blue-100/80 leading-relaxed">
+                    💡 <span className="font-bold text-blue-900">현지 옷차림 팁:</span> {currentData.weather.tip}
+                  </p>
                 </div>
 
+                {/* 4대 퀵 기능 (네트워크 진단 차단 방지 속성 반영) */}
+                <div className="grid grid-cols-4 gap-2">
+                  <button 
+                    onClick={() => setShowTranslateModal(true)}
+                    className="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-1 active:scale-95 transition"
+                  >
+                    <div className="p-2 bg-blue-100 text-blue-600 rounded-xl"><i data-lucide="mic" className="w-4 h-4"></i></div>
+                    <span className="text-xs font-bold text-slate-700">파파고번역</span>
+                  </button>
+
+                  <a 
+                    href={currentData.appLink} 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-1 active:scale-95 transition"
+                  >
+                    <div className="p-2 bg-emerald-100 text-emerald-600 rounded-xl"><i data-lucide="car" className="w-4 h-4"></i></div>
+                    <span className="text-xs font-bold text-slate-700">교통호출</span>
+                  </a>
+
+                  <button 
+                    onClick={() => setShowCalcModal(true)}
+                    className="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-1 active:scale-95 transition"
+                  >
+                    <div className="p-2 bg-amber-100 text-amber-600 rounded-xl"><i data-lucide="calculator" className="w-4 h-4"></i></div>
+                    <span className="text-xs font-bold text-slate-700">환율계산</span>
+                  </button>
+
+                  <a 
+                    href={currentData.sos}
+                    className="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-1 active:scale-95 transition"
+                  >
+                    <div className="p-2 bg-rose-100 text-rose-600 rounded-xl"><i data-lucide="phone-call" className="w-4 h-4"></i></div>
+                    <span className="text-xs font-bold text-rose-600">영사관SOS</span>
+                  </a>
+                </div>
+
+                {/* 실시간 이슈 */}
+                <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+                  <h2 className="text-sm font-extrabold text-slate-900 flex items-center gap-1">
+                    🔥 현지 실시간 이슈 TOP 3 <span className="text-[10px] text-slate-400 font-normal">(클릭 시 상세)</span>
+                  </h2>
+                  <div className="space-y-2">
+                    {currentData.issues.map((issue) => (
+                      <div 
+                        key={issue.id} 
+                        onClick={() => setSelectedIssue(issue)}
+                        className="flex justify-between items-center text-xs py-2 border-b border-slate-50 last:border-none cursor-pointer hover:bg-slate-50 px-1 rounded transition"
+                      >
+                        <span className="font-bold text-slate-800 truncate pr-2">{issue.id}. {issue.title}</span>
+                        <span className="text-slate-400 font-bold text-[10px] bg-slate-100 px-2 py-0.5 rounded-full whitespace-nowrap">
+                          💬 {issue.comments}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 카테고리 정보 */}
                 <div className="space-y-3">
-                  {currentData.places.map((place) => (
-                    <div key={place.id} className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-2">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="font-bold text-sm text-slate-900">{place.name}</h3>
-                          <span className="text-[11px] text-slate-400">{place.tag}</span>
+                  <div className="flex gap-2 overflow-x-auto pb-1 text-xs no-scrollbar">
+                    {[
+                      { id: 'food', label: '🍜 맛집·카페' },
+                      { id: 'stay', label: '🛏️ 숙소·치안' },
+                      { id: 'transit', label: '🚌 교통 guide' },
+                      { id: 'shop', label: '🛍️ 쇼핑·꿀팁' },
+                    ].map((tab) => (
+                      <button
+                        key={tab.id}
+                        onClick={() => setActiveCategory(tab.id)}
+                        className={`px-3.5 py-2 rounded-xl font-extrabold whitespace-nowrap transition ${
+                          activeCategory === tab.id 
+                            ? 'bg-blue-600 text-white shadow-md' 
+                            : 'bg-white text-slate-600 border border-slate-100'
+                        }`}
+                      >
+                        {tab.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="space-y-3">
+                    {currentData.places.map((place) => (
+                      <div key={place.id} className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-2">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h3 className="font-bold text-sm text-slate-900">{place.name}</h3>
+                            <span className="text-[11px] text-slate-400">{place.tag}</span>
+                          </div>
+                          <div className="flex items-center gap-1 text-xs font-black text-amber-500 bg-amber-50 px-2 py-1 rounded-lg">
+                            <span>⭐ {place.rating}</span>
+                            <span className="text-slate-300 font-normal">({place.reviews})</span>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-1 text-xs font-black text-amber-500 bg-amber-50 px-2 py-1 rounded-lg">
-                          <span>⭐ {place.rating}</span>
-                          <span className="text-slate-300 font-normal">({place.reviews})</span>
+                        <div className="bg-amber-50/80 p-3 rounded-xl border border-amber-100 text-xs text-amber-950 leading-relaxed">
+                          <span className="font-black text-amber-800">💡 톨구 꿀팁: </span>{place.tip}
                         </div>
                       </div>
-                      <div className="bg-amber-50/80 p-3 rounded-xl border border-amber-100 text-xs text-amber-950 leading-relaxed">
-                        <span className="font-black text-amber-800">💡 톨구 꿀팁: </span>{place.tip}
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-            </main>
-          ) : (
-            <main className="p-4 space-y-3">
-              <h2 className="font-bold text-sm text-slate-800">🗺️ {currentData.name} 실시간 지도</h2>
-              <div id="map-container" className="w-full h-[450px] rounded-2xl border border-slate-200 shadow-inner"></div>
-            </main>
-          )}
+                {/* 최하단 깔끔한 푸터 */}
+                <footer className="mt-8 p-6 bg-slate-900 text-slate-300 rounded-2xl text-center text-xs space-y-3">
+                  <div className="flex justify-center items-center gap-4 text-slate-200 font-bold">
+                    <button onClick={() => setFooterModalType('terms')} className="hover:underline">이용약관</button>
+                    <span>|</span>
+                    <button onClick={() => setFooterModalType('privacy')} className="hover:underline text-yellow-400">개인정보처리방침</button>
+                    <span>|</span>
+                    <button onClick={() => setFooterModalType('contact')} className="hover:underline">문의처</button>
+                  </div>
 
-          {/* 3. 최하단 이용약관, 개인정보처리방침, 문의처 3가지만 표기 */}
-          <footer className="mt-8 p-6 bg-slate-900 text-slate-300 border-t border-slate-800 text-center text-xs space-y-4">
-            <div className="flex justify-center items-center gap-4 text-slate-200 font-bold">
-              <button onClick={() => setFooterModalType('terms')} className="hover:underline">이용약관</button>
-              <span>|</span>
-              <button onClick={() => setFooterModalType('privacy')} className="hover:underline text-yellow-400">개인정보처리방침</button>
-              <span>|</span>
-              <button onClick={() => setFooterModalType('contact')} className="hover:underline">문의처</button>
-            </div>
+                  <p className="font-extrabold text-slate-500 text-[11px] tracking-wider">
+                    by tol9u. All rights reserved.
+                  </p>
+                </footer>
 
-            <p className="font-extrabold text-slate-500 text-[11px] tracking-wider">
-              by tol9u. All rights reserved.
-            </p>
-          </footer>
+              </main>
+            ) : (
+              <main className="p-4 space-y-3 h-full flex flex-col">
+                <h2 className="font-bold text-sm text-slate-800">🗺️ {currentData.name} 실시간 지도</h2>
+                <div id="map-container" className="w-full flex-1 min-h-[400px] rounded-2xl border border-slate-200 shadow-inner"></div>
+              </main>
+            )}
+          </div>
 
-          {/* 모달 1: 실시간 이슈 상세보기 모달 */}
+          {/* 모달 레이어들 */}
           {selectedIssue && (
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-              <div className="bg-white w-full max-w-md rounded-3xl p-6 space-y-4">
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+              <div className="bg-white w-full rounded-3xl p-6 space-y-4">
                 <div className="flex justify-between items-center border-b pb-3">
                   <h3 className="font-black text-base text-slate-900">🔥 실시간 이슈 상세</h3>
                   <button onClick={() => setSelectedIssue(null)} className="text-slate-400 font-bold text-lg">✕</button>
@@ -353,10 +363,9 @@
             </div>
           )}
 
-          {/* 모달 2: 라이브 뉴스 상세보기 모달 */}
           {showNewsModal && (
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-              <div className="bg-white w-full max-w-md rounded-3xl p-6 space-y-4">
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+              <div className="bg-white w-full rounded-3xl p-6 space-y-4">
                 <div className="flex justify-between items-center border-b pb-3">
                   <h3 className="font-black text-base text-slate-900">📰 현지 속보 / 기사 상세</h3>
                   <button onClick={() => setShowNewsModal(false)} className="text-slate-400 font-bold text-lg">✕</button>
@@ -369,17 +378,16 @@
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <a href={currentData.alert.url} target="_blank" className="flex-1 py-3 bg-blue-600 text-white text-center font-bold text-xs rounded-xl">원본 뉴스 보기</a>
+                  <a href={currentData.alert.url} target="_blank" rel="noopener noreferrer" className="flex-1 py-3 bg-blue-600 text-white text-center font-bold text-xs rounded-xl">원본 뉴스 보기</a>
                   <button onClick={() => setShowNewsModal(false)} className="py-3 px-4 bg-slate-200 text-slate-700 font-bold text-xs rounded-xl">닫기</button>
                 </div>
               </div>
             </div>
           )}
 
-          {/* 모달 3: 이용약관 / 개인정보처리방침 / 문의처 모달 */}
           {footerModalType && (
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-              <div className="bg-white w-full max-w-md rounded-3xl p-6 space-y-4 max-h-[80vh] overflow-y-auto">
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+              <div className="bg-white w-full rounded-3xl p-6 space-y-4 max-h-[80vh] overflow-y-auto">
                 <div className="flex justify-between items-center border-b pb-3">
                   <h3 className="font-black text-base text-slate-900">
                     {footerModalType === 'terms' && "📜 서비스 이용약관"}
@@ -413,10 +421,9 @@
             </div>
           )}
 
-          {/* 파파고 번역 모달 */}
           {showTranslateModal && (
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end justify-center p-4">
-              <div className="bg-white w-full max-w-md rounded-3xl p-6 space-y-4">
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end justify-center p-4">
+              <div className="bg-white w-full rounded-3xl p-6 space-y-4">
                 <div className="flex justify-between items-center border-b pb-3">
                   <h3 className="font-black text-lg text-slate-900">🎙️ 파파고 퀵 통역기</h3>
                   <button onClick={() => setShowTranslateModal(false)} className="text-slate-400 font-bold text-lg">✕</button>
@@ -437,10 +444,9 @@
             </div>
           )}
 
-          {/* 환율 계산기 모달 */}
           {showCalcModal && (
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end justify-center p-4">
-              <div className="bg-white w-full max-w-md rounded-3xl p-6 space-y-4">
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end justify-center p-4">
+              <div className="bg-white w-full rounded-3xl p-6 space-y-4">
                 <div className="flex justify-between items-center border-b pb-3">
                   <h3 className="font-black text-lg text-slate-900">💵 실시간 환율 계산기</h3>
                   <button onClick={() => setShowCalcModal(false)} className="text-slate-400 font-bold text-lg">✕</button>
