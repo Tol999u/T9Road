@@ -5,7 +5,6 @@ import {
   Utensils, Hotel, Bus, ShoppingBag, Star, Shield
 } from 'lucide-react';
 
-// 국가별 Mock 데이터베이스
 const COUNTRY_DATA = {
   tokyo: {
     name: "🇯🇵 일본 - 도쿄",
@@ -92,7 +91,6 @@ export default function Tol9uRoadApp() {
   const [activeCategory, setActiveCategory] = useState('food');
   const currentData = COUNTRY_DATA[selectedCity];
 
-  // 무단 드래그, 텍스트 복사 및 우클릭 방지 이벤트 핸들러
   const handlePreventAction = (e) => {
     e.preventDefault();
   };
@@ -100,11 +98,10 @@ export default function Tol9uRoadApp() {
   return (
     <div 
       className="max-w-md mx-auto bg-gray-50 min-h-screen pb-32 font-sans text-gray-800 relative shadow-2xl select-none"
-      onContextMenu={handlePreventAction} // 우클릭 방지
-      onCopy={handlePreventAction}        // 복사 방지
-      onCut={handlePreventAction}         // 잘라내기 방지
+      onContextMenu={handlePreventAction}
+      onCopy={handlePreventAction}
+      onCut={handlePreventAction}
     >
-      
       {/* HEADER */}
       <header className="bg-blue-600 text-white px-4 py-3 flex justify-between items-center sticky top-0 z-50">
         <h1 className="text-xl font-black tracking-wider">톨구로드 <span className="text-yellow-300 text-sm font-normal">(T9 Road)</span></h1>
@@ -114,7 +111,7 @@ export default function Tol9uRoadApp() {
         </div>
       </header>
 
-      {/* 1. 국가 / 도시 선택 영역 */}
+      {/* 1. 국가 선택 */}
       <section className="bg-blue-600 px-4 pb-4 text-white">
         <div className="relative">
           <select 
@@ -129,7 +126,7 @@ export default function Tol9uRoadApp() {
         </div>
       </section>
 
-      {/* 2. 실시간 속보 / 재난·재해 헤드라인 배너 */}
+      {/* 2. 실시간 속보 */}
       <section className={`${currentData.alert.level} text-white px-4 py-2.5 flex items-center justify-between text-xs font-semibold shadow-inner`}>
         <div className="flex items-center gap-2 truncate pr-2">
           <span className="font-bold whitespace-nowrap bg-black/20 px-1.5 py-0.5 rounded">{currentData.alert.type}</span>
@@ -139,8 +136,7 @@ export default function Tol9uRoadApp() {
       </section>
 
       <main className="p-4 space-y-4">
-        
-        {/* 3. 날씨 & 복장/현지 꿀팁 요약 카드 */}
+        {/* 3. 날씨 */}
         <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 space-y-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-blue-600 font-bold">
@@ -155,7 +151,7 @@ export default function Tol9uRoadApp() {
           </p>
         </div>
 
-        {/* 4. 핵심 퀵 액션 버튼 */}
+        {/* 4. 퀵 버튼 */}
         <div className="grid grid-cols-4 gap-2">
           {[
             { icon: <Mic className="text-blue-500" />, label: "파파고번역" },
@@ -170,7 +166,7 @@ export default function Tol9uRoadApp() {
           ))}
         </div>
 
-        {/* 5. 실시간 현지 이슈 & 커뮤니티 꿀팁 피드 */}
+        {/* 5. 실시간 이슈 */}
         <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 space-y-3">
           <h2 className="text-sm font-bold text-gray-900 flex items-center gap-1">
             🔥 현지 실시간 ISSUE TOP 3
@@ -187,9 +183,8 @@ export default function Tol9uRoadApp() {
           </div>
         </div>
 
-        {/* 6. 카테고리별 여행 정보 */}
+        {/* 6. 정보 카드 */}
         <div className="space-y-3">
-          {/* Category Tabs */}
           <div className="flex gap-2 overflow-x-auto pb-1 text-xs">
             {[
               { id: 'food', label: '🍜 맛집·카페' },
@@ -211,7 +206,6 @@ export default function Tol9uRoadApp() {
             ))}
           </div>
 
-          {/* Place Cards */}
           <div className="space-y-3">
             {currentData.places.map((place) => (
               <div key={place.id} className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 space-y-2">
@@ -234,7 +228,7 @@ export default function Tol9uRoadApp() {
           </div>
         </div>
 
-        {/* 7. 최하단 프레임 푸터 (저작권, 보안, 문의처) */}
+        {/* 7. 최하단 푸터 */}
         <footer className="mt-8 pt-6 pb-20 border-t border-gray-200 text-center text-gray-400 space-y-2 text-[11px] leading-relaxed">
           <div className="flex justify-center items-center gap-3 text-gray-500 font-medium">
             <button className="hover:underline">이용약관</button>
@@ -265,7 +259,7 @@ export default function Tol9uRoadApp() {
 
       </main>
 
-      {/* 8. 하단 퀵 파파고 음성 번역 플로팅 바 */}
+      {/* 8. 플로팅 바 */}
       <div className="fixed bottom-16 left-0 right-0 max-w-md mx-auto px-4 z-40">
         <button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 px-4 rounded-2xl shadow-lg flex items-center justify-center gap-2 active:scale-98 transition">
           <Mic className="animate-pulse" size={20} />
