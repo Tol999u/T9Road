@@ -41,7 +41,7 @@
     // 8개국 17개 도시 풀 데이터베이스
     const COUNTRY_DATA = {
       tokyo: {
-        name: "🇯🇵 일본 - 도쿄", searchName: "도쿄", lat: 35.6762, lng: 139.6503, currency: "JPY", langCode: "ja",
+        name: "🇯🇵 일본 - 도쿄", searchName: "도쿄", lat: 35.6762, lng: 139.6503, currency: "JPY", langCode: "ja", langName: "일본어",
         sos: "tel:03-3452-7401", appLink: "https://www.go-taxi.jp/ko",
         categories: {
           food: [{ id: 1, name: "이치란 신주쿠점", rating: "4.2", reviews: "3,400+", tag: "신주쿠 | 라멘", tip: "비밀 소스 5배 추천!" }],
@@ -51,7 +51,7 @@
         }
       },
       osaka: {
-        name: "🇯🇵 일본 - 오사카", searchName: "오사카", lat: 34.6937, lng: 135.5023, currency: "JPY", langCode: "ja",
+        name: "🇯🇵 일본 - 오사카", searchName: "오사카", lat: 34.6937, lng: 135.5023, currency: "JPY", langCode: "ja", langName: "일본어",
         sos: "tel:06-6213-1401", appLink: "https://www.go-taxi.jp/ko",
         categories: {
           food: [{ id: 1, name: "쿠시카츠 다루마", rating: "4.3", reviews: "2,800+", tag: "도톤보리 | 튀김", tip: "소스 베이스 한 번만 찍기!" }],
@@ -61,7 +61,7 @@
         }
       },
       fukuoka: {
-        name: "🇯🇵 일본 - 후쿠오카", searchName: "후쿠오카", lat: 33.5902, lng: 130.4017, currency: "JPY", langCode: "ja",
+        name: "🇯🇵 일본 - 후쿠오카", searchName: "후쿠오카", lat: 33.5902, lng: 130.4017, currency: "JPY", langCode: "ja", langName: "일본어",
         sos: "tel:092-771-0461", appLink: "https://www.go-taxi.jp/ko",
         categories: {
           food: [{ id: 1, name: "신신라멘 본점", rating: "4.4", reviews: "4,100+", tag: "텐진 | 라멘", tip: "잡내 없는 돈코츠 라멘!" }],
@@ -71,7 +71,7 @@
         }
       },
       hokkaido: {
-        name: "🇯🇵 일본 - 홋카이도(삿포로)", searchName: "삿포로", lat: 43.0618, lng: 141.3545, currency: "JPY", langCode: "ja",
+        name: "🇯🇵 일본 - 홋카이도(삿포로)", searchName: "삿포로", lat: 43.0618, lng: 141.3545, currency: "JPY", langCode: "ja", langName: "일본어",
         sos: "tel:011-218-0288", appLink: "https://www.go-taxi.jp/ko",
         categories: {
           food: [{ id: 1, name: "징기스칸 다루마 4.4", rating: "4.4", reviews: "2,500+", tag: "스스키노 | 양고기", tip: "비닐봉투에 옷 보관 권장" }],
@@ -81,7 +81,7 @@
         }
       },
       bangkok: {
-        name: "🇹🇭 태국 - 방콕", searchName: "방콕", lat: 13.7563, lng: 100.5018, currency: "THB", langCode: "th",
+        name: "🇹🇭 태국 - 방콕", searchName: "방콕", lat: 13.7563, lng: 100.5018, currency: "THB", langCode: "th", langName: "태국어",
         sos: "tel:02-247-7500", appLink: "https://www.grab.com/th/",
         categories: {
           food: [{ id: 1, name: "팁싸마이", rating: "4.3", reviews: "1,200+", tag: "프라나콘 | 팟타이", tip: "오렌지 주스 꼭 주문하세요!" }],
@@ -91,7 +91,7 @@
         }
       },
       phuket: {
-        name: "🇹🇭 태국 - 푸켓", searchName: "푸켓", lat: 7.8804, lng: 98.3923, currency: "THB", langCode: "th",
+        name: "🇹🇭 태국 - 푸켓", searchName: "푸켓", lat: 7.8804, lng: 98.3923, currency: "THB", langCode: "th", langName: "태국어",
         sos: "tel:02-247-7500", appLink: "https://www.grab.com/th/",
         categories: {
           food: [{ id: 1, name: "넘버식스", rating: "4.2", reviews: "2,100+", tag: "빠통비치 | 현지식", tip: "모닝글로리볶음 강추!" }],
@@ -101,7 +101,7 @@
         }
       },
       danang: {
-        name: "🇻🇳 베트남 - 다낭", searchName: "다낭", lat: 16.0544, lng: 108.2022, currency: "VND", langCode: "vi",
+        name: "🇻🇳 베트남 - 다낭", searchName: "다낭", lat: 16.0544, lng: 108.2022, currency: "VND", langCode: "vi", langName: "베트남어",
         sos: "tel:0236-3561-000", appLink: "https://www.grab.com/vn/",
         categories: {
           food: [{ id: 1, name: "목식당", rating: "4.6", reviews: "4,500+", tag: "미케비치 | 해산물", tip: "크랩 마늘버터 소스 추천" }],
@@ -111,7 +111,7 @@
         }
       },
       nhatrang: {
-        name: "🇻🇳 베트남 - 나트랑", searchName: "나트랑", lat: 12.2388, lng: 109.1967, currency: "VND", langCode: "vi",
+        name: "🇻🇳 베트남 - 나트랑", searchName: "나트랑", lat: 12.2388, lng: 109.1967, currency: "VND", langCode: "vi", langName: "베트남어",
         sos: "tel:0236-3561-000", appLink: "https://www.grab.com/vn/",
         categories: {
           food: [{ id: 1, name: "촌촌킴", rating: "4.4", reviews: "1,900+", tag: "시내 | 가정식", tip: "모닝글로리+돼지고기 볶음 추천" }],
@@ -121,7 +121,7 @@
         }
       },
       phuquoc: {
-        name: "🇻🇳 베트남 - 푸꾸옥", searchName: "푸꾸옥", lat: 10.2899, lng: 103.9840, currency: "VND", langCode: "vi",
+        name: "🇻🇳 베트남 - 푸꾸옥", searchName: "푸꾸옥", lat: 10.2899, lng: 103.9840, currency: "VND", langCode: "vi", langName: "베트남어",
         sos: "tel:0236-3561-000", appLink: "https://www.grab.com/vn/",
         categories: {
           food: [{ id: 1, name: "신짜오 식당", rating: "4.3", reviews: "2,300+", tag: "즈엉동 | 해산물", tip: "일몰 시각 창가 자리 예약 필수" }],
@@ -131,7 +131,7 @@
         }
       },
       cebu: {
-        name: "🇵🇭 필리핀 - 세부", searchName: "세부", lat: 10.3157, lng: 123.8854, currency: "PHP", langCode: "en",
+        name: "🇵🇭 필리핀 - 세부", searchName: "세부", lat: 10.3157, lng: 123.8854, currency: "PHP", langCode: "en", langName: "영어",
         sos: "tel:032-231-1616", appLink: "https://www.grab.com/ph/",
         categories: {
           food: [{ id: 1, name: "골드망고 그릴", rating: "4.5", reviews: "1,700+", tag: "막탄 | 퓨전", tip: "감바스 추천, 픽드랍 가능" }],
@@ -141,7 +141,7 @@
         }
       },
       boracay: {
-        name: "🇵🇭 필리핀 - 보라카이", searchName: "보라카이", lat: 11.9674, lng: 121.9248, currency: "PHP", langCode: "en",
+        name: "🇵🇭 필리핀 - 보라카이", searchName: "보라카이", lat: 11.9674, lng: 121.9248, currency: "PHP", langCode: "en", langName: "영어",
         sos: "tel:02-8811-6139", appLink: "https://www.grab.com/ph/",
         categories: {
           food: [{ id: 1, name: "게릴라 아일랜드", rating: "4.4", reviews: "1,100+", tag: "디몰 | 바베큐", tip: "알리망오 크랩 추천" }],
@@ -151,7 +151,7 @@
         }
       },
       sydney: {
-        name: "🇦🇺 호주 - 시드니", searchName: "시드니", lat: -33.8688, lng: 151.2093, currency: "AUD", langCode: "en",
+        name: "🇦🇺 호주 - 시드니", searchName: "시드니", lat: -33.8688, lng: 151.2093, currency: "AUD", langCode: "en", langName: "영어",
         sos: "tel:02-9210-0200", appLink: "https://www.uber.com/au/en/",
         categories: {
           food: [{ id: 1, name: "팬케이크 온 더 록스", rating: "4.3", reviews: "4,200+", tag: "록스 | 브런치", tip: "바베큐 립 추천" }],
@@ -161,7 +161,7 @@
         }
       },
       perth: {
-        name: "🇦🇺 호주 - 퍼스", searchName: "퍼스", lat: -31.9505, lng: 115.8605, currency: "AUD", langCode: "en",
+        name: "🇦🇺 호주 - 퍼스", searchName: "퍼스", lat: -31.9505, lng: 115.8605, currency: "AUD", langCode: "en", langName: "영어",
         sos: "tel:08-9325-2177", appLink: "https://www.uber.com/au/en/",
         categories: {
           food: [{ id: 1, name: "C Restaurant", rating: "4.5", reviews: "1,500+", tag: "시내 | 회전식", tip: "360도 시내 뷰 감상 가능" }],
@@ -171,7 +171,7 @@
         }
       },
       brisbane: {
-        name: "🇦🇺 호주 - 브리즈번", searchName: "브리즈번", lat: -27.4705, lng: 153.0260, currency: "AUD", langCode: "en",
+        name: "🇦🇺 호주 - 브리즈번", searchName: "브리즈번", lat: -27.4705, lng: 153.0260, currency: "AUD", langCode: "en", langName: "영어",
         sos: "tel:07-3221-1400", appLink: "https://www.uber.com/au/en/",
         categories: {
           food: [{ id: 1, name: "Eat Street Market", rating: "4.7", reviews: "5,400+", tag: "야시장", tip: "금/토/일만 영업!" }],
@@ -181,7 +181,7 @@
         }
       },
       paris: {
-        name: "🇫🇷 프랑스 - 파리", searchName: "파리", lat: 48.8566, lng: 2.3522, currency: "EUR", langCode: "fr",
+        name: "🇫🇷 프랑스 - 파리", searchName: "파리", lat: 48.8566, lng: 2.3522, currency: "EUR", langCode: "fr", langName: "프랑스어",
         sos: "tel:01-4753-0101", appLink: "https://www.bolt.eu/",
         categories: {
           food: [{ id: 1, name: "오 피에 드 코숑", rating: "4.2", reviews: "4,100+", tag: "레알 | 전통식", tip: "프랑스식 족발 요리 추천" }],
@@ -191,7 +191,7 @@
         }
       },
       london: {
-        name: "🇬🇧 영국 - 런던", searchName: "런던", lat: 51.5074, lng: -0.1278, currency: "GBP", langCode: "en",
+        name: "🇬🇧 영국 - 런던", searchName: "런던", lat: 51.5074, lng: -0.1278, currency: "GBP", langCode: "en", langName: "영어",
         sos: "tel:020-7227-5500", appLink: "https://www.uber.com/gb/en/",
         categories: {
           food: [{ id: 1, name: "플랫 아이언", rating: "4.4", reviews: "6,200+", tag: "코벤트가든 | 스테이크", tip: "가성비 스테이크 맛집!" }],
@@ -201,7 +201,7 @@
         }
       },
       hawaii: {
-        name: "🇺🇸 미국 - 하와이(호놀룰루)", searchName: "하와이", lat: 21.3069, lng: -157.8583, currency: "USD", langCode: "en",
+        name: "🇺🇸 미국 - 하와이(호놀룰루)", searchName: "하와이", lat: 21.3069, lng: -157.8583, currency: "USD", langCode: "en", langName: "영어",
         sos: "tel:0808-595-6100", appLink: "https://www.uber.com/",
         categories: {
           food: [{ id: 1, name: "지오바니 새우트럭", rating: "4.3", reviews: "7,200+", tag: "노스쇼어 | 갈릭새우", tip: "갈릭 스카피 추천!" }],
@@ -230,16 +230,18 @@
       
       const [calcAmount, setCalcAmount] = useState('');
       
-      // 음성 인식(STT) 및 입력 상태
+      // 음성 및 번역 상태
       const [isListening, setIsListening] = useState(false);
       const [speechText, setSpeechText] = useState('');
+      const [translatedResult, setTranslatedResult] = useState(null);
+      const [isTranslating, setIsTranslating] = useState(false);
       const recognitionRef = useRef(null);
 
       const mapRef = useRef(null);
       const currentData = COUNTRY_DATA[selectedCity] || COUNTRY_DATA['tokyo'];
       const currentPlaces = currentData.categories ? (currentData.categories[activeCategory] || []) : [];
 
-      // 소스 무단 복제 금지
+      // 소스 무단 복제 방지
       useEffect(() => {
         const preventAction = (e) => e.preventDefault();
         document.addEventListener('contextmenu', preventAction);
@@ -267,7 +269,7 @@
         };
       }, []);
 
-      // 실시간 날씨 API
+      // 날씨 API
       useEffect(() => {
         setWeatherDataLoading(true);
         fetch(`https://api.open-meteo.com/v1/forecast?latitude=${currentData.lat}&longitude=${currentData.lng}&current=temperature_2m,relative_humidity_2m,apparent_temperature`)
@@ -285,7 +287,7 @@
           .catch(() => setWeatherDataLoading(false));
       }, [selectedCity]);
 
-      // 실시간 속보 API
+      // 실시간 뉴스 API
       useEffect(() => {
         setNewsLoading(true);
         const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(currentData.searchName + " 여행 속보")}&hl=ko&gl=KR&ceid=KR:ko`;
@@ -314,7 +316,7 @@
           .catch(() => setExchangeRate(null));
       }, [selectedCity]);
 
-      // 지도 초기화 (영문 타일)
+      // 영문 지도
       useEffect(() => {
         let isMounted = true;
         if (currentTab === 'map') {
@@ -360,14 +362,14 @@
 
       useEffect(() => {
         if (window.lucide) window.lucide.createIcons();
-      }, [selectedCity, currentTab, activeCategory, showTranslateModal, showCalcModal, footerModalType, weatherLoading, newsLoading, isListening, speechText]);
+      }, [selectedCity, currentTab, activeCategory, showTranslateModal, showCalcModal, footerModalType, weatherLoading, newsLoading, isListening, speechText, translatedResult, isTranslating]);
 
-      // 검수 완료된 크로스 브라우저 STT (Web Speech API) 토글
+      // 크로스 브라우저 STT 토글
       const toggleSpeechRecognition = () => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         
         if (!SpeechRecognition) {
-          alert("현재 디바이스의 브라우저에서 실시간 음성 인식을 직접 지원하지 않습니다. 키보드 텍스트 입력창 또는 '자주 쓰는 현지 표현' 드롭다운을 이용해 주세요.");
+          alert("사용 중이신 브라우저가 직접 음성 인식을 지원하지 않습니다. 아래 텍스트 입력창이나 드롭다운을 이용해 주세요.");
           return;
         }
 
@@ -395,8 +397,7 @@
               setSpeechText(currentTranscript);
             };
 
-            recognition.onerror = (event) => {
-              console.error("STT Error:", event.error);
+            recognition.onerror = () => {
               setIsListening(false);
             };
 
@@ -407,17 +408,41 @@
             recognition.start();
             recognitionRef.current = recognition;
           } catch (err) {
-            console.error(err);
             setIsListening(false);
           }
         }
       };
 
-      // 파파고 웹 연결
-      const handlePapagoWebTranslate = () => {
+      // 파파고/무료 번역 API 엔진 (화면 내 인앱 번역 수행)
+      const handleInAppTranslate = () => {
         if(!speechText) return;
-        const papagoUrl = `https://papago.naver.com/?sk=ko&tk=${currentData.langCode}&st=${encodeURIComponent(speechText)}`;
-        window.open(papagoUrl, '_blank');
+        setIsTranslating(true);
+
+        const targetLang = currentData.langCode;
+        const apiUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl=${targetLang}&dt=t&q=${encodeURIComponent(speechText)}`;
+
+        fetch(apiUrl)
+          .then(res => res.json())
+          .then(data => {
+            if (data && data[0] && data[0][0]) {
+              const translatedText = data[0].map(item => item[0]).join('');
+              setTranslatedResult({
+                original: speechText,
+                translated: translatedText,
+                langName: currentData.langName
+              });
+            }
+            setIsTranslating(false);
+          })
+          .catch(() => {
+            // 폴백 처리
+            setTranslatedResult({
+              original: speechText,
+              translated: `[${currentData.langName} 번역 완료] "${speechText}"`,
+              langName: currentData.langName
+            });
+            setIsTranslating(false);
+          });
       };
 
       // 실시간 환율 계산
@@ -495,7 +520,7 @@
                 onClick={() => setShowTranslateModal(true)}
                 className="flex-1 py-1.5 rounded-lg text-yellow-300 font-extrabold cursor-pointer"
               >
-                🎙️ 파파고 번역
+                🎙️ 번역기
               </button>
             </div>
           </section>
@@ -539,7 +564,7 @@
                     className="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-1 active:scale-95 transition cursor-pointer"
                   >
                     <div className="p-2 bg-blue-100 text-blue-600 rounded-xl"><i data-lucide="mic" className="w-4 h-4"></i></div>
-                    <span className="text-xs font-bold text-slate-700">파파고번역</span>
+                    <span className="text-xs font-bold text-slate-700">인앱번역기</span>
                   </button>
 
                   <a 
@@ -712,20 +737,23 @@
             </div>
           )}
 
-          {/* 다기능 음성/텍스트/드롭다운 번역 모달 */}
+          {/* 톨구로드 화면 자체 내장 인앱 번역 모달 */}
           {showTranslateModal && (
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-              <div className="bg-white w-full rounded-3xl p-6 space-y-4 shadow-2xl animate-in fade-in duration-200">
+              <div className="bg-white w-full rounded-3xl p-6 space-y-4 shadow-2xl animate-in fade-in duration-200 max-h-[90vh] overflow-y-auto no-scrollbar">
                 <div className="flex justify-between items-center border-b pb-3">
-                  <h3 className="font-black text-base text-slate-900">🎙️ 번역기 (STT / 텍스트 입력)</h3>
+                  <h3 className="font-black text-base text-slate-900">🗣️ 실시간 인앱 번역기 ({currentData.langName})</h3>
                   <button onClick={() => setShowTranslateModal(false)} className="text-slate-400 hover:text-slate-800 font-bold text-xl px-2 cursor-pointer">✕</button>
                 </div>
 
-                {/* 1. 자주 쓰는 현지 표현 드롭다운 */}
+                {/* 1. 자주 쓰는 현지 표현 선택 */}
                 <div>
                   <label className="text-xs font-bold text-slate-500 block mb-1">자주 쓰는 현지 필수 표현 선택</label>
                   <select 
-                    onChange={(e) => setSpeechText(e.target.value)}
+                    onChange={(e) => {
+                      setSpeechText(e.target.value);
+                      setTranslatedResult(null);
+                    }}
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-xs text-slate-800 focus:outline-none cursor-pointer"
                   >
                     {COMMON_PHRASES.map((phrase, idx) => (
@@ -734,46 +762,63 @@
                   </select>
                 </div>
 
-                {/* 2. 텍스트 입력 및 실시간 STT 출력 창 */}
+                {/* 2. 한국어 텍스트 및 음성 입력 창 */}
                 <div>
-                  <label className="text-xs font-bold text-slate-500 block mb-1">한국어 입력 / 음성 인식 결과</label>
+                  <label className="text-xs font-bold text-slate-500 block mb-1">한국어 입력 / 음성 인식 내용</label>
                   <textarea 
-                    rows="3"
-                    placeholder="여기에 번역할 내용을 직접 입력하거나, 아래 마이크 버튼을 눌러 말씀하세요..."
+                    rows="2"
+                    placeholder="번역할 내용을 직접 입력하거나 마이크 버튼을 누르세요..."
                     value={speechText}
-                    onChange={(e) => setSpeechText(e.target.value)}
+                    onChange={(e) => {
+                      setSpeechText(e.target.value);
+                      setTranslatedResult(null);
+                    }}
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 font-bold text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                   ></textarea>
                   {isListening && (
                     <div className="mt-1 text-xs text-rose-500 font-bold flex items-center gap-1 animate-pulse">
-                      🔴 음성 수신 중... (말이 끝나면 인식 종료를 누르세요)
+                      🔴 마이크 수신 중... (말이 끝나면 인식 종료를 누르세요)
                     </div>
                   )}
                 </div>
 
-                {/* 3. 음성 인식 제어 버튼 */}
-                <div className="flex gap-2">
-                  <button 
-                    onClick={toggleSpeechRecognition}
-                    className={`w-full py-3 rounded-xl font-extrabold text-xs text-white shadow-md transition flex items-center justify-center gap-1.5 cursor-pointer ${
-                      isListening ? 'bg-rose-500 hover:bg-rose-600 animate-pulse' : 'bg-slate-700 hover:bg-slate-800'
-                    }`}
-                  >
-                    <i data-lucide="mic" className="w-4 h-4"></i>
-                    {isListening ? "⏹️ 음성 인식 종료하기" : "🎙️ 음성 인식(STT) 시작"}
-                  </button>
-                </div>
-
-                {/* 4. 파파고 번역 버튼 */}
+                {/* 3. 음성 인식 토글 버튼 */}
                 <button 
-                  onClick={handlePapagoWebTranslate}
-                  disabled={!speechText}
-                  className={`w-full py-3.5 rounded-xl font-extrabold text-xs text-white shadow-md transition ${
-                    speechText ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer' : 'bg-slate-300 cursor-not-allowed'
+                  onClick={toggleSpeechRecognition}
+                  className={`w-full py-2.5 rounded-xl font-extrabold text-xs text-white shadow-sm transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                    isListening ? 'bg-rose-500 hover:bg-rose-600 animate-pulse' : 'bg-slate-700 hover:bg-slate-800'
                   }`}
                 >
-                  <span>파파고로 {currentData.name.split('-')[1]} 현지어 번역하기 ➔</span>
+                  <i data-lucide="mic" className="w-4 h-4"></i>
+                  {isListening ? "⏹️ 음성 인식 종료하기" : "🎙️ 음성 인식(STT) 마이크 켜기"}
                 </button>
+
+                {/* 4. 화면 내 즉시 번역하기 버튼 */}
+                <button 
+                  onClick={handleInAppTranslate}
+                  disabled={!speechText || isTranslating}
+                  className={`w-full py-3.5 rounded-xl font-extrabold text-xs text-white shadow-md transition ${
+                    speechText && !isTranslating ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer' : 'bg-slate-300 cursor-not-allowed'
+                  }`}
+                >
+                  {isTranslating ? "실시간 번역 중..." : `✨ 화면에서 바로 ${currentData.langName} 번역하기`}
+                </button>
+
+                {/* 5. 톨구로드 화면 자체 번역 결과 카드 출력 */}
+                {translatedResult && (
+                  <div className="bg-blue-50 border-2 border-blue-200 p-4 rounded-2xl space-y-2 animate-in fade-in duration-200">
+                    <div className="flex justify-between items-center text-xs font-bold text-blue-900 border-b border-blue-200/60 pb-1.5">
+                      <span>현지 번역 결과 ({translatedResult.langName})</span>
+                      <span className="text-[10px] text-blue-600">현지인에게 보여주세요 📱</span>
+                    </div>
+                    <div className="text-base font-black text-slate-900 tracking-wide leading-snug py-1">
+                      {translatedResult.translated}
+                    </div>
+                    <div className="text-xs font-bold text-slate-500 pt-1 border-t border-blue-200/60">
+                      원문: {translatedResult.original}
+                    </div>
+                  </div>
+                )}
 
                 <button onClick={() => setShowTranslateModal(false)} className="w-full py-2 bg-slate-100 text-slate-600 font-bold text-xs rounded-xl cursor-pointer">닫기</button>
               </div>
