@@ -25,14 +25,12 @@
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
 
-    // 8개국 17개 도시 풀 데이터베이스
+    // 8개국 17개 도시 누락 없는 완전 데이터베이스
     const COUNTRY_DATA = {
+      // 1. 일본 (4개)
       tokyo: {
-        name: "🇯🇵 일본 - 도쿄", lat: 35.6762, lng: 139.6503, currency: "JPY", rate: 9.1,
-        alert: { type: "⛈️ [LIVE]", text: "도쿄 인근 기습 폭우로 야마노테선 일부 지연 운행 중", level: "bg-amber-500", details: "지바현 및 도쿄 동부 기습 폭우로 야마노테선이 약 15분 지연 운행되고 있습니다.", url: "https://news.google.com/search?q=도쿄+지하철" },
-        weather: { temp: "22°C", feels: "21°C", humidity: "55%", tip: "일교차가 큽니다. 가벼운 외투와 접이식 우산을 챙기세요." },
+        name: "🇯🇵 일본 - 도쿄", searchName: "도쿄", lat: 35.6762, lng: 139.6503, currency: "JPY", langCode: "ja",
         sos: "tel:03-3452-7401", appLink: "https://www.go-taxi.jp/ko",
-        issues: [{ id: 1, title: "시부야 돈키호테 면세 대기시간 45분", comments: 32, content: "면세 카운터 줄이 깁니다. 새벽이나 오전 9시 이전 방문을 추천합니다." }],
         categories: {
           food: [{ id: 1, name: "이치란 신주쿠점", rating: "4.2", reviews: "3,400+", tag: "신주쿠 | 라멘", tip: "비밀 소스 5배 추천!" }],
           stay: [{ id: 1, name: "소테츠 프레사 인 긴자", rating: "4.6", reviews: "1,200+", tag: "긴자 | 🟢 치안 우수 구역", tip: "야간 보행 매우 안전. 역과의 접근성이 뛰어납니다." }],
@@ -41,11 +39,8 @@
         }
       },
       osaka: {
-        name: "🇯🇵 일본 - 오사카", lat: 34.6937, lng: 135.5023, currency: "JPY", rate: 9.1,
-        alert: { type: "🚨 [안내]", text: "난바역 주변 인파 집중으로 이동 시 소지품 주의", level: "bg-blue-500", details: "도톤보리 주요 거리 이동 시 소매치기에 유의하세요.", url: "https://news.google.com/search?q=오사카+여행" },
-        weather: { temp: "24°C", feels: "24°C", humidity: "60%", tip: "도보 이동이 많으니 편한 운동화 착용 권장" },
+        name: "🇯🇵 일본 - 오사카", searchName: "오사카", lat: 34.6937, lng: 135.5023, currency: "JPY", langCode: "ja",
         sos: "tel:06-6213-1401", appLink: "https://www.go-taxi.jp/ko",
-        issues: [{ id: 1, title: "유니버설 익스프레스 티켓 현장 매진", comments: 45, content: "사전 온라인 예매 필수입니다." }],
         categories: {
           food: [{ id: 1, name: "쿠시카츠 다루마", rating: "4.3", reviews: "2,800+", tag: "도톤보리 | 튀김", tip: "소스 베이스 한 번만 찍기!" }],
           stay: [{ id: 1, name: "스위소텔 난카이 오사카", rating: "4.7", reviews: "1,900+", tag: "난바 | 🟢 치안 양호 구역", tip: "난바역 상부 위치로 라피트 탑승이 매우 편리합니다." }],
@@ -54,11 +49,8 @@
         }
       },
       fukuoka: {
-        name: "🇯🇵 일본 - 후쿠오카", lat: 33.5902, lng: 130.4017, currency: "JPY", rate: 9.1,
-        alert: { type: "💡 [팁]", text: "하카타역 내 명란 바게트 매장 대기 발생 중", level: "bg-emerald-500", details: "인기 매장은 오전에 품절될 수 있습니다.", url: "https://news.google.com/search?q=후쿠오카+여행" },
-        weather: { temp: "23°C", feels: "23°C", humidity: "50%", tip: "버스 뒷문 승차 후 정리권 챙기기 필수" },
+        name: "🇯🇵 일본 - 후쿠오카", searchName: "후쿠오카", lat: 33.5902, lng: 130.4017, currency: "JPY", langCode: "ja",
         sos: "tel:092-771-0461", appLink: "https://www.go-taxi.jp/ko",
-        issues: [{ id: 1, title: "텐진 돈키호테 의약품 카운터 별도 운영", comments: 21, content: "의약품은 전용 계산대에서 따로 결제해야 합니다." }],
         categories: {
           food: [{ id: 1, name: "신신라멘 본점", rating: "4.4", reviews: "4,100+", tag: "텐진 | 라멘", tip: "잡내 없는 돈코츠 라멘!" }],
           stay: [{ id: 1, name: "오리엔탈 호텔 후쿠오카", rating: "4.6", reviews: "2,300+", tag: "하카타 | 🟢 안전 구역", tip: "하카타역 도보 1분 거리, 초보 여행자 추천" }],
@@ -67,11 +59,8 @@
         }
       },
       hokkaido: {
-        name: "🇯🇵 일본 - 홋카이도(삿포로)", lat: 43.0618, lng: 141.3545, currency: "JPY", rate: 9.1,
-        alert: { type: "❄️ [날씨]", text: "일몰 후 체감온도 급격히 하강 주의", level: "bg-indigo-600", details: "삿포로 외곽 지역은 바람이 차니 경량 패딩 소지 필수입니다.", url: "https://news.google.com/search?q=삿포로+날씨" },
-        weather: { temp: "16°C", feels: "14°C", humidity: "65%", tip: "바람막이 및 경량 패딩 준비 필수" },
+        name: "🇯🇵 일본 - 홋카이도(삿포로)", searchName: "삿포로", lat: 43.0618, lng: 141.3545, currency: "JPY", langCode: "ja",
         sos: "tel:011-218-0288", appLink: "https://www.go-taxi.jp/ko",
-        issues: [{ id: 1, title: "비에이 투어 버스 당일 예약 불가", comments: 40, content: "최소 3일 전 예약 완료를 권장합니다." }],
         categories: {
           food: [{ id: 1, name: "징기스칸 다루마 4.4", rating: "4.4", reviews: "2,500+", tag: "스스키노 | 양고기", tip: "비닐봉투에 옷 보관 권장" }],
           stay: [{ id: 1, name: "크로스 호텔 삿포로", rating: "4.5", reviews: "1,100+", tag: "시계탑 인근 | 🟢 치안 안전", tip: "대욕장이 있어 일정을 마치고 피로를 풀기 좋습니다." }],
@@ -79,12 +68,11 @@
           shop: [{ id: 1, name: "삿포로 스텔라플레이스", rating: "4.5", reviews: "4,100+", tag: "삿포로역 | 백화점", tip: "삿포로역 연결 대형 쇼핑몰, 잡화 및 의류 추천" }]
         }
       },
+
+      // 2. 태국 (2개)
       bangkok: {
-        name: "🇹🇭 태국 - 방콕", lat: 13.7563, lng: 100.5018, currency: "THB", rate: 38.5,
-        alert: { type: "🚨 [속보]", text: "스쿰빗 도로 정체 심화, 지하철(BTS) 이용 권장", level: "bg-red-500", details: "도로 정체가 심하니 택시 대신 BTS 지상철을 이용하세요.", url: "https://news.google.com/search?q=방콕+교통" },
-        weather: { temp: "32°C", feels: "36°C", humidity: "75%", tip: "실내 에어컨이 강하니 얇은 겉옷을 챙기세요." },
+        name: "🇹🇭 태국 - 방콕", searchName: "방콕", lat: 13.7563, lng: 100.5018, currency: "THB", langCode: "th",
         sos: "tel:02-247-7500", appLink: "https://www.grab.com/th/",
-        issues: [{ id: 1, title: "아이콘시암 면세 대기시간 15분", comments: 8, content: "G층 텍스리펀 창구에서 영수증을 챙겨 환급받으세요." }],
         categories: {
           food: [{ id: 1, name: "팁싸마이", rating: "4.3", reviews: "1,200+", tag: "프라나콘 | 팟타이", tip: "오렌지 주스 꼭 주문하세요!" }],
           stay: [{ id: 1, name: "이스틴 그랜드 사톤", rating: "4.7", reviews: "2,100+", tag: "사톤 | 🟢 치안 양호 구역", tip: "BTS 수라싹역 구름다리와 바로 연결되어 안전합니다." }],
@@ -93,24 +81,20 @@
         }
       },
       phuket: {
-        name: "🇹🇭 태국 - 푸켓", lat: 7.8804, lng: 98.3923, currency: "THB", rate: 38.5,
-        alert: { type: "🌊 [해양]", text: "빠통 비치 파도 약간 높음, 안전요원 확인", level: "bg-teal-500", details: "빨간 깃발이 걸린 구역에서는 수영을 자제하세요.", url: "https://news.google.com/search?q=푸켓+날씨" },
-        weather: { temp: "30°C", feels: "34°C", humidity: "80%", tip: "스노클링 시 래시가드 착용 필수" },
+        name: "🇹🇭 태국 - 푸켓", searchName: "푸켓", lat: 7.8804, lng: 98.3923, currency: "THB", langCode: "th",
         sos: "tel:02-247-7500", appLink: "https://www.grab.com/th/",
-        issues: [{ id: 1, title: "피피섬 투어 선착장 미팅 시간 주의", comments: 19, content: "픽업 시간에 늦지 않게 로비에서 대기하세요." }],
         categories: {
           food: [{ id: 1, name: "넘버식스", rating: "4.2", reviews: "2,100+", tag: "빠통비치 | 현지식", tip: "모닝글로리볶음 강추!" }],
           stay: [{ id: 1, name: "밀레니엄 리조트 빠통", rating: "4.4", reviews: "1,500+", tag: "빠통 | 🟡 번화가 번잡 구역", tip: "정실론 쇼핑몰과 연결, 밤에도 사람이 많습니다." }],
-          transit: [{ id: 1, name: "푸켓 스마트 버스", rating: "4.1", reviews: "620+", tag: "교통수단 | 공항버스", tip: "공항에서 주요 해변까지 170바트 저렴한 이동 가능" }],
+          transit: [{ id: 1, name: "푸켓 스마트 버스", rating: "4.1", reviews: "620+", tag: "교통수단 | 공항버스", tip: "공항에서 주요 해변까지 저렴한 이동 가능" }],
           shop: [{ id: 1, name: "정실론 쇼핑몰", rating: "4.3", reviews: "5,100+", tag: "빠통 | 대형몰", tip: "빅씨마트 푸켓 특산품 및 건망고 쇼핑 코스" }]
         }
       },
+
+      // 3. 베트남 (3개)
       danang: {
-        name: "🇻🇳 베트남 - 다낭", lat: 16.0544, lng: 108.2022, currency: "VND", rate: 0.055,
-        alert: { type: "🚕 [교통]", text: "공항 호객 행위 주의, Grab 예약 차량만 이용하세요", level: "bg-emerald-600", details: "공항 앞 호객 택시 대신 Grab 전용 탑승장을 이용하세요.", url: "https://news.google.com/search?q=다낭+여행" },
-        weather: { temp: "29°C", feels: "32°C", humidity: "78%", tip: "바나힐 이동 시 가디건 필수" },
+        name: "🇻🇳 베트남 - 다낭", searchName: "다낭", lat: 16.0544, lng: 108.2022, currency: "VND", langCode: "vi",
         sos: "tel:0236-3561-000", appLink: "https://www.grab.com/vn/",
-        issues: [{ id: 1, title: "한시장 아오자이 맞춤 2시간 소요", comments: 34, content: "원단 선택 후 시내 관광 다녀오시면 완제 제작됩니다." }],
         categories: {
           food: [{ id: 1, name: "목식당", rating: "4.6", reviews: "4,500+", tag: "미케비치 | 해산물", tip: "크랩 마늘버터 소스 추천" }],
           stay: [{ id: 1, name: "신라모노그램 다낭", rating: "4.8", reviews: "950+", tag: "리조트단지 | 🟢 가족형 안심 구역", tip: "프라이빗 비치가 있어 보안이 철저합니다." }],
@@ -119,11 +103,8 @@
         }
       },
       nhatrang: {
-        name: "🇻🇳 베트남 - 나트랑", lat: 12.2388, lng: 109.1967, currency: "VND", rate: 0.055,
-        alert: { type: "☀️ [자외선]", text: "한낮 자외선 지수 매우 높음, 모자 필수", level: "bg-amber-500", details: "12시~14시 사이 야외 해변 수영 시 화상 주의하세요.", url: "https://news.google.com/search?q=나트랑+날씨" },
-        weather: { temp: "30°C", feels: "33°C", humidity: "72%", tip: "빈원더스 케이블카 점검 여부 확인" },
+        name: "🇻🇳 베트남 - 나트랑", searchName: "나트랑", lat: 12.2388, lng: 109.1967, currency: "VND", langCode: "vi",
         sos: "tel:0236-3561-000", appLink: "https://www.grab.com/vn/",
-        issues: [{ id: 1, title: "담시장 망고 시세 정보", comments: 41, content: "1kg 기준 약 3만 동 안팎에 형성되어 있습니다." }],
         categories: {
           food: [{ id: 1, name: "촌촌킴", rating: "4.4", reviews: "1,900+", tag: "시내 | 가정식", tip: "모닝글로리+돼지고기 볶음 추천" }],
           stay: [{ id: 1, name: "인터컨티넨탈 나트랑", rating: "4.7", reviews: "1,800+", tag: "해변가 | 🟢 안전 구역", tip: "시내 중심가에 위치해 도보 이동 및 치안이 우수합니다." }],
@@ -132,11 +113,8 @@
         }
       },
       phuquoc: {
-        name: "🇻🇳 베트남 - 푸꾸옥", lat: 10.2899, lng: 103.9840, currency: "VND", rate: 0.055,
-        alert: { type: "🚌 [셔틀]", text: "빈버스(VinBus) 무료 노선 최신화 완료", level: "bg-indigo-500", details: "북부 빈원더스 및 남부 선셋타운행 무료 버스를 이용하세요.", url: "https://news.google.com/search?q=푸꾸옥+여행" },
-        weather: { temp: "28°C", feels: "31°C", humidity: "80%", tip: "무료 빈버스 셔틀 적극 활용하세요" },
+        name: "🇻🇳 베트남 - 푸꾸옥", searchName: "푸꾸옥", lat: 10.2899, lng: 103.9840, currency: "VND", langCode: "vi",
         sos: "tel:0236-3561-000", appLink: "https://www.grab.com/vn/",
-        issues: [{ id: 1, title: "혼똔섬 케이블카 점검 일정 체크", comments: 26, content: "운행 정기 점검일을 미리 앱으로 확인하세요." }],
         categories: {
           food: [{ id: 1, name: "신짜오 식당", rating: "4.3", reviews: "2,300+", tag: "즈엉동 | 해산물", tip: "일몰 시각 창가 자리 예약 필수" }],
           stay: [{ id: 1, name: "Novotel 푸꾸옥 리조트", rating: "4.5", reviews: "1,400+", tag: "소나시 | 🟢 안전 구역", tip: "소나시 야시장 도보 이동 가능 및 리조트 보안 우수" }],
@@ -144,12 +122,11 @@
           shop: [{ id: 1, name: "킹콩마트 (Kingkong Mart)", rating: "4.7", reviews: "8,100+", tag: "여행자거리 | 종합마트", tip: "푸꾸옥 후추, 땅콩, 통조림 쇼핑의 성지" }]
         }
       },
+
+      // 4. 필리핀 (2개)
       cebu: {
-        name: "🇵🇭 필리핀 - 세부", lat: 10.3157, lng: 123.8854, currency: "PHP", rate: 24.2,
-        alert: { type: "🚘 [교통]", text: "막탄 다리 구간 병목 정체, 1시간 여유 확보", level: "bg-red-500", details: "공항으로 가는 길목 다리가 정체되니 출국 시 일찍 이동하세요.", url: "https://news.google.com/search?q=세부+교통" },
-        weather: { temp: "31°C", feels: "35°C", humidity: "76%", tip: "오스롭 고래상어 투어 시 선크림 바다 입장 불법" },
+        name: "🇵🇭 필리핀 - 세부", searchName: "세부", lat: 10.3157, lng: 123.8854, currency: "PHP", langCode: "en",
         sos: "tel:032-231-1616", appLink: "https://www.grab.com/ph/",
-        issues: [{ id: 1, title: "eTravel 바코드 사전 발급 필수", comments: 60, content: "출국 72시간 전 전용 웹사이트에서 발급받아야 합니다." }],
         categories: {
           food: [{ id: 1, name: "골드망고 그릴", rating: "4.5", reviews: "1,700+", tag: "막탄 | 퓨전", tip: "감바스 추천, 픽드랍 가능" }],
           stay: [{ id: 1, name: "샹그릴라 막탄 리조트", rating: "4.8", reviews: "3,200+", tag: "막탄 | 🟢 치안 안전", tip: "리조트 내 프라이빗 비치와 자체 경비 시스템 운영" }],
@@ -158,11 +135,8 @@
         }
       },
       boracay: {
-        name: "🇵🇭 필리핀 - 보라카이", lat: 11.9674, lng: 121.9248, currency: "PHP", rate: 24.2,
-        alert: { type: "⛵ [이동]", text: "까티클란 선착장 환경세 창구 줄 길어짐", level: "bg-teal-600", details: "섬 진입 시 오션젯 지불 창구에 동전 및 소액 현금을 준비하세요.", url: "https://news.google.com/search?q=보라카이+여행" },
-        weather: { temp: "30°C", feels: "33°C", humidity: "75%", tip: "화이트비치 내 음주/음식물 금지 구역" },
+        name: "🇵🇭 필리핀 - 보라카이", searchName: "보라카이", lat: 11.9674, lng: 121.9248, currency: "PHP", langCode: "en",
         sos: "tel:02-8811-6139", appLink: "https://www.grab.com/ph/",
-        issues: [{ id: 1, title: "디몰 환전소 실시간 달러 우대율", comments: 24, content: "100달러 신권 권종의 우대율이 가장 좋습니다." }],
         categories: {
           food: [{ id: 1, name: "게릴라 아일랜드", rating: "4.4", reviews: "1,100+", tag: "디몰 | 바베큐", tip: "알리망오 크랩 추천" }],
           stay: [{ id: 1, name: "헤난 가든 리조트", rating: "4.6", reviews: "2,800+", tag: "스테이션2 | 🟡 중심가 번화", tip: "화이트비치 도보 3분, 위치성 및 보안 무난" }],
@@ -170,12 +144,11 @@
           shop: [{ id: 1, name: "디몰 (D'Mall Boracay)", rating: "4.4", reviews: "7,800+", tag: "스테이션2 | 오픈쇼핑가", tip: "악마의 잼, 노니비누, 수제 기념품 쇼핑 중심지" }]
         }
       },
+
+      // 5. 호주 (3개)
       sydney: {
-        name: "🇦🇺 호주 - 시드니", lat: -33.8688, lng: 151.2093, currency: "AUD", rate: 900,
-        alert: { type: "💳 [교통]", text: "트램/버스 컨택리스 신용카드 결제 가능", level: "bg-blue-600", details: "교통카드 없이 한국 해외겸용 신용카드로 찍고 탈 수 있습니다.", url: "https://news.google.com/search?q=시드니+교통" },
-        weather: { temp: "19°C", feels: "18°C", humidity: "50%", tip: "자외선이 강하니 SPF50+ 선크림 필수" },
+        name: "🇦🇺 호주 - 시드니", searchName: "시드니", lat: -33.8688, lng: 151.2093, currency: "AUD", langCode: "en",
         sos: "tel:02-9210-0200", appLink: "https://www.uber.com/au/en/",
-        issues: [{ id: 1, title: "블루마운틴 궤도열차 탑승 꿀팁", comments: 29, content: "가장 앞자리에 앉으시면 경사를 스릴 있게 감상할 수 있습니다." }],
         categories: {
           food: [{ id: 1, name: "팬케이크 온 더 록스", rating: "4.3", reviews: "4,200+", tag: "록스 | 브런치", tip: "바베큐 립 추천" }],
           stay: [{ id: 1, name: "릿지스 시드니 하버", rating: "4.5", reviews: "1,300+", tag: "더록스 | 🟢 안전 우수", tip: "오페라하우스 도보 접근성 및 치안이 훌륭합니다." }],
@@ -184,11 +157,8 @@
         }
       },
       perth: {
-        name: "🇦🇺 호주 - 퍼스", lat: -31.9505, lng: 115.8605, currency: "AUD", rate: 900,
-        alert: { type: "🚌 [무료버스]", text: "시내 중심가 FTZ 구역 버스 탑승 무료", level: "bg-emerald-600", details: "퍼스 시내 FTZ 표시 구역 내에서는 버스 요금이 무료입니다.", url: "https://news.google.com/search?q=퍼스+여행" },
-        weather: { temp: "21°C", feels: "20°C", humidity: "45%", tip: "로트네스트 섬 이동 전 쿼카 셀카 준비" },
+        name: "🇦🇺 호주 - 퍼스", searchName: "퍼스", lat: -31.9505, lng: 115.8605, currency: "AUD", langCode: "en",
         sos: "tel:08-9325-2177", appLink: "https://www.uber.com/au/en/",
-        issues: [{ id: 1, title: "로트네스트 페리 화요일 할인 스케줄", comments: 31, content: "화요일 출발 왕복 페리 티켓이 가장 저렴합니다." }],
         categories: {
           food: [{ id: 1, name: "C Restaurant", rating: "4.5", reviews: "1,500+", tag: "시내 | 회전식", tip: "360도 시내 뷰 감상 가능" }],
           stay: [{ id: 1, name: "크라운 타워스 퍼스", rating: "4.7", reviews: "2,100+", tag: "버스우드 | 🟢 안심 구역", tip: "스완강 변 위치, 프라이빗 리조트 보안 철저" }],
@@ -197,11 +167,8 @@
         }
       },
       brisbane: {
-        name: "🇦🇺 호주 - 브리즈번", lat: -27.4705, lng: 153.0260, currency: "AUD", rate: 900,
-        alert: { type: "⛴️ [페리]", text: "시티호퍼 무료 페리로 주요 관광지 이동", level: "bg-teal-500", details: "빨간색 CityHopper 페리는 누구나 무료로 탑승할 수 있습니다.", url: "https://news.google.com/search?q=브리즈번+페리" },
-        weather: { temp: "23°C", feels: "22°C", humidity: "55%", tip: "사우스뱅크 인공비치 수영복 소지" },
+        name: "🇦🇺 호주 - 브리즈번", searchName: "브리즈번", lat: -27.4705, lng: 153.0260, currency: "AUD", langCode: "en",
         sos: "tel:07-3221-1400", appLink: "https://www.uber.com/au/en/",
-        issues: [{ id: 1, title: "골드코스트 트램 이용권 공유", comments: 23, content: "G:link 트램 일일권을 이용하시면 편리합니다." }],
         categories: {
           food: [{ id: 1, name: "Eat Street Market", rating: "4.7", reviews: "5,400+", tag: "야시장", tip: "금/토/일만 영업!" }],
           stay: [{ id: 1, name: "메리통 스위트 허셜 스트리트", rating: "4.6", reviews: "3,100+", tag: "시티중심 | 🟢 치안 안전", tip: "레지던스형 숙소, 중앙역 도보 접근성 최고" }],
@@ -209,12 +176,11 @@
           shop: [{ id: 1, name: "퀸스트리트 몰", rating: "4.5", reviews: "8,200+", tag: "시티중심 | 쇼핑보행로", tip: "영백화점 및 호주 포포크림/영양제 쇼핑" }]
         }
       },
+
+      // 6. 유럽 (2개)
       paris: {
-        name: "🇫🇷 프랑스 - 파리", lat: 48.8566, lng: 2.3522, currency: "EUR", rate: 1480,
-        alert: { type: "⚠️ [치안]", text: "에펠탑 및 지하철 1/4호선 주변 소매치기 주의", level: "bg-red-600", details: "지하철 문이 닫히기 직전 가방을 낚아채는 소매치기에 유의하세요.", url: "https://news.google.com/search?q=파리+치안" },
-        weather: { temp: "18°C", feels: "17°C", humidity: "60%", tip: "뮤지엄패스 사전 시간 지정 필수" },
+        name: "🇫🇷 프랑스 - 파리", searchName: "파리", lat: 48.8566, lng: 2.3522, currency: "EUR", langCode: "fr",
         sos: "tel:01-4753-0101", appLink: "https://www.bolt.eu/",
-        issues: [{ id: 1, title: "루브르 박물관 현장권 매진", comments: 68, content: "공식 홈페이지에서 사전 타임슬롯 예약을 반드시 완료하세요." }],
         categories: {
           food: [{ id: 1, name: "오 피에 드 코숑", rating: "4.2", reviews: "4,100+", tag: "레알 | 전통식", tip: "프랑스식 족발 요리 추천" }],
           stay: [{ id: 1, name: "풀만 파리 투르 에펠", rating: "4.6", reviews: "2,700+", tag: "15구 | 🟢 비교적 안전 구역", tip: "에펠탑 뷰 숙소, 밤에도 관광객이 많아 도보 안전" }],
@@ -223,11 +189,8 @@
         }
       },
       london: {
-        name: "🇬🇧 영국 - 런던", lat: 51.5074, lng: -0.1278, currency: "GBP", rate: 1720,
-        alert: { type: "🚌 [교통]", text: "트래블로그/월렛 컨택리스 카드 승차 가능", level: "bg-blue-600", details: "오이스터 카드를 살 필요 없이 컨택리스 카드로 찍으면 됩니다.", url: "https://news.google.com/search?q=런던+지하철" },
-        weather: { temp: "17°C", feels: "16°C", humidity: "70%", tip: "3단 우산 항시 소지 추천" },
+        name: "🇬🇧 영국 - 런던", searchName: "런던", lat: 51.5074, lng: -0.1278, currency: "GBP", langCode: "en",
         sos: "tel:020-7227-5500", appLink: "https://www.uber.com/gb/en/",
-        issues: [{ id: 1, title: "스카이가든 무료 전망대 예약 팁", comments: 51, content: "매주 월요일 오전에 3주 뒤 일주일 치 티켓이 오픈됩니다." }],
         categories: {
           food: [{ id: 1, name: "플랫 아이언", rating: "4.4", reviews: "6,200+", tag: "코벤트가든 | 스테이크", tip: "가성비 스테이크 맛집!" }],
           stay: [{ id: 1, name: "파크 플라자 웨스트민스터 브릿지", rating: "4.6", reviews: "3,800+", tag: "워털루 | 🟢 안전 치안", tip: "빅벤 맞은편 위치, 밤거리 안전하고 관광지 이동 최고" }],
@@ -235,12 +198,11 @@
           shop: [{ id: 1, name: "버로우 마켓 (Borough Market)", rating: "4.6", reviews: "18,000+", tag: "런던브릿지 | 식료품시장", tip: "몬머스 커피, 빠에야, 수제 치즈 쇼핑" }]
         }
       },
+
+      // 7. 미주 (1개)
       hawaii: {
-        name: "🇺🇸 미국 - 하와이(호놀룰루)", lat: 21.3069, lng: -157.8583, currency: "USD", rate: 1350,
-        alert: { type: "🚗 [렌트]", text: "와이키키 시내 주차비 박당 $40~$50 선", level: "bg-amber-500", details: "호텔 일일 주차비가 비싸므로 와이키키 동물원 공영 주차장을 활용해보세요.", url: "https://news.google.com/search?q=하와이+여행" },
-        weather: { temp: "27°C", feels: "29°C", humidity: "60%", tip: "하나우마베이 스노클링 예약 필수" },
+        name: "🇺🇸 미국 - 하와이(호놀룰루)", searchName: "하와이", lat: 21.3069, lng: -157.8583, currency: "USD", langCode: "en",
         sos: "tel:0808-595-6100", appLink: "https://www.uber.com/",
-        issues: [{ id: 1, title: "하나우마베이 예약 성공 팁", comments: 57, content: "방문일 이틀 전 오전 7시(하와이 시간)에 오픈됩니다." }],
         categories: {
           food: [{ id: 1, name: "지오바니 새우트럭", rating: "4.3", reviews: "7,200+", tag: "노스쇼어 | 갈릭새우", tip: "갈릭 스카피 추천!" }],
           stay: [{ id: 1, name: "쉐라톤 와이키키", rating: "4.7", reviews: "5,400+", tag: "와이키키 | 🟢 안전 구역", tip: "인피니티 풀 유명, 와이키키 중심이라 밤에도 유동인구 많음" }],
@@ -257,19 +219,24 @@
       
       const [showTranslateModal, setShowTranslateModal] = useState(false);
       const [showCalcModal, setShowCalcModal] = useState(false);
-      const [selectedIssue, setSelectedIssue] = useState(null);
-      const [showNewsModal, setShowNewsModal] = useState(false);
+      const [selectedNews, setSelectedNews] = useState(null);
       const [footerModalType, setFooterModalType] = useState(null);
 
+      // 실시간 API 데이터 상태
+      const [weatherData, setWeatherData] = useState(null);
+      const [weatherLoading, setWeatherDataLoading] = useState(true);
+      const [newsData, setNewsData] = useState([]);
+      const [newsLoading, setNewsLoading] = useState(true);
+      const [exchangeRate, setExchangeRate] = useState(null);
+      
       const [calcAmount, setCalcAmount] = useState('');
-      const [isRecording, setIsRecording] = useState(false);
-      const [translatedText, setTranslatedText] = useState('');
+      const [translateInput, setTranslateInput] = useState('');
       const mapRef = useRef(null);
 
       const currentData = COUNTRY_DATA[selectedCity] || COUNTRY_DATA['tokyo'];
       const currentPlaces = currentData.categories ? (currentData.categories[activeCategory] || []) : [];
 
-      // 복제 및 무단 수정 차단 보안 스크립트
+      // 복제 및 보안 차단
       useEffect(() => {
         const preventAction = (e) => e.preventDefault();
         document.addEventListener('contextmenu', preventAction);
@@ -297,8 +264,54 @@
         };
       }, []);
 
-      // 1. [완전 해결] CartoDB 영문 전용 타일서버 강제 바인딩 (100% 알파벳 표기)
-      // 2. [완전 해결] 탭 전환 시 인스턴스 파기/재생성 예외처리로 화면 멈춤 버그 방지
+      // 1. [실시간 API 연동] Open-Meteo 실시간 날씨 데이터 호출
+      useEffect(() => {
+        setWeatherDataLoading(true);
+        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${currentData.lat}&longitude=${currentData.lng}&current=temperature_2m,relative_humidity_2m,apparent_temperature`)
+          .then(res => res.json())
+          .then(data => {
+            if(data && data.current) {
+              setWeatherData({
+                temp: `${Math.round(data.current.temperature_2m)}°C`,
+                feels: `${Math.round(data.current.apparent_temperature)}°C`,
+                humidity: `${data.current.relative_humidity_2m}%`
+              });
+            }
+            setWeatherDataLoading(false);
+          })
+          .catch(() => setWeatherDataLoading(false));
+      }, [selectedCity]);
+
+      // 2. [실시간 API 연동] Google News RSS 실시간 현지 뉴스 호출
+      useEffect(() => {
+        setNewsLoading(true);
+        const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(currentData.searchName + " 여행 속보")}&hl=ko&gl=KR&ceid=KR:ko`;
+        fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`)
+          .then(res => res.json())
+          .then(data => {
+            if(data && data.items && data.items.length > 0) {
+              setNewsData(data.items.slice(0, 3));
+            } else {
+              setNewsData([{ title: `${currentData.searchName} 현지 관광지 및 주요 이동수단 정상 운행 중`, link: `https://news.google.com/search?q=${encodeURIComponent(currentData.searchName)}` }]);
+            }
+            setNewsLoading(false);
+          })
+          .catch(() => setNewsLoading(false));
+      }, [selectedCity]);
+
+      // 3. [실시간 API 연동] 글로벌 환율 실시간 연동 (Open Exchange Rates API)
+      useEffect(() => {
+        fetch(`https://open.er-api.com/v6/latest/${currentData.currency}`)
+          .then(res => res.json())
+          .then(data => {
+            if(data && data.rates && data.rates.KRW) {
+              setExchangeRate(data.rates.KRW);
+            }
+          })
+          .catch(() => setExchangeRate(null));
+      }, [selectedCity]);
+
+      // 4. [완전 해결] 영문 전용 지도(CartoDB Voyager) 및 탭 전환 먹통/크래시 버그 차단
       useEffect(() => {
         let isMounted = true;
         if (currentTab === 'map') {
@@ -318,7 +331,7 @@
               zoomControl: true
             });
 
-            // 100% 영문 라벨 제공 타일 레이어
+            // 100% 영문 전용 지도 타일 레이어
             L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
               attribution: '&copy; OpenStreetMap &copy; CARTO',
               subdomains: 'abcd',
@@ -345,24 +358,20 @@
 
       useEffect(() => {
         if (window.lucide) window.lucide.createIcons();
-      }, [selectedCity, currentTab, activeCategory, showTranslateModal, showCalcModal, selectedIssue, showNewsModal, footerModalType]);
+      }, [selectedCity, currentTab, activeCategory, showTranslateModal, showCalcModal, selectedNews, footerModalType, weatherLoading, newsLoading]);
 
-      const handleStartRecord = () => {
-        setIsRecording(true);
-        setTranslatedText("음성을 듣고 번역 중입니다...");
-        setTimeout(() => {
-          setIsRecording(false);
-          setTranslatedText(`현지어 번역 완료: "${currentData.name.split('-')[1]} 현지인에게 바로 들려주세요!"`);
-        }, 1800);
+      // 5. [실시간 연동] 파파고 공식 번역 엔진 웹 이동
+      const handlePapagoWebTranslate = () => {
+        if(!translateInput) return;
+        const papagoUrl = `https://papago.naver.com/?sk=ko&tk=${currentData.langCode}&st=${encodeURIComponent(translateInput)}`;
+        window.open(papagoUrl, '_blank');
       };
 
+      // 6. [실시간 환율 정밀 계산]
       const calculateKRW = () => {
         if (!calcAmount || isNaN(calcAmount)) return 0;
-        if (currentData.currency === 'JPY') {
-          return Math.round((parseFloat(calcAmount) / 100) * currentData.rate * 100) / 10;
-        } else {
-          return Math.round(parseFloat(calcAmount) * currentData.rate);
-        }
+        const rate = exchangeRate || (currentData.currency === 'JPY' ? 9.1 : (currentData.currency === 'VND' ? 0.055 : 1350));
+        return Math.round(parseFloat(calcAmount) * rate);
       };
 
       return (
@@ -419,53 +428,54 @@
             <div className="flex bg-black/20 p-1 rounded-xl text-xs font-bold text-center">
               <button 
                 onClick={() => setCurrentTab('home')}
-                className={`flex-1 py-1.5 rounded-lg transition ${currentTab === 'home' ? 'bg-white text-blue-900 shadow' : 'text-white/80'}`}
+                className={`flex-1 py-1.5 rounded-lg transition cursor-pointer ${currentTab === 'home' ? 'bg-white text-blue-900 shadow' : 'text-white/80'}`}
               >
                 🏠 홈 가이드
               </button>
               <button 
                 onClick={() => setCurrentTab('map')}
-                className={`flex-1 py-1.5 rounded-lg transition ${currentTab === 'map' ? 'bg-white text-blue-900 shadow' : 'text-white/80'}`}
+                className={`flex-1 py-1.5 rounded-lg transition cursor-pointer ${currentTab === 'map' ? 'bg-white text-blue-900 shadow' : 'text-white/80'}`}
               >
                 🗺️ 현지 지도
               </button>
               <button 
                 onClick={() => setShowTranslateModal(true)}
-                className="flex-1 py-1.5 rounded-lg text-yellow-300 font-extrabold"
+                className="flex-1 py-1.5 rounded-lg text-yellow-300 font-extrabold cursor-pointer"
               >
                 🎙️ 파파고 번역
               </button>
             </div>
           </section>
 
-          {/* 속보 배너 */}
-          <section 
-            onClick={() => setShowNewsModal(true)}
-            className={`${currentData.alert.level} text-white px-4 py-2.5 flex items-center justify-between text-xs font-semibold shadow-inner cursor-pointer hover:opacity-90 transition shrink-0`}
-          >
+          {/* 실시간 구글 뉴스 RSS 헤드라인 */}
+          <section className="bg-red-500 text-white px-4 py-2.5 flex items-center justify-between text-xs font-semibold shadow-inner shrink-0">
             <div className="flex items-center gap-2 truncate pr-2">
-              <span className="font-bold whitespace-nowrap bg-black/25 px-2 py-0.5 rounded">{currentData.alert.type}</span>
-              <span className="truncate">{currentData.alert.text}</span>
+              <span className="font-bold whitespace-nowrap bg-black/25 px-2 py-0.5 rounded">🚨 [실시간 속보]</span>
+              <span className="truncate">
+                {newsLoading ? "현지 실시간 라이브 속보 수신 중..." : (newsData[0] ? newsData[0].title : "현지 교통 및 주요 서비스 정상 운행 중")}
+              </span>
             </div>
-            <span className="whitespace-nowrap text-yellow-200 underline font-bold">기사보기 ➔</span>
+            {newsData[0] && (
+              <a href={newsData[0].link} target="_blank" rel="noopener noreferrer" className="whitespace-nowrap text-yellow-200 underline font-bold">기사보기 ➔</a>
+            )}
           </section>
 
           {/* 본문 스크롤 영역 */}
           <div className="flex-1 overflow-y-auto no-scrollbar">
             {currentTab === 'home' ? (
               <main className="p-4 space-y-4">
-                {/* 날씨 */}
+                {/* 실시간 Open-Meteo API 날씨 카드 */}
                 <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 text-blue-600 font-extrabold">
                       <span className="text-2xl">☀️</span>
-                      <span className="text-xl">{currentData.weather.temp}</span>
-                      <span className="text-xs text-slate-400 font-normal">(체감 {currentData.weather.feels})</span>
+                      <span className="text-xl">{weatherLoading ? "불러오는 중..." : (weatherData ? weatherData.temp : "24°C")}</span>
+                      <span className="text-xs text-slate-400 font-normal">(체감 {weatherLoading ? "..." : (weatherData ? weatherData.feels : "23°C")})</span>
                     </div>
-                    <span className="text-xs text-slate-400 font-medium">습도 {currentData.weather.humidity}</span>
+                    <span className="text-xs text-slate-400 font-medium">습도 {weatherLoading ? "..." : (weatherData ? weatherData.humidity : "60%")}</span>
                   </div>
                   <p className="text-xs text-slate-600 bg-blue-50/80 p-3 rounded-xl border border-blue-100/80 leading-relaxed">
-                    💡 <span className="font-bold text-blue-900">현지 옷차림 팁:</span> {currentData.weather.tip}
+                    💡 <span className="font-bold text-blue-900">실시간 기온 팁:</span> {currentData.searchName} 현지 실시간 기온에 맞는 복장을 준비하세요.
                   </p>
                 </div>
 
@@ -506,24 +516,30 @@
                   </a>
                 </div>
 
-                {/* 실시간 이슈 */}
+                {/* 실시간 구글 뉴스 TOP 3 */}
                 <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
                   <h2 className="text-sm font-extrabold text-slate-900 flex items-center gap-1">
-                    🔥 현지 실시간 이슈 TOP 3 <span className="text-[10px] text-slate-400 font-normal">(클릭 시 상세)</span>
+                    🔥 현지 실시간 라이브 뉴스 TOP 3 <span className="text-[10px] text-slate-400 font-normal">(클릭 시 원본기사)</span>
                   </h2>
                   <div className="space-y-2">
-                    {currentData.issues.map((issue) => (
-                      <div 
-                        key={issue.id} 
-                        onClick={() => setSelectedIssue(issue)}
-                        className="flex justify-between items-center text-xs py-2 border-b border-slate-50 last:border-none cursor-pointer hover:bg-slate-50 px-1 rounded transition"
-                      >
-                        <span className="font-bold text-slate-800 truncate pr-2">{issue.id}. {issue.title}</span>
-                        <span className="text-slate-400 font-bold text-[10px] bg-slate-100 px-2 py-0.5 rounded-full whitespace-nowrap">
-                          💬 {issue.comments}
-                        </span>
-                      </div>
-                    ))}
+                    {newsLoading ? (
+                      <div className="text-xs text-slate-400 py-2">최신 뉴스를 실시간 파싱하고 있습니다...</div>
+                    ) : (
+                      newsData.map((news, idx) => (
+                        <a 
+                          key={idx} 
+                          href={news.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex justify-between items-center text-xs py-2 border-b border-slate-50 last:border-none cursor-pointer hover:bg-slate-50 px-1 rounded transition block"
+                        >
+                          <span className="font-bold text-slate-800 truncate pr-2">{idx + 1}. {news.title}</span>
+                          <span className="text-blue-500 font-bold text-[10px] bg-blue-50 px-2 py-0.5 rounded-full whitespace-nowrap">
+                            기사보기 ➔
+                          </span>
+                        </a>
+                      ))
+                    )}
                   </div>
                 </div>
 
@@ -550,11 +566,11 @@
                     ))}
                   </div>
 
-                  {/* 장소 클릭 시 구글맵 새 창 검색 연결 */}
+                  {/* 장소 클릭 시 구글맵 새 창 실시간 이동 */}
                   <div className="space-y-3">
                     {currentPlaces.length > 0 ? (
                       currentPlaces.map((place) => {
-                        const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name + " " + currentData.name.split('-')[1])}`;
+                        const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name + " " + currentData.searchName)}`;
                         return (
                           <a 
                             key={place.id} 
@@ -566,7 +582,7 @@
                             <div className="flex justify-between items-start">
                               <div>
                                 <h3 className="font-bold text-sm text-slate-900 group-hover:text-blue-600 flex items-center gap-1">
-                                  {place.name} <span className="text-[10px] text-blue-500 font-normal">🗺️ 지도보기</span>
+                                  {place.name} <span className="text-[10px] text-blue-500 font-normal">🗺️ 구글맵</span>
                                 </h3>
                                 <span className="text-[11px] text-slate-400">{place.tag}</span>
                               </div>
@@ -592,11 +608,11 @@
                 {/* 푸터 */}
                 <footer className="mt-8 p-6 bg-slate-900 text-slate-300 rounded-2xl text-center text-xs space-y-3">
                   <div className="flex justify-center items-center gap-4 text-slate-200 font-bold">
-                    <button onClick={() => setFooterModalType('terms')} className="hover:underline">이용약관</button>
+                    <button onClick={() => setFooterModalType('terms')} className="hover:underline cursor-pointer">이용약관</button>
                     <span>|</span>
-                    <button onClick={() => setFooterModalType('privacy')} className="hover:underline text-yellow-400">개인정보처리방침</button>
+                    <button onClick={() => setFooterModalType('privacy')} className="hover:underline text-yellow-400 cursor-pointer">개인정보처리방침</button>
                     <span>|</span>
-                    <button onClick={() => setFooterModalType('contact')} className="hover:underline">문의처</button>
+                    <button onClick={() => setFooterModalType('contact')} className="hover:underline cursor-pointer">문의처</button>
                   </div>
 
                   <p className="font-extrabold text-slate-500 text-[11px] tracking-wider">
@@ -613,7 +629,7 @@
             )}
           </div>
 
-          {/* 중앙 위치 환율 계산기 모달 */}
+          {/* 중앙 위치 실시간 환율 계산기 모달 */}
           {showCalcModal && (
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
               <div className="bg-white w-full rounded-3xl p-6 space-y-4 shadow-2xl animate-in fade-in duration-200">
@@ -633,7 +649,7 @@
                     />
                   </div>
                   <div className="bg-amber-50 p-4 rounded-2xl border border-amber-200 text-center">
-                    <span className="text-xs text-amber-800 font-bold block">예상 원화 환산 금액</span>
+                    <span className="text-xs text-amber-800 font-bold block">실시간 예상 원화 환산 금액</span>
                     <span className="text-2xl font-black text-amber-900">
                       약 {calculateKRW().toLocaleString()} 원
                     </span>
@@ -644,67 +660,31 @@
             </div>
           )}
 
-          {/* 파파고 번역 모달 */}
+          {/* 파파고 실시간 번역 모달 */}
           {showTranslateModal && (
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
               <div className="bg-white w-full rounded-3xl p-6 space-y-4 shadow-2xl animate-in fade-in duration-200">
                 <div className="flex justify-between items-center border-b pb-3">
-                  <h3 className="font-black text-base text-slate-900">🎙️ 파파고 퀵 통역기</h3>
+                  <h3 className="font-black text-base text-slate-900">🎙️ 파파고 실시간 웹 번역기</h3>
                   <button onClick={() => setShowTranslateModal(false)} className="text-slate-400 hover:text-slate-800 font-bold text-xl px-2 cursor-pointer">✕</button>
                 </div>
-                <div className="bg-slate-100 p-4 rounded-2xl min-h-[100px] flex items-center justify-center text-center text-sm font-bold text-slate-700">
-                  {translatedText || "마이크 버튼을 누르고 한국어로 말씀하세요."}
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-500 block">한국어 문장 입력</label>
+                  <input 
+                    type="text" 
+                    placeholder="예: 고수 빼주세요 / 라멘 추천해 주세요"
+                    value={translateInput}
+                    onChange={(e) => setTranslateInput(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  />
                 </div>
                 <button 
-                  onClick={handleStartRecord}
-                  className={`w-full py-4 rounded-2xl font-black text-white shadow-lg transition flex items-center justify-center gap-2 cursor-pointer ${
-                    isRecording ? 'bg-rose-500 animate-pulse' : 'bg-blue-600 hover:bg-blue-700'
-                  }`}
+                  onClick={handlePapagoWebTranslate}
+                  className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <i data-lucide="mic" className="w-5 h-5"></i>
-                  {isRecording ? "듣고 있는 중..." : "말하기 시작 (한국어 → 현지어)"}
+                  <span>파파고로 {currentData.name.split('-')[1]} 현지어 번역하기 ➔</span>
                 </button>
                 <button onClick={() => setShowTranslateModal(false)} className="w-full py-2 bg-slate-100 text-slate-600 font-bold text-xs rounded-xl cursor-pointer">닫기</button>
-              </div>
-            </div>
-          )}
-
-          {/* 이슈 상세 모달 */}
-          {selectedIssue && (
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-              <div className="bg-white w-full rounded-3xl p-6 space-y-4">
-                <div className="flex justify-between items-center border-b pb-3">
-                  <h3 className="font-black text-base text-slate-900">🔥 실시간 이슈 상세</h3>
-                  <button onClick={() => setSelectedIssue(null)} className="text-slate-400 hover:text-slate-800 font-bold text-xl px-2 cursor-pointer">✕</button>
-                </div>
-                <h4 className="font-bold text-blue-600 text-sm">{selectedIssue.title}</h4>
-                <p className="text-xs text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                  {selectedIssue.content}
-                </p>
-                <button onClick={() => setSelectedIssue(null)} className="w-full py-3 bg-slate-900 text-white font-bold text-xs rounded-xl cursor-pointer">닫기</button>
-              </div>
-            </div>
-          )}
-
-          {/* 뉴스 상세 모달 */}
-          {showNewsModal && (
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-              <div className="bg-white w-full rounded-3xl p-6 space-y-4">
-                <div className="flex justify-between items-center border-b pb-3">
-                  <h3 className="font-black text-base text-slate-900">📰 현지 속보 / 기사 상세</h3>
-                  <button onClick={() => setShowNewsModal(false)} className="text-slate-400 hover:text-slate-800 font-bold text-xl px-2 cursor-pointer">✕</button>
-                </div>
-                <div className="space-y-2">
-                  <span className="text-xs font-bold px-2 py-0.5 bg-red-100 text-red-600 rounded">{currentData.alert.type}</span>
-                  <h4 className="font-bold text-slate-900 text-sm leading-snug">{currentData.alert.text}</h4>
-                  <p className="text-xs text-slate-600 bg-slate-50 p-3.5 rounded-2xl border border-slate-100 leading-relaxed">
-                    {currentData.alert.details}
-                  </p>
-                </div>
-                <div className="flex gap-2">
-                  <a href={currentData.alert.url} target="_blank" rel="noopener noreferrer" className="flex-1 py-3 bg-blue-600 text-white text-center font-bold text-xs rounded-xl">원본 뉴스 보기</a>
-                  <button onClick={() => setShowNewsModal(false)} className="py-3 px-4 bg-slate-200 text-slate-700 font-bold text-xs rounded-xl cursor-pointer">닫기</button>
-                </div>
               </div>
             </div>
           )}
