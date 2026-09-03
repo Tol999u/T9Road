@@ -21,61 +21,199 @@
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
 
+    // 8개국 17개 도시 풀 데이터베이스
     const COUNTRY_DATA = {
       tokyo: {
-        name: "🇯🇵 일본 - 도쿄",
-        lat: 35.6762, lng: 139.6503,
-        currency: "JPY", rate: 9.1,
+        name: "🇯🇵 일본 - 도쿄", lat: 35.6762, lng: 139.6503, currency: "JPY", rate: 9.1,
         alert: { type: "⛈️ [LIVE]", text: "도쿄 인근 기습 폭우로 야마노테선 일부 지연 운행 중", level: "bg-amber-500" },
         weather: { temp: "22°C", feels: "21°C", humidity: "55%", tip: "일교차가 큽니다. 가벼운 외투와 접이식 우산을 챙기세요." },
-        sos: "tel:03-3452-7401", // 주일본 한국대사관
-        appLink: "https://www.go-taxi.jp/ko", // 일본 GO 택시
-        issues: [{ id: 1, title: "시부야 돈키호테 면세 대기시간 45분", comments: 32 }],
+        sos: "tel:03-3452-7401", appLink: "https://www.go-taxi.jp/ko",
+        issues: [{ id: 1, title: "시부야 메가돈키호테 면세 대기시간 45분", comments: 32 }, { id: 2, title: "도쿄 지하철 72시간 패스 본전 코스", comments: 19 }],
         places: [{ id: 1, name: "이치란 신주쿠점", rating: "4.2", reviews: "3,400+", tag: "신주쿠 | 라멘", tip: "비밀 소스 5배 추천!" }]
       },
+      osaka: {
+        name: "🇯🇵 일본 - 오사카", lat: 34.6937, lng: 135.5023, currency: "JPY", rate: 9.1,
+        alert: { type: "🚨 [안내]", text: "난바역 주변 인파 집중으로 이동 시 소지품 주의", level: "bg-blue-500" },
+        weather: { temp: "24°C", feels: "24°C", humidity: "60%", tip: "도톤보리 도보 이동이 많으니 편한 운동화 착용 권장" },
+        sos: "tel:06-6213-1401", appLink: "https://www.go-taxi.jp/ko",
+        issues: [{ id: 1, title: "유니버설 익스프레스 티켓 현장 매진", comments: 45 }],
+        places: [{ id: 1, name: "쿠시카츠 다루마", rating: "4.3", reviews: "2,800+", tag: "도톤보리 | 튀김", tip: "소스 베이스 한 번만 찍기!" }]
+      },
+      fukuoka: {
+        name: "🇯🇵 일본 - 후쿠오카", lat: 33.5902, lng: 130.4017, currency: "JPY", rate: 9.1,
+        alert: { type: "💡 [팁]", text: "하카타역 내 명란 바게트 매장 대기 발생 중", level: "bg-emerald-500" },
+        weather: { temp: "23°C", feels: "23°C", humidity: "50%", tip: "버스 뒷문 승차 후 정리권 챙기기 필수" },
+        sos: "tel:092-771-0461", appLink: "https://www.go-taxi.jp/ko",
+        issues: [{ id: 1, title: "텐진 돈키호테 의약품 결제 카운터 별도 운영", comments: 21 }],
+        places: [{ id: 1, name: "신신라멘 하카타 본점", rating: "4.4", reviews: "4,100+", tag: "텐진 | 라멘", tip: "잡내 없는 돈코츠 라멘!" }]
+      },
+      hokkaido: {
+        name: "🇯🇵 일본 - 홋카이도(삿포로)", lat: 43.0618, lng: 141.3545, currency: "JPY", rate: 9.1,
+        alert: { type: "❄️ [날씨]", text: "일몰 후 체감온도 급격히 하강 주의", level: "bg-indigo-600" },
+        weather: { temp: "16°C", feels: "14°C", humidity: "65%", tip: "바람막이 및 경량 패딩 준비 필수" },
+        sos: "tel:011-218-0288", appLink: "https://www.go-taxi.jp/ko",
+        issues: [{ id: 1, title: "비에이 투어 버스 당일 예약 불가", comments: 40 }],
+        places: [{ id: 1, name: "징기스칸 다루마 4.4", rating: "4.4", reviews: "2,500+", tag: "스스키노 | 양고기", tip: "비닐봉투에 옷 보관 권장" }]
+      },
       bangkok: {
-        name: "🇹🇭 태국 - 방콕",
-        lat: 13.7563, lng: 100.5018,
-        currency: "THB", rate: 38.5,
+        name: "🇹🇭 태국 - 방콕", lat: 13.7563, lng: 100.5018, currency: "THB", rate: 38.5,
         alert: { type: "🚨 [속보]", text: "스쿰빗 도로 정체 심화, 지하철(BTS) 이용 권장", level: "bg-red-500" },
         weather: { temp: "32°C", feels: "36°C", humidity: "75%", tip: "실내 에어컨이 강하니 얇은 겉옷을 챙기세요." },
-        sos: "tel:02-247-7500", // 주태국 한국대사관
-        appLink: "https://www.grab.com/th/", // 동남아 그랩
+        sos: "tel:02-247-7500", appLink: "https://www.grab.com/th/",
         issues: [{ id: 1, title: "아이콘시암 면세 대기시간 15분", comments: 8 }],
         places: [{ id: 1, name: "팁싸마이", rating: "4.3", reviews: "1,200+", tag: "프라나콘 | 팟타이", tip: "오렌지 주스 꼭 주문하세요!" }]
       },
+      phuket: {
+        name: "🇹🇭 태국 - 푸켓", lat: 7.8804, lng: 98.3923, currency: "THB", rate: 38.5,
+        alert: { type: "🌊 [해양]", text: "빠통 비치 파도 약간 높음, 안전요원 확인", level: "bg-teal-500" },
+        weather: { temp: "30°C", feels: "34°C", humidity: "80%", tip: "스노클링 시 래시가드 착용 필수" },
+        sos: "tel:02-247-7500", appLink: "https://www.grab.com/th/",
+        issues: [{ id: 1, title: "피피섬 투어 선착장 미팅 시간 주의", comments: 19 }],
+        places: [{ id: 1, name: "넘버식스", rating: "4.2", reviews: "2,100+", tag: "빠통비치 | 현지식", tip: "모닝글로리볶음 강추!" }]
+      },
       danang: {
-        name: "🇻🇳 베트남 - 다낭",
-        lat: 16.0544, lng: 108.2022,
-        currency: "VND", rate: 0.055,
+        name: "🇻🇳 베트남 - 다낭", lat: 16.0544, lng: 108.2022, currency: "VND", rate: 0.055,
         alert: { type: "🚕 [교통]", text: "공항 호객 행위 주의, Grab 예약 차량만 이용하세요", level: "bg-emerald-600" },
         weather: { temp: "29°C", feels: "32°C", humidity: "78%", tip: "바나힐 이동 시 가디건 필수" },
-        sos: "tel:0236-3561-000", // 주다낭 총영사관
-        appLink: "https://www.grab.com/vn/",
+        sos: "tel:0236-3561-000", appLink: "https://www.grab.com/vn/",
         issues: [{ id: 1, title: "한시장 아오자이 맞춤 2시간 소요", comments: 34 }],
         places: [{ id: 1, name: "목식당", rating: "4.6", reviews: "4,500+", tag: "미케비치 | 해산물", tip: "크랩 마늘버터 소스 추천" }]
+      },
+      nhatrang: {
+        name: "🇻🇳 베트남 - 나트랑", lat: 12.2388, lng: 109.1967, currency: "VND", rate: 0.055,
+        alert: { type: "☀️ [자외선]", text: "한낮 자외선 지수 매우 높음, 모자 필수", level: "bg-amber-500" },
+        weather: { temp: "30°C", feels: "33°C", humidity: "72%", tip: "빈원더스 케이블카 운영 여부 사전 확인" },
+        sos: "tel:0236-3561-000", appLink: "https://www.grab.com/vn/",
+        issues: [{ id: 1, title: "담시장 망고 가격 시세 현황 공유", comments: 41 }],
+        places: [{ id: 1, name: "촌촌킴", rating: "4.4", reviews: "1,900+", tag: "시내 | 가정식", tip: "모닝글로리+돼지고기 볶음 추천" }]
+      },
+      phuquoc: {
+        name: "🇻🇳 베트남 - 푸꾸옥", lat: 10.2899, lng: 103.9840, currency: "VND", rate: 0.055,
+        alert: { type: "🚌 [셔틀]", text: "빈버스(VinBus) 무료 노선 최신화 완료", level: "bg-indigo-500" },
+        weather: { temp: "28°C", feels: "31°C", humidity: "80%", tip: "무료 빈버스 셔틀 적극 활용하세요" },
+        sos: "tel:0236-3561-000", appLink: "https://www.grab.com/vn/",
+        issues: [{ id: 1, title: "혼똔섬 케이블카 점검 일정 체크", comments: 26 }],
+        places: [{ id: 1, name: "신짜오 식당", rating: "4.3", reviews: "2,300+", tag: "즈엉동 | 해산물", tip: "일몰 시각 창가 자리 예약 필수" }]
+      },
+      cebu: {
+        name: "🇵🇭 필리핀 - 세부", lat: 10.3157, lng: 123.8854, currency: "PHP", rate: 24.2,
+        alert: { type: "🚘 [교통]", text: "막탄 다리 구간 병목 정체, 1시간 여유 확보", level: "bg-red-500" },
+        weather: { temp: "31°C", feels: "35°C", humidity: "76%", tip: "오스롭 고래상어 투어 시 선크림 바다 입장 불법" },
+        sos: "tel:032-231-1616", appLink: "https://www.grab.com/ph/",
+        issues: [{ id: 1, title: "eTravel 바코드 사전 발급 필수", comments: 60 }],
+        places: [{ id: 1, name: "골드망고 그릴", rating: "4.5", reviews: "1,700+", tag: "막탄 | 퓨전", tip: "감바스 추천, 픽드랍 가능" }]
+      },
+      boracay: {
+        name: "🇵🇭 필리핀 - 보라카이", lat: 11.9674, lng: 121.9248, currency: "PHP", rate: 24.2,
+        alert: { type: "⛵ [이동]", text: "까티클란 선착장 환경세 창구 줄 길어짐", level: "bg-teal-600" },
+        weather: { temp: "30°C", feels: "33°C", humidity: "75%", tip: "화이트비치 내 음주/음식물 금지 구역" },
+        sos: "tel:02-8811-6139", appLink: "https://www.grab.com/ph/",
+        issues: [{ id: 1, title: "디몰 환전소 실시간 달러 우대율", comments: 24 }],
+        places: [{ id: 1, name: "게릴라 아일랜드", rating: "4.4", reviews: "1,100+", tag: "디몰 | 바베큐", tip: "알리망오 크랩 추천" }]
+      },
+      sydney: {
+        name: "🇦🇺 호주 - 시드니", lat: -33.8688, lng: 151.2093, currency: "AUD", rate: 900,
+        alert: { type: "💳 [교통]", text: "트램/버스 컨택리스 신용카드 결제 가능", level: "bg-blue-600" },
+        weather: { temp: "19°C", feels: "18°C", humidity: "50%", tip: "자외선이 강하니 SPF50+ 선크림 필수" },
+        sos: "tel:02-9210-0200", appLink: "https://www.uber.com/au/en/",
+        issues: [{ id: 1, title: "블루마운틴 궤도열차 탑승 꿀팁", comments: 29 }],
+        places: [{ id: 1, name: "팬케이크 온 더 록스", rating: "4.3", reviews: "4,200+", tag: "록스 | 브런치", tip: "바베큐 립 추천" }]
+      },
+      perth: {
+        name: "🇦🇺 호주 - 퍼스", lat: -31.9505, lng: 115.8605, currency: "AUD", rate: 900,
+        alert: { type: "🚌 [무료버스]", text: "시내 중심가 FTZ 구역 버스 탑승 무료", level: "bg-emerald-600" },
+        weather: { temp: "21°C", feels: "20°C", humidity: "45%", tip: "로트네스트 섬 이동 전 쿼카 셀카 준비" },
+        sos: "tel:08-9325-2177", appLink: "https://www.uber.com/au/en/",
+        issues: [{ id: 1, title: "로트네스트 페리 화요일 할인 스케줄", comments: 31 }],
+        places: [{ id: 1, name: "C Restaurant", rating: "4.5", reviews: "1,500+", tag: "시내 | 회전식", tip: "360도 시내 뷰 감상 가능" }]
+      },
+      brisbane: {
+        name: "🇦🇺 호주 - 브리즈번", lat: -27.4705, lng: 153.0260, currency: "AUD", rate: 900,
+        alert: { type: "⛴️ [페리]", text: "시티호퍼 무료 페리로 주요 관광지 이동", level: "bg-teal-500" },
+        weather: { temp: "23°C", feels: "22°C", humidity: "55%", tip: "사우스뱅크 인공비치 수영복 소지" },
+        sos: "tel:07-3221-1400", appLink: "https://www.uber.com/au/en/",
+        issues: [{ id: 1, title: "골드코스트 트램 이용권 공유", comments: 23 }],
+        places: [{ id: 1, name: "Eat Street Market", rating: "4.7", reviews: "5,400+", tag: "야시장", tip: "금/토/일만 영업!" }]
+      },
+      paris: {
+        name: "🇫🇷 프랑스 - 파리", lat: 48.8566, lng: 2.3522, currency: "EUR", rate: 1480,
+        alert: { type: "⚠️ [치안]", text: "에펠탑 및 지하철 1/4호선 주변 소매치기 주의", level: "bg-red-600" },
+        weather: { temp: "18°C", feels: "17°C", humidity: "60%", tip: "뮤지엄패스 사전 시간 지정 필수" },
+        sos: "tel:01-4753-0101", appLink: "https://www.bolt.eu/",
+        issues: [{ id: 1, title: "루브르 박물관 현장권 매진", comments: 68 }],
+        places: [{ id: 1, name: "오 피에 드 코숑", rating: "4.2", reviews: "4,100+", tag: "레알 | 전통식", tip: "프랑스식 족발 요리 추천" }]
+      },
+      london: {
+        name: "🇬🇧 영국 - 런던", lat: 51.5074, lng: -0.1278, currency: "GBP", rate: 1720,
+        alert: { type: "🚌 [교통]", text: "트래블로그/월렛 컨택리스 카드 승차 가능", level: "bg-blue-600" },
+        weather: { temp: "17°C", feels: "16°C", humidity: "70%", tip: "3단 우산 항시 소지 추천" },
+        sos: "tel:020-7227-5500", appLink: "https://www.uber.com/gb/en/",
+        issues: [{ id: 1, title: "스카이가든 무료 전망대 예약 팁", comments: 51 }],
+        places: [{ id: 1, name: "플랫 아이언", rating: "4.4", reviews: "6,200+", tag: "코벤트가든 | 스테이크", tip: "가성비 스테이크 맛집!" }]
+      },
+      hawaii: {
+        name: "🇺🇸 미국 - 하와이(호놀룰루)", lat: 21.3069, lng: -157.8583, currency: "USD", rate: 1350,
+        alert: { type: "🚗 [렌트]", text: "와이키키 시내 주차비 박당 $40~$50 선", level: "bg-amber-500" },
+        weather: { temp: "27°C", feels: "29°C", humidity: "60%", tip: "하나우마베이 스노클링 예약 필수" },
+        sos: "tel:0808-595-6100", appLink: "https://www.uber.com/",
+        issues: [{ id: 1, title: "하나우마베이 예약 성공 팁", comments: 57 }],
+        places: [{ id: 1, name: "지오바니 새우트럭", rating: "4.3", reviews: "7,200+", tag: "노스쇼어 | 갈릭새우", tip: "갈릭 스카피 추천!" }]
       }
     };
 
     function App() {
       const [selectedCity, setSelectedCity] = useState('tokyo');
-      const [currentTab, setCurrentTab] = useState('home'); // 'home' or 'map'
+      const [currentTab, setCurrentTab] = useState('home'); 
+      const [activeCategory, setActiveCategory] = useState('food');
       const [showTranslateModal, setShowTranslateModal] = useState(false);
       const [showCalcModal, setShowCalcModal] = useState(false);
       const [calcAmount, setCalcAmount] = useState('');
+      const [isRecording, setIsRecording] = useState(false);
+      const [translatedText, setTranslatedText] = useState('');
       const mapRef = useRef(null);
 
       const currentData = COUNTRY_DATA[selectedCity] || COUNTRY_DATA['tokyo'];
 
-      // 지도 표시 로직
+      // 소스 무단 복제 및 수정을 방지하는 보안 이벤트를 강제 바인딩
+      useEffect(() => {
+        const preventAction = (e) => e.preventDefault();
+        
+        // 우클릭, 복사, 잘라내기, 선택 금지
+        document.addEventListener('contextmenu', preventAction);
+        document.addEventListener('copy', preventAction);
+        document.addEventListener('cut', preventAction);
+
+        // F12, Ctrl+Shift+I, Ctrl+U 등 개발자도구/소스보기 단축키 차단
+        const handleKeyDown = (e) => {
+          if (
+            e.keyCode === 123 || 
+            (e.ctrlKey && e.shiftKey && e.keyCode === 73) || 
+            (e.ctrlKey && e.keyCode === 85) || 
+            (e.ctrlKey && e.keyCode === 83)
+          ) {
+            e.preventDefault();
+            return false;
+          }
+        };
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+          document.removeEventListener('contextmenu', preventAction);
+          document.removeEventListener('copy', preventAction);
+          document.removeEventListener('cut', preventAction);
+          document.removeEventListener('keydown', handleKeyDown);
+        };
+      }, []);
+
+      // 현지 지도 렌더링
       useEffect(() => {
         if (currentTab === 'map') {
           setTimeout(() => {
             if (mapRef.current) mapRef.current.remove();
-            const map = L.map('map-container').setView([currentData.lat, currentData.lng], 13);
+            const map = L.map('map-container').setView([currentData.lat, currentData.lng], 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
             L.marker([currentData.lat, currentData.lng]).addTo(map)
-              .bindPopup(`<b>${currentData.name}</b><br>현재 추천 중심지`)
+              .bindPopup(`<b>${currentData.name}</b><br>현지 가이드 중심지`)
               .openPopup();
             mapRef.current = map;
           }, 100);
@@ -84,82 +222,320 @@
 
       useEffect(() => {
         if (window.lucide) window.lucide.createIcons();
-      }, [selectedCity, currentTab, showTranslateModal, showCalcModal]);
+      }, [selectedCity, currentTab, activeCategory, showTranslateModal, showCalcModal, isRecording]);
+
+      // 가상 파파고 번역
+      const handleStartRecord = () => {
+        setIsRecording(true);
+        setTranslatedText("음성을 듣고 번역 중입니다...");
+        setTimeout(() => {
+          setIsRecording(false);
+          setTranslatedText(`현지어 번역 완료: "${currentData.name.split('-')[1]} 현지인에게 바로 들려주세요!"`);
+        }, 1800);
+      };
+
+      // 환율 계산
+      const calculateKRW = () => {
+        if (!calcAmount || isNaN(calcAmount)) return 0;
+        if (currentData.currency === 'JPY') {
+          return Math.round((parseFloat(calcAmount) / 100) * currentData.rate * 100) / 10;
+        } else {
+          return Math.round(parseFloat(calcAmount) * currentData.rate);
+        }
+      };
 
       return (
-        <div className="max-w-md mx-auto bg-slate-50 min-h-screen pb-32 font-sans text-slate-800 relative shadow-2xl select-none">
+        <div className="max-w-md mx-auto bg-slate-50 min-h-screen font-sans text-slate-800 relative shadow-2xl select-none">
           
           {/* HEADER */}
-          <header className="bg-blue-600 text-white px-4 py-3 flex justify-between items-center sticky top-0 z-50">
-            <h1 className="text-xl font-black">톨구로드 <span className="text-yellow-300 text-xs">(T9 Road)</span></h1>
+          <header className="bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-600 text-white px-4 py-3.5 flex justify-between items-center sticky top-0 z-50 shadow-md">
+            <div className="flex items-center gap-2">
+              <span className="bg-yellow-400 text-blue-900 font-black text-xs px-2 py-0.5 rounded-full">T9</span>
+              <h1 className="text-xl font-black tracking-wider">톨구로드 <span className="text-blue-200 text-xs font-normal">Tol9u Road</span></h1>
+            </div>
+            <div className="flex gap-2">
+              <button className="p-1.5 bg-white/10 rounded-full"><i data-lucide="bell" className="w-4 h-4"></i></button>
+              <button className="p-1.5 bg-white/10 rounded-full"><i data-lucide="user" className="w-4 h-4"></i></button>
+            </div>
           </header>
 
-          {/* 도시 선택 */}
-          <section className="bg-blue-600 px-4 pb-4 text-white">
+          {/* 1. 도시 선택 & 상단 메인 탭 (홈 / 현지지도 / 번역기 위로 이동) */}
+          <section className="bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-600 px-4 pb-3 text-white space-y-3">
             <select 
               value={selectedCity}
               onChange={(e) => setSelectedCity(e.target.value)}
-              className="w-full bg-white text-slate-900 font-bold py-2.5 px-4 rounded-xl shadow-md text-sm"
+              className="w-full bg-white text-slate-900 font-bold py-2.5 px-4 rounded-xl shadow-lg text-sm focus:outline-none"
             >
-              <option value="tokyo">🇯🇵 일본 - 도쿄</option>
-              <option value="bangkok">🇹🇭 태국 - 방콕</option>
-              <option value="danang">🇻🇳 베트남 - 다낭</option>
+              <optgroup label="🇯🇵 일본">
+                <option value="tokyo">🇯🇵 일본 - 도쿄</option>
+                <option value="osaka">🇯🇵 일본 - 오사카</option>
+                <option value="fukuoka">🇯🇵 일본 - 후쿠오카</option>
+                <option value="hokkaido">🇯🇵 일본 - 홋카이도(삿포로)</option>
+              </optgroup>
+              <optgroup label="🇹🇭 태국">
+                <option value="bangkok">🇹🇭 태국 - 방콕</option>
+                <option value="phuket">🇹🇭 태국 - 푸켓</option>
+              </optgroup>
+              <optgroup label="🇻🇳 베트남">
+                <option value="danang">🇻🇳 베트남 - 다낭</option>
+                <option value="nhatrang">🇻🇳 베트남 - 나트랑</option>
+                <option value="phuquoc">🇻🇳 베트남 - 푸꾸옥</option>
+              </optgroup>
+              <optgroup label="🇵🇭 필리핀">
+                <option value="cebu">🇵🇭 필리핀 - 세부</option>
+                <option value="boracay">🇵🇭 필리핀 - 보라카이</option>
+              </optgroup>
+              <optgroup label="🇦🇺 호주">
+                <option value="sydney">🇦🇺 호주 - 시드니</option>
+                <option value="perth">🇦🇺 호주 - 퍼스</option>
+                <option value="brisbane">🇦🇺 호주 - 브리즈번</option>
+              </optgroup>
+              <optgroup label="🇪🇺 유럽">
+                <option value="paris">🇫🇷 프랑스 - 파리</option>
+                <option value="london">🇬🇧 영국 - 런던</option>
+              </optgroup>
+              <optgroup label="🇺🇸 미주">
+                <option value="hawaii">🇺🇸 미국 - 하와이(호놀룰루)</option>
+              </optgroup>
             </select>
+
+            {/* 메인 네비게이션 탭 (위로 이동) */}
+            <div className="flex bg-black/20 p-1 rounded-xl text-xs font-bold text-center">
+              <button 
+                onClick={() => setCurrentTab('home')}
+                className={`flex-1 py-1.5 rounded-lg transition ${currentTab === 'home' ? 'bg-white text-blue-900 shadow' : 'text-white/80'}`}
+              >
+                🏠 홈 가이드
+              </button>
+              <button 
+                onClick={() => setCurrentTab('map')}
+                className={`flex-1 py-1.5 rounded-lg transition ${currentTab === 'map' ? 'bg-white text-blue-900 shadow' : 'text-white/80'}`}
+              >
+                🗺️ 현지 실시간 지도
+              </button>
+              <button 
+                onClick={() => setShowTranslateModal(true)}
+                className="flex-1 py-1.5 rounded-lg text-yellow-300 font-extrabold"
+              >
+                🎙️ 파파고 번역
+              </button>
+            </div>
           </section>
 
-          {/* 메인 화면 / 지도 화면 분기 */}
+          {/* 2. 헤드라인 속보 */}
+          <section className={`${currentData.alert.level} text-white px-4 py-2.5 flex items-center justify-between text-xs font-semibold shadow-inner`}>
+            <div className="flex items-center gap-2 truncate pr-2">
+              <span className="font-bold whitespace-nowrap bg-black/25 px-2 py-0.5 rounded">{currentData.alert.type}</span>
+              <span className="truncate">{currentData.alert.text}</span>
+            </div>
+          </section>
+
+          {/* 메인 컨텐츠 영역 */}
           {currentTab === 'home' ? (
             <main className="p-4 space-y-4">
-              {/* 속보 */}
-              <div className={`${currentData.alert.level} text-white px-3 py-2 rounded-xl text-xs font-bold`}>
-                {currentData.alert.type} {currentData.alert.text}
-              </div>
-
-              {/* 날씨 */}
-              <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-                <div className="text-lg font-black text-blue-600">☀️ {currentData.weather.temp}</div>
-                <p className="text-xs text-slate-600 mt-1">💡 {currentData.weather.tip}</p>
-              </div>
-
-              {/* 4대 버튼 (실제 링크 작동 연동) */}
-              <div className="grid grid-cols-4 gap-2">
-                <button onClick={() => setShowTranslateModal(true)} className="bg-white p-3 rounded-2xl border text-xs font-bold text-slate-700">🎙️ 번역</button>
-                <a href={currentData.appLink} target="_blank" className="bg-white p-3 rounded-2xl border text-xs font-bold text-center text-slate-700">🚖 교통호출</a>
-                <button onClick={() => setShowCalcModal(true)} className="bg-white p-3 rounded-2xl border text-xs font-bold text-slate-700">💵 환율</button>
-                <a href={currentData.sos} className="bg-white p-3 rounded-2xl border text-xs font-bold text-center text-rose-600">🚨 영사관SOS</a>
-              </div>
-
-              {/* 맛집 리스트 */}
-              <div className="space-y-2">
-                <h3 className="font-bold text-sm">🍜 현지 검증 맛집</h3>
-                {currentData.places.map(p => (
-                  <div key={p.id} className="bg-white p-3 rounded-2xl border text-xs space-y-1">
-                    <div className="font-bold">{p.name} ⭐{p.rating}</div>
-                    <div className="text-slate-500">💡 {p.tip}</div>
+              
+              {/* 날씨 카고 */}
+              <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-blue-600 font-extrabold">
+                    <span className="text-2xl">☀️</span>
+                    <span className="text-xl">{currentData.weather.temp}</span>
+                    <span className="text-xs text-slate-400 font-normal">(체감 {currentData.weather.feels})</span>
                   </div>
-                ))}
+                  <span className="text-xs text-slate-400 font-medium">습도 {currentData.weather.humidity}</span>
+                </div>
+                <p className="text-xs text-slate-600 bg-blue-50/80 p-3 rounded-xl border border-blue-100/80 leading-relaxed">
+                  💡 <span className="font-bold text-blue-900">현지 옷차림 팁:</span> {currentData.weather.tip}
+                </p>
               </div>
+
+              {/* 4대 퀵 기능 (기능 연동) */}
+              <div className="grid grid-cols-4 gap-2">
+                <button 
+                  onClick={() => setShowTranslateModal(true)}
+                  className="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-1 active:scale-95 transition"
+                >
+                  <div className="p-2 bg-blue-100 text-blue-600 rounded-xl"><i data-lucide="mic" className="w-4 h-4"></i></div>
+                  <span className="text-xs font-bold text-slate-700">파파고번역</span>
+                </button>
+
+                <a 
+                  href={currentData.appLink} target="_blank"
+                  className="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-1 active:scale-95 transition"
+                >
+                  <div className="p-2 bg-emerald-100 text-emerald-600 rounded-xl"><i data-lucide="car" className="w-4 h-4"></i></div>
+                  <span className="text-xs font-bold text-slate-700">교통호출</span>
+                </a>
+
+                <button 
+                  onClick={() => setShowCalcModal(true)}
+                  className="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-1 active:scale-95 transition"
+                >
+                  <div className="p-2 bg-amber-100 text-amber-600 rounded-xl"><i data-lucide="calculator" className="w-4 h-4"></i></div>
+                  <span className="text-xs font-bold text-slate-700">환율계산</span>
+                </button>
+
+                <a 
+                  href={currentData.sos}
+                  className="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center justify-center gap-1 active:scale-95 transition"
+                >
+                  <div className="p-2 bg-rose-100 text-rose-600 rounded-xl"><i data-lucide="phone-call" className="w-4 h-4"></i></div>
+                  <span className="text-xs font-bold text-rose-600">영사관SOS</span>
+                </a>
+              </div>
+
+              {/* 실시간 이슈 TOP 3 */}
+              <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+                <h2 className="text-sm font-extrabold text-slate-900 flex items-center gap-1">
+                  🔥 현지 실시간 이슈 TOP 3
+                </h2>
+                <div className="space-y-2">
+                  {currentData.issues.map((issue) => (
+                    <div key={issue.id} className="flex justify-between items-center text-xs py-2 border-b border-slate-50 last:border-none">
+                      <span className="font-medium text-slate-700 truncate pr-2">{issue.id}. {issue.title}</span>
+                      <span className="text-slate-400 font-bold text-[10px] bg-slate-100 px-2 py-0.5 rounded-full whitespace-nowrap">
+                        💬 {issue.comments}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 카테고리별 여행 정보 */}
+              <div className="space-y-3">
+                <div className="flex gap-2 overflow-x-auto pb-1 text-xs">
+                  {[
+                    { id: 'food', label: '🍜 맛집·카페' },
+                    { id: 'stay', label: '🛏️ 숙소·치안' },
+                    { id: 'transit', label: '🚌 교통 guide' },
+                    { id: 'shop', label: '🛍️ 쇼핑·꿀팁' },
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveCategory(tab.id)}
+                      className={`px-3 py-2 rounded-xl font-extrabold whitespace-nowrap transition ${
+                        activeCategory === tab.id 
+                          ? 'bg-blue-600 text-white shadow-md' 
+                          : 'bg-white text-slate-600 border border-slate-100'
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="space-y-3">
+                  {currentData.places.map((place) => (
+                    <div key={place.id} className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-2">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="font-bold text-sm text-slate-900">{place.name}</h3>
+                          <span className="text-[11px] text-slate-400">{place.tag}</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-xs font-black text-amber-500 bg-amber-50 px-2 py-1 rounded-lg">
+                          <span>⭐ {place.rating}</span>
+                          <span className="text-slate-300 font-normal">({place.reviews})</span>
+                        </div>
+                      </div>
+                      <div className="bg-amber-50/80 p-3 rounded-xl border border-amber-100 text-xs text-amber-950 leading-relaxed">
+                        <span className="font-black text-amber-800">💡 톨구 꿀팁: </span>{place.tip}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
             </main>
           ) : (
-            /* 실제 지도 노출 영역 */
+            /* 실제 지도 노출 탭 */
             <main className="p-4 space-y-3">
-              <h2 className="font-bold text-sm text-slate-800">🗺️ {currentData.name} 현지 실시간 지도</h2>
-              <div id="map-container" className="w-full h-96 rounded-2xl border shadow-inner"></div>
+              <h2 className="font-bold text-sm text-slate-800">🗺️ {currentData.name} 실시간 지도</h2>
+              <div id="map-container" className="w-full h-[450px] rounded-2xl border border-slate-200 shadow-inner"></div>
             </main>
           )}
 
-          {/* 푸터 */}
-          <footer className="mt-8 pt-6 pb-24 border-t text-center text-slate-400 text-[11px] space-y-1">
-            <p>공식 문의처: <a href="mailto:dotol9u@gmail.com" className="underline font-bold text-slate-600">dotol9u@gmail.com</a></p>
-            <p className="font-bold">by tol9u. All rights reserved.</p>
+          {/* 3. 최하단 프레임 (공식문의처 및 저작권 무단 배포 금지 고정 배치) */}
+          <footer className="mt-8 p-6 bg-slate-900 text-slate-300 border-t border-slate-800 text-center text-[11px] space-y-3 leading-relaxed">
+            <div className="flex justify-center items-center gap-3 text-slate-200 font-bold">
+              <button className="hover:underline">이용약관</button>
+              <span>|</span>
+              <button className="hover:underline text-yellow-400">개인정보처리방침</button>
+              <span>|</span>
+              <button className="hover:underline">문의처</button>
+            </div>
+
+            <div className="text-slate-300 bg-slate-800/60 py-2 px-3 rounded-xl border border-slate-700/50">
+              ✉️ 공식 문의처: <a href="mailto:dotol9u@gmail.com" className="font-bold text-yellow-300 underline">dotol9u@gmail.com</a>
+            </div>
+
+            <div className="bg-slate-800 p-3.5 rounded-2xl border border-slate-700 text-[10px] text-slate-400 text-left space-y-1.5">
+              <p className="font-bold text-yellow-400 flex items-center gap-1">
+                🛡️ 저작권 및 무단 복제/배포 금지 안내
+              </p>
+              <p className="leading-normal">
+                본 서비스(톨구로드 / T9 Road)의 모든 데이터, 소스코드, UI 디자인 및 데이터 구조는 저작권법의 보호를 받습니다. 
+                소유자의 동의 없는 무단 복제, 2차 가공, 캡처, 소스 유출 및 무단 배포 행위 시 관련 법령에 의해 처벌받을 수 있습니다.
+              </p>
+            </div>
+
+            <p className="font-extrabold text-slate-500 tracking-wider pt-2">
+              by tol9u. All rights reserved.
+            </p>
           </footer>
 
-          {/* 하단 네비게이션 (홈 vs 현지지도 스위칭) */}
-          <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t px-6 py-3 flex justify-around text-xs font-bold text-slate-500 z-50">
-            <button onClick={() => setCurrentTab('home')} className={currentTab === 'home' ? 'text-blue-600' : ''}>🏠 홈</button>
-            <button onClick={() => setCurrentTab('map')} className={currentTab === 'map' ? 'text-blue-600' : ''}>🗺️ 현지지도</button>
-            <button onClick={() => setShowTranslateModal(true)}>🎙️ 번역기</button>
-          </nav>
+          {/* 파파고 번역 모달 */}
+          {showTranslateModal && (
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end justify-center p-4">
+              <div className="bg-white w-full max-w-md rounded-3xl p-6 space-y-4">
+                <div className="flex justify-between items-center border-b pb-3">
+                  <h3 className="font-black text-lg text-slate-900">🎙️ 파파고 퀵 통역기</h3>
+                  <button onClick={() => setShowTranslateModal(false)} className="text-slate-400 font-bold text-lg">✕</button>
+                </div>
+                <div className="bg-slate-100 p-4 rounded-2xl min-h-[100px] flex items-center justify-center text-center text-sm font-bold text-slate-700">
+                  {translatedText || "마이크 버튼을 누르고 한국어로 말씀하세요."}
+                </div>
+                <button 
+                  onClick={handleStartRecord}
+                  className={`w-full py-4 rounded-2xl font-black text-white shadow-lg transition flex items-center justify-center gap-2 ${
+                    isRecording ? 'bg-rose-500 animate-pulse' : 'bg-blue-600 hover:bg-blue-700'
+                  }`}
+                >
+                  <i data-lucide="mic" className="w-5 h-5"></i>
+                  {isRecording ? "듣고 있는 중..." : "말하기 시작 (한국어 → 현지어)"}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* 환율 계산기 모달 */}
+          {showCalcModal && (
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end justify-center p-4">
+              <div className="bg-white w-full max-w-md rounded-3xl p-6 space-y-4">
+                <div className="flex justify-between items-center border-b pb-3">
+                  <h3 className="font-black text-lg text-slate-900">💵 실시간 환율 계산기</h3>
+                  <button onClick={() => setShowCalcModal(false)} className="text-slate-400 font-bold text-lg">✕</button>
+                </div>
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-xs font-bold text-slate-500 block mb-1">현지 금액 입력 ({currentData.currency})</label>
+                    <input 
+                      type="number" 
+                      placeholder="예: 1000"
+                      value={calcAmount}
+                      onChange={(e) => setCalcAmount(e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 font-bold text-slate-900 focus:outline-none"
+                    />
+                  </div>
+                  <div className="bg-amber-50 p-4 rounded-2xl border border-amber-200 text-center">
+                    <span className="text-xs text-amber-800 font-bold block">예상 원화 환산 금액</span>
+                    <span className="text-2xl font-black text-amber-900">
+                      약 {calculateKRW().toLocaleString()} 원
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
         </div>
       );
